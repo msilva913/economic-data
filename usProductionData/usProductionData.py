@@ -12,9 +12,6 @@ import pandas as pd
 import runProcs
 # get_ipython().magic(u'matplotlib inline')
 
-'''This program makes use of the perpetual inventory method from Hall and Jones (1999) to
-construct annual and quarterly aggregate capital stock series for the U.S.'''
-
 
 # In[2]:
 
@@ -489,6 +486,4 @@ df.to_csv('US_Production_Q_Data_Growth_Rates.csv',index=False)
 # 11. Export notebook to python script
 progName = 'usProductionData'
 runProcs.exportNb(progName)
-# runProcs.handout('Slides_'+progName)
-# runProcs.tex(['Slides_'+progName,'Handout_'+progName])
 

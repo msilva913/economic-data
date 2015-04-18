@@ -1,19 +1,18 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 from __future__ import division,unicode_literals
 # get_ipython().magic(u'matplotlib inline')
 import numpy as np
 import pandas as pd
 import json
-import pprint
 import runProcs
 from urllib2 import urlopen
 
 
-# In[2]:
+# In[ ]:
 
 # 0. State abbreviations
 
@@ -76,7 +75,7 @@ u'Wyoming':u'WY'
 stateList = [s for s in stateAbbr]
 
 
-# In[3]:
+# In[ ]:
 
 # 1. Construct series for price deflator
 
@@ -86,7 +85,7 @@ result = gdpDeflator.read()
 jsonResponse = json.loads(result)
 
 
-# In[4]:
+# In[ ]:
 
 # 1.2 Construct the data frame for the deflator series
 values = []
@@ -104,7 +103,7 @@ dataP = pd.DataFrame(values,index = years,columns = ['price level'])
 print dataP
 
 
-# In[5]:
+# In[ ]:
 
 # 2. Construct series for per capita income by state, region, and the entire us
 
@@ -115,7 +114,7 @@ jsonResponse = json.loads(result)
 # jsonResponse['BEAAPI']['Results']['Data'][0]['GeoName']
 
 
-# In[6]:
+# In[ ]:
 
 # 2.2 Construct the data frame for the per capita income series
 
@@ -152,7 +151,7 @@ dataY.columns=columns
 dataY
 
 
-# In[7]:
+# In[ ]:
 
 # 3. Export data to csv
 series = dataY
@@ -163,7 +162,7 @@ for c in dropCols:
 series.to_csv('stateIncomeData.csv',na_rep='NaN')
 
 
-# In[8]:
+# In[ ]:
 
 # 4. Export notebook to .py
 runProcs.exportNb('stateIncomeData')

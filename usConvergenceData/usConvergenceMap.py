@@ -113,7 +113,7 @@ ax.set_ylabel('average growth')
 plt.grid()
 
 plt.tight_layout()
-plt.savefig('fig_us_statesIncomeGrowth.png',bbox_inches='tight',dpi=120)
+# plt.savefig('fig_us_statesIncomeGrowth.png',bbox_inches='tight',dpi=120)
 
 
 # In[6]:
@@ -143,7 +143,7 @@ plt.legend(lns,labs,loc='upper left')
 
 
 plt.tight_layout()
-plt.savefig('fig_us_statesIncome.png',bbox_inches='tight',dpi=120)
+# plt.savefig('fig_us_statesIncome.png',bbox_inches='tight',dpi=120)
 
 
 # In[7]:
@@ -173,7 +173,7 @@ plt.legend(lns,labs,loc='upper right',ncol=2)
 
 
 plt.tight_layout()
-plt.savefig('fig_us_statesIncomeRelative.png',bbox_inches='tight',dpi=120)
+# plt.savefig('fig_us_statesIncomeRelative.png',bbox_inches='tight',dpi=120)
 
 
 # In[8]:
