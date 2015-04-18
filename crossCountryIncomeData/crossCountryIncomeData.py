@@ -6,13 +6,10 @@
 from __future__ import division
 import matplotlib.pyplot as plt
 import matplotlib.dates as dts
-from fredclass import fred, window_equalize
 import numpy as np
 import runProcs
-import wbpy,wbdata
+import wbdata
 import pandas as pd
-from pprint import pprint
-from datetime import date
 # get_ipython().magic(u'matplotlib inline')
 
 
@@ -44,12 +41,6 @@ years2,years4,years5,years10,years15= dts.YearLocator(2),dts.YearLocator(4),dts.
 # 0.4 y label locator for vertical axes plotting gdp
 majorLocator_y   = plt.MultipleLocator(3)
 majorLocator_shares   = plt.MultipleLocator(0.2)
-
-# 0.5 Index locator
-def findDateIndex(dateStr,fredObj):
-    for n,d in enumerate(fredObj.dates):
-        if d == dateStr:
-            return n
 
 
 # In[3]:
@@ -136,6 +127,4 @@ fig.tight_layout()
 
 #6. Export notebook to python script
 runProcs.exportNb('crossCountryIncomeData')
-# runProcs.handout('crossCountryIncomeData')
-# runProcs.tex(['crossCountryIncomeData','crossCountryIncomeData'])
 
