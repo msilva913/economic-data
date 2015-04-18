@@ -1,2 +1,2 @@
 # economicData
-Python programs for constructing various economic datasets
+Python programs for downloading economic data and constructing datasets
