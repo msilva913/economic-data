@@ -57,7 +57,7 @@ Program for constructing a dataset for the US that includes real GDP, consumptio
 
 ##z1data
 Program for downloading the z.1 statistical release from the Federal Reserve and for parsing the xml file.
-- Instructions: Run either **cz1data.ipynb** or **z1data.py**
+- Instructions: Run either **z1data.ipynb** or **z1data.py**
 - Ouput: 
    - Z1legend.csv: csv file containing codes for each z.1 series (optional)
 - Dependencies: pandas, numpy, requests, zipfile, lxml, runProcs.py
