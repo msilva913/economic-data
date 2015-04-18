@@ -142,13 +142,3 @@ tBills.plot(x_compat=True)
 # 4. export the notebook
 runProcs.exportNb('z1data')
 
-
-# In[8]:
-
-t
-
-
-# In[ ]:
-
-
-
