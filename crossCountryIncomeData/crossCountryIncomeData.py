@@ -1,19 +1,22 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[9]:
 
 from __future__ import division
 import matplotlib.pyplot as plt
 import matplotlib.dates as dts
 import numpy as np
 import runProcs
-import wbdata
+from scipy.stats import gaussian_kde
 import pandas as pd
 # get_ipython().magic(u'matplotlib inline')
 
+# This program requires the Penn World Tables data file: pwt81.xlsx
+# available at https://pwt.sas.upenn.edu/
 
-# In[2]:
+
+# In[10]:
 
 # 0. Setup
 
@@ -42,88 +45,172 @@ years2,years4,years5,years10,years15= dts.YearLocator(2),dts.YearLocator(4),dts.
 majorLocator_y   = plt.MultipleLocator(3)
 majorLocator_shares   = plt.MultipleLocator(0.2)
 
-
-# In[3]:
-
-# 1. Get the World Bank ISO codes
-isoCodes = pd.DataFrame(wbdata.search_countries("",display=False))
-isoCodes = isoCodes[['id','name']]
-isoCodes = isoCodes.set_index('name')
+# 0.5 Index locator
+def findDateIndex(dateStr,fredObj):
+    for n,d in enumerate(fredObj.dates):
+        if d == dateStr:
+            return n
 
 
-# In[8]:
+# In[11]:
 
-# 2. Indices for data series and labels for data frame
-
-indicators = {'NY.GDP.PCAP.KD':'GDP per capita (constant 2005 US$)'}
-
-
-# In[5]:
-
-# 3.1 country groups
-countries =  [i['id'] for i in wbdata.get_country(incomelevel=['LIC','MIC','HIC'],display=False)]
-# countriesH = [i['id'] for i in wbdata.get_country(incomelevel=['HIC'],display=False)]
-# countriesM = [i['id'] for i in wbdata.get_country(incomelevel=['MIC'],display=False)]
-# countriesL = [i['id'] for i in wbdata.get_country(incomelevel=['LIC'],display=False)]
-
-# 3.2 data frames
-df   = wbdata.get_dataframe(indicators, country=countries,convert_date=True)
+# 1. Import data
+pwt = pd.read_excel('pwt81.xlsx',sheetname='Data')
 
 
-# In[6]:
+# In[12]:
 
-# 4. Create the data sets
-crossCountryIncome = pd.DataFrame([])
-crossCountryIncomeLog = pd.DataFrame([])
-sampleN=0
-t0 = 10
-for country, newDf in df.groupby(level=0):
-    newDf = newDf.reset_index()
-    newDf = newDf.set_index('date')
-    tempSeriesLog = pd.Series(np.log(newDf['GDP per capita (constant 2005 US$)']/1000))
-    tempSeries = pd.Series(newDf['GDP per capita (constant 2005 US$)']/1000)
-    if not np.isnan(tempSeries.sort_index().iloc[t0]) and not np.isnan(tempSeries.sort_index().iloc[-2]):
-        crossCountryIncomeLog[isoCodes.loc[country][0]+' - '+country] = tempSeriesLog
-        crossCountryIncome[isoCodes.loc[country][0]+' - '+country] = tempSeries
-        sampleN+=1
-print 'countries in sample: ',sampleN
-crossCountryIncomeLog = crossCountryIncomeLog.sort_index()
-crossCountryIncome = crossCountryIncome.sort_index()
+# 2. lists of countries, codes, and years
+year0 = 1960
 
-crossCountryIncomeLog = crossCountryIncomeLog.iloc[t0:-1]
-crossCountryIncome = crossCountryIncome.iloc[t0:-1]
-    
-crossCountryIncomeLog.to_csv('crossCountryIncomeLog.csv',index_label='date')
-crossCountryIncome.to_csv('crossCountryIncome.csv',index_label='date')
+countryCodes=[]
+countries = []
+years = []
+for code in pwt['countrycode']:
+    if code not in countryCodes:
+        countryCodes.append(code)
+        
+for country in pwt['country']:
+    if country == u"Côte d'Ivoire":
+        country = u"Cote d'Ivoire"
+    if country not in countries:
+        countries.append(country)
+        
+for year in pwt['year']:
+    if year not in years:
+        years.append(year)
+
+year0= years.index(year0)
 
 
-# In[7]:
+# In[13]:
+
+# 3. Create dataset 
+incomeDict = {}
+incomePcDict = {}
+popDict = {}
+count=0
+for i,code in enumerate(countryCodes):
+    income = pwt.loc[pwt['countrycode'] == code]['rgdpe'].values
+    pop = pwt.loc[pwt['countrycode'] == code]['pop'].values
+    incomePc = income/pop
+    if code =='ZWE':
+        income = income[0:62]
+        incomePc = incomePc[0:62]
+        pop = pop[0:62]
+    if True not in [np.isnan(x) for x in incomePc[year0:]]:
+        incomeDict[countries[i]+' - '+code] = income[year0:].tolist()
+        incomePcDict[countries[i]+' - '+code] = incomePc[year0:].tolist()
+        popDict[countries[i]+' - '+code] = pop[year0:].tolist()
+        count+=1
+
+income = pd.DataFrame(incomeDict,index=years[year0:])
+incomePc = pd.DataFrame(incomePcDict,index=years[year0:])
+pop = pd.DataFrame(popDict,index=years[year0:])
+
+incomePcLog = np.round(np.log(incomePc),5)
+incomePc = np.round(incomePc,5)
+
+# totalPop = pop.sum(axis=1)
+# totalIncome = income.sum(axis=1)
+# totalIncomePc = totalIncome/totalPop
+
+print count,' countries in the sample.'
+
+incomePc.to_csv('crossCountryIncome.csv',index_label='year')
+incomePcLog.to_csv('crossCountryIncomeLog.csv',index_label='year')
+
+
+# In[14]:
+
+incomePc = pd.read_csv('crossCountryIncome.csv',index_col='year')
+
+names = []
+y = []
+g = []
+for c in incomePc.columns:
+    names.append(c)
+    income = incomePc[c].iloc[0]
+    growth = (incomePc[c].iloc[-1]/incomePc[c].iloc[0])**(1/(len(incomePc[c])-1))-1
+    y.append(income/1000)
+    g.append(growth*100)
+
+
+# In[15]:
 
 # 5. Plot for website
-
-data = pd.read_csv('crossCountryIncome.csv',index_col='date')
-income70 = data.iloc[0]
+data = pd.read_csv('crossCountryIncome.csv',index_col='year')
+income60 = data.iloc[0]/1000
 growth = 100*((data.iloc[-1]/data.iloc[0])**(1/(len(data.index)-1))-1)
 
 fig = plt.figure(figsize=(10, 6)) 
 ax = fig.add_subplot(1,1,1)
 colors = ['red','blue','magenta','green']
 
-plt.scatter(income70,growth,s=0.0001)
+plt.scatter(income60,growth,s=0.0001)
 for i, txt in enumerate(data.columns):
     
-    ax.annotate(txt[0:3], (income70[i],growth[i]),fontsize=10,color = colors[np.mod(i,4)])
+    ax.annotate(txt[-3:], (income60[i],growth[i]),fontsize=10,color = colors[np.mod(i,4)])
 ax.grid()
 # ax.set_xscale('log')
-ax.set_xlabel('GDP per capita 1970 (2005 $)')
-ax.set_ylabel('Real GDP per capita growth\nfrom 1970 to '+str(data.index[-1][0:4]))
+ax.set_xlabel('GDP per capita in 1960\n (thousands of 2005 $ PPP)')
+ax.set_ylabel('Real GDP per capita growth\nfrom 1970 to '+str(years[-1])+ ' (%)')
+ax.set_xlim([0,20])
 
 fig.tight_layout()
-# plt.savefig('fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
+plt.savefig('fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
-# In[8]:
+# In[16]:
 
 #6. Export notebook to python script
 runProcs.exportNb('crossCountryIncomeData')
+
+
+# In[17]:
+
+fig = plt.figure()
+ax = fig.add_subplot(1,1,1)
+
+colors = ['red','blue','magenta','green']
+ax.scatter(y,g,s=0.0001)
+
+for i, txt in enumerate(names):
+    ax.annotate(txt[-3:], (y[i],g[i]),fontsize=7.5,alpha = 0.75,color = colors[np.mod(i,4)])
+ax.grid()
+# ax.set_xscale('log')
+ax.set_xlabel('GDP per capita in 1960\n (thousands of 2005 $ PPP)')
+ax.set_ylabel('Real GDP per capita growth\nfrom 1970 to '+str(years[-1])+ ' (%)')
+ax.set_xlim([0,20])
+
+fig.tight_layout()
+# plt.savefig('fig_GDPpc1960_GDPPpc1960_Growth.png',bbox_inches='tight')
+
+
+# In[18]:
+
+fig = plt.figure()
+ax = fig.add_subplot(1,1,1)
+
+y1960 = incomePc.iloc[years.index(1960)]
+yCurrent = incomePc.iloc[-1]
+
+# colors = ['red','blue','magenta','green']
+ax.scatter(y1960,yCurrent,s=0.00001)
+ax.grid()
+ax.set_xscale('log')
+ax.set_yscale('log')
+ax.set_xlim([10e1,10e4])
+ax.set_ylim([10e1,10e4])
+
+x = np.arange(0,100000,1)
+line45, = ax.plot(x,x,'k-')
+plt.legend([line45],['$45^\circ$'],loc='lower right',fontsize='15')
+
+for i, txt in enumerate(names):
+    ax.annotate(txt[-3:], (y1960[i],yCurrent[i]),fontsize=7.5,alpha = 0.75,color = colors[np.mod(i,4)])
+ax.set_xlabel('GDP per capita in '+str(years[0])+'\n (thousands of 2005 $ PPP)')
+ax.set_ylabel('GDP per capita in '+str(years[-1])+'\n (thousands of 2005 $ PPP)')
+fig.tight_layout()
+# plt.savefig('fig_GDPpc1960_CDPPpcCurrent.png',bbox_inches='tight')
 
