@@ -51,12 +51,11 @@ isoCodes = isoCodes[['id','name']]
 isoCodes = isoCodes.set_index('name')
 
 
-# In[4]:
+# In[8]:
 
 # 2. Indices for data series and labels for data frame
 
-indicators = {'NY.GDP.PCAP.KD':'GDP per capita (constant 2005 US$)'
-              }
+indicators = {'NY.GDP.PCAP.KD':'GDP per capita (constant 2005 US$)'}
 
 
 # In[5]:

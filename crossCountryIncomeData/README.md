@@ -1,2 +1,2 @@
 # crossCountryIncomeData
-Python script for downloading GDP per capita data from World Bank World Development Indicators
+Python script for creating a dataset of GDP per capita (PPP) from the Penn World Tables. To run this program you need pwt81.xlsx, available at: https://pwt.sas.upenn.edu/.
