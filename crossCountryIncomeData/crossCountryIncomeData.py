@@ -58,7 +58,7 @@ def findDateIndex(dateStr,fredObj):
 pwt = pd.read_excel('pwt81.xlsx',sheetname='Data')
 
 
-# In[4]:
+# In[ ]:
 
 # 2. lists of countries, codes, and years
 year0 = 1960
@@ -83,7 +83,7 @@ for year in pwt['year']:
 year0= years.index(year0)
 
 
-# In[5]:
+# In[ ]:
 
 # 3. Create deatasets
 
@@ -168,7 +168,7 @@ hours = createDataSet(pwtCode='avh',perCapita=False,fileName='crossCountryHours'
 popluation = createDataSet(pwtCode='pop',perCapita=False,fileName='crossCountryPopulation')
 
 
-# In[10]:
+# In[ ]:
 
 # 4. Plot for website
 data = pd.read_csv('crossCountryIncomePerCapita.csv',index_col='year')
@@ -190,7 +190,7 @@ ax.set_ylabel('Real GDP per capita growth\nfrom 1970 to '+str(years[-1])+ ' (%)'
 ax.set_xlim([0,20])
 
 fig.tight_layout()
-plt.savefig('fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
+# plt.savefig('fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
 # In[ ]:
