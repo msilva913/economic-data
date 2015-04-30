@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[8]:
+# In[1]:
 
 from __future__ import division
 import matplotlib.pyplot as plt
@@ -16,7 +16,7 @@ import pandas as pd
 # available at https://pwt.sas.upenn.edu/
 
 
-# In[9]:
+# In[2]:
 
 # 0. Setup
 
@@ -52,13 +52,13 @@ def findDateIndex(dateStr,fredObj):
             return n
 
 
-# In[11]:
+# In[3]:
 
 # 1. Import data
 pwt = pd.read_excel('pwt81.xlsx',sheetname='Data')
 
 
-# In[12]:
+# In[4]:
 
 # 2. lists of countries, codes, and years
 year0 = 1960
@@ -83,7 +83,7 @@ for year in pwt['year']:
 year0= years.index(year0)
 
 
-# In[20]:
+# In[5]:
 
 # 3. Create deatasets
 
@@ -174,7 +174,7 @@ def createDataSet(pwtCode='cgdpe',perCapita=True,perWorker=False,fileName='test'
 
 incomePw = createDataSet(pwtCode='cgdpe',perCapita=False,perWorker=True,fileName='crossCountryIncomePerWorker')
 outputPw = createDataSet(pwtCode='cgdpo',perCapita=False,perWorker=True,fileName='crossCountryOutputPerWorker')
-outputPw = createDataSet(pwtCode='cgdpo',perCapita=False,perWorker=True,fileName='crossCountryOutputPerCapita')
+outputPc = createDataSet(pwtCode='cgdpo',perCapita=True,perWorker=False,fileName='crossCountryOutputPerCapita')
 consumptionPc = createDataSet(pwtCode='ccon',perCapita=True,perWorker=False,fileName='crossCountryConsumptionPerCapita')
 physicalCapitalPw = createDataSet(pwtCode='ck',perCapita=False,perWorker=True,fileName='crossCountryPhysicalCapitalPerWorker')
 physicalCapitalPc = createDataSet(pwtCode='ck',perCapita=True,perWorker=False,fileName='crossCountryPhysicalCapitalPerCapita')
@@ -182,21 +182,6 @@ humanCapitalPc = createDataSet(pwtCode='hc',perCapita=False,perWorker=False,file
 employed = createDataSet(pwtCode='hc',perCapita=False,perWorker=False,fileName='crossCountryEmployed')
 hours = createDataSet(pwtCode='avh',perCapita=False,perWorker=False,fileName='crossCountryHours')
 popluation = createDataSet(pwtCode='pop',perCapita=False,perWorker=False,fileName='crossCountryPopulation')
-
-
-# In[24]:
-
-plt.scatter(physicalCapitalPc.iloc[-1],incomePc.iloc[-1])
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
 
 
 # In[6]:
