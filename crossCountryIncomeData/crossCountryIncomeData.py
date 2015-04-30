@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[8]:
 
 from __future__ import division
 import matplotlib.pyplot as plt
@@ -16,7 +16,7 @@ import pandas as pd
 # available at https://pwt.sas.upenn.edu/
 
 
-# In[2]:
+# In[9]:
 
 # 0. Setup
 
@@ -52,13 +52,13 @@ def findDateIndex(dateStr,fredObj):
             return n
 
 
-# In[3]:
+# In[11]:
 
 # 1. Import data
 pwt = pd.read_excel('pwt81.xlsx',sheetname='Data')
 
 
-# In[4]:
+# In[12]:
 
 # 2. lists of countries, codes, and years
 year0 = 1960
@@ -83,7 +83,7 @@ for year in pwt['year']:
 year0= years.index(year0)
 
 
-# In[5]:
+# In[20]:
 
 # 3. Create deatasets
 
@@ -172,16 +172,34 @@ def createDataSet(pwtCode='cgdpe',perCapita=True,perWorker=False,fileName='test'
         new.to_csv(fileName+'.csv',index_label='year')    
         return new
 
+incomePw = createDataSet(pwtCode='cgdpe',perCapita=False,perWorker=True,fileName='crossCountryIncomePerWorker')
 outputPw = createDataSet(pwtCode='cgdpo',perCapita=False,perWorker=True,fileName='crossCountryOutputPerWorker')
+outputPw = createDataSet(pwtCode='cgdpo',perCapita=False,perWorker=True,fileName='crossCountryOutputPerCapita')
 consumptionPc = createDataSet(pwtCode='ccon',perCapita=True,perWorker=False,fileName='crossCountryConsumptionPerCapita')
-physicalCapialPw = createDataSet(pwtCode='ck',perCapita=False,perWorker=True,fileName='crossCountryPhysicalCapitalPerWorker')
+physicalCapitalPw = createDataSet(pwtCode='ck',perCapita=False,perWorker=True,fileName='crossCountryPhysicalCapitalPerWorker')
+physicalCapitalPc = createDataSet(pwtCode='ck',perCapita=True,perWorker=False,fileName='crossCountryPhysicalCapitalPerCapita')
 humanCapitalPc = createDataSet(pwtCode='hc',perCapita=False,perWorker=False,fileName='crossCountryHumanCapitalPerCapita')
 employed = createDataSet(pwtCode='hc',perCapita=False,perWorker=False,fileName='crossCountryEmployed')
 hours = createDataSet(pwtCode='avh',perCapita=False,perWorker=False,fileName='crossCountryHours')
 popluation = createDataSet(pwtCode='pop',perCapita=False,perWorker=False,fileName='crossCountryPopulation')
 
 
+# In[24]:
+
+plt.scatter(physicalCapitalPc.iloc[-1],incomePc.iloc[-1])
+
+
 # In[ ]:
+
+
+
+
+# In[ ]:
+
+
+
+
+# In[6]:
 
 # 4. Plot for website
 data = pd.read_csv('crossCountryIncomePerCapita.csv',index_col='year')
@@ -206,7 +224,7 @@ fig.tight_layout()
 # plt.savefig('fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
-# In[ ]:
+# In[7]:
 
 #5. Export notebook to python script
 runProcs.exportNb('crossCountryIncomeData')
