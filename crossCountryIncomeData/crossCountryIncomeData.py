@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[9]:
+# In[1]:
 
 from __future__ import division
 import matplotlib.pyplot as plt
@@ -16,7 +16,7 @@ import pandas as pd
 # available at https://pwt.sas.upenn.edu/
 
 
-# In[10]:
+# In[2]:
 
 # 0. Setup
 
@@ -52,13 +52,13 @@ def findDateIndex(dateStr,fredObj):
             return n
 
 
-# In[11]:
+# In[3]:
 
 # 1. Import data
 pwt = pd.read_excel('pwt81.xlsx',sheetname='Data')
 
 
-# In[12]:
+# In[4]:
 
 # 2. lists of countries, codes, and years
 year0 = 1960
@@ -83,15 +83,17 @@ for year in pwt['year']:
 year0= years.index(year0)
 
 
-# In[13]:
+# In[5]:
 
-# 3. Create dataset 
+# 3. Create deatasets
+
+# 3.1 income and population datasets
 incomeDict = {}
 incomePcDict = {}
 popDict = {}
 count=0
 for i,code in enumerate(countryCodes):
-    income = pwt.loc[pwt['countrycode'] == code]['rgdpe'].values
+    income = pwt.loc[pwt['countrycode'] == code]['cgdpe'].values
     pop = pwt.loc[pwt['countrycode'] == code]['pop'].values
     incomePc = income/pop
     if code =='ZWE':
@@ -106,10 +108,9 @@ for i,code in enumerate(countryCodes):
 
 income = pd.DataFrame(incomeDict,index=years[year0:])
 incomePc = pd.DataFrame(incomePcDict,index=years[year0:])
-pop = pd.DataFrame(popDict,index=years[year0:])
 
-incomePcLog = np.round(np.log(incomePc),5)
 incomePc = np.round(incomePc,5)
+incomePcLog = np.round(np.log(incomePc),5)
 
 # totalPop = pop.sum(axis=1)
 # totalIncome = income.sum(axis=1)
@@ -117,29 +118,60 @@ incomePc = np.round(incomePc,5)
 
 print count,' countries in the sample.'
 
-incomePc.to_csv('crossCountryIncome.csv',index_label='year')
-incomePcLog.to_csv('crossCountryIncomeLog.csv',index_label='year')
+incomePc.to_csv('crossCountryIncomePerCapita.csv',index_label='year')
+incomePcLog.to_csv('crossCountryIncomePerCapitaLog.csv',index_label='year')
+
+# 3.2 Other datasets
+
+def createDataSet(pwtCode='cgdpe',perCapita=True,fileName='test'):
+
+    newDict = {}
+    newPcDict = {}
+    popDict = {}
+
+    for i,code in enumerate(countryCodes):
+        income = pwt.loc[pwt['countrycode'] == code]['cgdpe'].values
+        pop = pwt.loc[pwt['countrycode'] == code]['pop'].values
+        
+        new = pwt.loc[pwt['countrycode'] == code][pwtCode].values
+        incomePc = income/pop
+        newPc = new/pop
+        
+        if code =='ZWE':
+            income = income[0:62]
+            incomePc = incomePc[0:62]
+            new = new[0:62]
+            newPc = newPc[0:62]
+            pop = pop[0:62]
+        if True not in [np.isnan(x) for x in incomePc[year0:]]:
+            newDict[countries[i]+' - '+code] = new[year0:].tolist()
+            newPcDict[countries[i]+' - '+code] = newPc[year0:].tolist()
+    
+    new = pd.DataFrame(newDict,index=years[year0:])
+    newPc = pd.DataFrame(newPcDict,index=years[year0:])
+    
+    new = np.round(new,5)
+    newPc = np.round(newPc,5)
+
+    if perCapita == True:
+        newPc.to_csv(fileName+'.csv',index_label='year')
+        return newPc
+    else:
+        new.to_csv(fileName+'.csv',index_label='year')    
+        return new
+
+consumptionPc = createDataSet(pwtCode='ccon',perCapita=True,fileName='crossCountryConsumptionPerCapita')
+physicalCapialPc = createDataSet(pwtCode='ck',perCapita=True,fileName='crossCountryPhysicalCapitalPerWorker')
+humanCapitalPc = createDataSet(pwtCode='hc',perCapita=False,fileName='crossCountryHumanCapitalPerCapita')
+employed = createDataSet(pwtCode='hc',perCapita=False,fileName='crossCountryEmployed')
+hours = createDataSet(pwtCode='avh',perCapita=False,fileName='crossCountryHours')
+popluation = createDataSet(pwtCode='pop',perCapita=False,fileName='crossCountryPopulation')
 
 
-# In[14]:
+# In[10]:
 
-incomePc = pd.read_csv('crossCountryIncome.csv',index_col='year')
-
-names = []
-y = []
-g = []
-for c in incomePc.columns:
-    names.append(c)
-    income = incomePc[c].iloc[0]
-    growth = (incomePc[c].iloc[-1]/incomePc[c].iloc[0])**(1/(len(incomePc[c])-1))-1
-    y.append(income/1000)
-    g.append(growth*100)
-
-
-# In[15]:
-
-# 5. Plot for website
-data = pd.read_csv('crossCountryIncome.csv',index_col='year')
+# 4. Plot for website
+data = pd.read_csv('crossCountryIncomePerCapita.csv',index_col='year')
 income60 = data.iloc[0]/1000
 growth = 100*((data.iloc[-1]/data.iloc[0])**(1/(len(data.index)-1))-1)
 
@@ -161,56 +193,8 @@ fig.tight_layout()
 plt.savefig('fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
-# In[16]:
+# In[ ]:
 
-#6. Export notebook to python script
+#5. Export notebook to python script
 runProcs.exportNb('crossCountryIncomeData')
-
-
-# In[17]:
-
-fig = plt.figure()
-ax = fig.add_subplot(1,1,1)
-
-colors = ['red','blue','magenta','green']
-ax.scatter(y,g,s=0.0001)
-
-for i, txt in enumerate(names):
-    ax.annotate(txt[-3:], (y[i],g[i]),fontsize=7.5,alpha = 0.75,color = colors[np.mod(i,4)])
-ax.grid()
-# ax.set_xscale('log')
-ax.set_xlabel('GDP per capita in 1960\n (thousands of 2005 $ PPP)')
-ax.set_ylabel('Real GDP per capita growth\nfrom 1970 to '+str(years[-1])+ ' (%)')
-ax.set_xlim([0,20])
-
-fig.tight_layout()
-# plt.savefig('fig_GDPpc1960_GDPPpc1960_Growth.png',bbox_inches='tight')
-
-
-# In[18]:
-
-fig = plt.figure()
-ax = fig.add_subplot(1,1,1)
-
-y1960 = incomePc.iloc[years.index(1960)]
-yCurrent = incomePc.iloc[-1]
-
-# colors = ['red','blue','magenta','green']
-ax.scatter(y1960,yCurrent,s=0.00001)
-ax.grid()
-ax.set_xscale('log')
-ax.set_yscale('log')
-ax.set_xlim([10e1,10e4])
-ax.set_ylim([10e1,10e4])
-
-x = np.arange(0,100000,1)
-line45, = ax.plot(x,x,'k-')
-plt.legend([line45],['$45^\circ$'],loc='lower right',fontsize='15')
-
-for i, txt in enumerate(names):
-    ax.annotate(txt[-3:], (y1960[i],yCurrent[i]),fontsize=7.5,alpha = 0.75,color = colors[np.mod(i,4)])
-ax.set_xlabel('GDP per capita in '+str(years[0])+'\n (thousands of 2005 $ PPP)')
-ax.set_ylabel('GDP per capita in '+str(years[-1])+'\n (thousands of 2005 $ PPP)')
-fig.tight_layout()
-# plt.savefig('fig_GDPpc1960_CDPPpcCurrent.png',bbox_inches='tight')
 
