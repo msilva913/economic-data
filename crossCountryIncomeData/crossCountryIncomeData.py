@@ -58,7 +58,7 @@ def findDateIndex(dateStr,fredObj):
 pwt = pd.read_excel('pwt81.xlsx',sheetname='Data')
 
 
-# In[ ]:
+# In[4]:
 
 # 2. lists of countries, codes, and years
 year0 = 1960
@@ -83,7 +83,7 @@ for year in pwt['year']:
 year0= years.index(year0)
 
 
-# In[ ]:
+# In[5]:
 
 # 3. Create deatasets
 
@@ -123,49 +123,62 @@ incomePcLog.to_csv('crossCountryIncomePerCapitaLog.csv',index_label='year')
 
 # 3.2 Other datasets
 
-def createDataSet(pwtCode='cgdpe',perCapita=True,fileName='test'):
-
+def createDataSet(pwtCode='cgdpe',perCapita=True,perWorker=False,fileName='test'):
+    
     newDict = {}
     newPcDict = {}
+    newPwDict = {}
     popDict = {}
+    employedDict = {}
 
     for i,code in enumerate(countryCodes):
         income = pwt.loc[pwt['countrycode'] == code]['cgdpe'].values
         pop = pwt.loc[pwt['countrycode'] == code]['pop'].values
+        employed = pwt.loc[pwt['countrycode'] == code]['emp'].values
         
-        new = pwt.loc[pwt['countrycode'] == code][pwtCode].values
         incomePc = income/pop
+        new = pwt.loc[pwt['countrycode'] == code][pwtCode].values
         newPc = new/pop
+        newPw = new/employed
         
         if code =='ZWE':
             income = income[0:62]
             incomePc = incomePc[0:62]
             new = new[0:62]
             newPc = newPc[0:62]
+            newPw = newPw[0:62]
             pop = pop[0:62]
+            employed = employed[0:62]
         if True not in [np.isnan(x) for x in incomePc[year0:]]:
             newDict[countries[i]+' - '+code] = new[year0:].tolist()
             newPcDict[countries[i]+' - '+code] = newPc[year0:].tolist()
+            newPwDict[countries[i]+' - '+code] = newPw[year0:].tolist()
     
     new = pd.DataFrame(newDict,index=years[year0:])
     newPc = pd.DataFrame(newPcDict,index=years[year0:])
+    newPw = pd.DataFrame(newPwDict,index=years[year0:])
     
     new = np.round(new,5)
     newPc = np.round(newPc,5)
+    newPw = np.round(newPw,5)
 
     if perCapita == True:
         newPc.to_csv(fileName+'.csv',index_label='year')
         return newPc
+    elif perCapita == True:
+        newPw.to_csv(fileName+'.csv',index_label='year')
+        return newPw
     else:
         new.to_csv(fileName+'.csv',index_label='year')    
         return new
 
-consumptionPc = createDataSet(pwtCode='ccon',perCapita=True,fileName='crossCountryConsumptionPerCapita')
-physicalCapialPc = createDataSet(pwtCode='ck',perCapita=True,fileName='crossCountryPhysicalCapitalPerWorker')
-humanCapitalPc = createDataSet(pwtCode='hc',perCapita=False,fileName='crossCountryHumanCapitalPerCapita')
-employed = createDataSet(pwtCode='hc',perCapita=False,fileName='crossCountryEmployed')
-hours = createDataSet(pwtCode='avh',perCapita=False,fileName='crossCountryHours')
-popluation = createDataSet(pwtCode='pop',perCapita=False,fileName='crossCountryPopulation')
+outputPw = createDataSet(pwtCode='cgdpo',perCapita=False,perWorker=True,fileName='crossCountryOutputPerWorker')
+consumptionPc = createDataSet(pwtCode='ccon',perCapita=True,perWorker=False,fileName='crossCountryConsumptionPerCapita')
+physicalCapialPw = createDataSet(pwtCode='ck',perCapita=False,perWorker=True,fileName='crossCountryPhysicalCapitalPerWorker')
+humanCapitalPc = createDataSet(pwtCode='hc',perCapita=False,perWorker=False,fileName='crossCountryHumanCapitalPerCapita')
+employed = createDataSet(pwtCode='hc',perCapita=False,perWorker=False,fileName='crossCountryEmployed')
+hours = createDataSet(pwtCode='avh',perCapita=False,perWorker=False,fileName='crossCountryHours')
+popluation = createDataSet(pwtCode='pop',perCapita=False,perWorker=False,fileName='crossCountryPopulation')
 
 
 # In[ ]:
