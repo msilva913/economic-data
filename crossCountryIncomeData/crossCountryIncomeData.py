@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[3]:
 
 from __future__ import division
 import matplotlib.pyplot as plt
@@ -16,7 +16,7 @@ import pandas as pd
 # available at https://pwt.sas.upenn.edu/
 
 
-# In[2]:
+# In[4]:
 
 # 0. Setup
 
@@ -52,13 +52,13 @@ def findDateIndex(dateStr,fredObj):
             return n
 
 
-# In[3]:
+# In[5]:
 
 # 1. Import data
 pwt = pd.read_excel('pwt81.xlsx',sheetname='Data')
 
 
-# In[4]:
+# In[6]:
 
 # 2. lists of countries, codes, and years
 year0 = 1960
@@ -83,7 +83,7 @@ for year in pwt['year']:
 year0= years.index(year0)
 
 
-# In[5]:
+# In[8]:
 
 # 3. Create deatasets
 
@@ -182,6 +182,19 @@ humanCapitalPc = createDataSet(pwtCode='hc',perCapita=False,perWorker=False,file
 employed = createDataSet(pwtCode='hc',perCapita=False,perWorker=False,fileName='crossCountryEmployed')
 hours = createDataSet(pwtCode='avh',perCapita=False,perWorker=False,fileName='crossCountryHours')
 popluation = createDataSet(pwtCode='pop',perCapita=False,perWorker=False,fileName='crossCountryPopulation')
+savingRate = createDataSet(pwtCode='csh_i',perCapita=False,perWorker=False,fileName='crossCountrySavingRate')
+
+
+# In[17]:
+
+g = 100*((incomePc.iloc[-1]/incomePc.iloc[0])**(1/(len(incomePc['Argentina - ARG'])-1))-1)
+
+plt.scatter(savingRate.mean(),g)
+
+
+# In[15]:
+
+savingRate.mean()
 
 
 # In[6]:
