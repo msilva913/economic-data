@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[3]:
+# In[1]:
 
 from __future__ import division
 import matplotlib.pyplot as plt
@@ -16,7 +16,7 @@ import pandas as pd
 # available at https://pwt.sas.upenn.edu/
 
 
-# In[4]:
+# In[2]:
 
 # 0. Setup
 
@@ -52,13 +52,13 @@ def findDateIndex(dateStr,fredObj):
             return n
 
 
-# In[5]:
+# In[3]:
 
 # 1. Import data
 pwt = pd.read_excel('pwt81.xlsx',sheetname='Data')
 
 
-# In[6]:
+# In[ ]:
 
 # 2. lists of countries, codes, and years
 year0 = 1960
@@ -83,7 +83,7 @@ for year in pwt['year']:
 year0= years.index(year0)
 
 
-# In[8]:
+# In[ ]:
 
 # 3. Create deatasets
 
@@ -183,21 +183,11 @@ employed = createDataSet(pwtCode='hc',perCapita=False,perWorker=False,fileName='
 hours = createDataSet(pwtCode='avh',perCapita=False,perWorker=False,fileName='crossCountryHours')
 popluation = createDataSet(pwtCode='pop',perCapita=False,perWorker=False,fileName='crossCountryPopulation')
 savingRate = createDataSet(pwtCode='csh_i',perCapita=False,perWorker=False,fileName='crossCountrySavingRate')
+laborShare = createDataSet(pwtCode='labsh',perCapita=False,perWorker=False,fileName='crossCountryLaborShare')
+depreciation = createDataSet(pwtCode='delta',perCapita=False,perWorker=False,fileName='crossCountryDepreciationRate')
 
 
-# In[17]:
-
-g = 100*((incomePc.iloc[-1]/incomePc.iloc[0])**(1/(len(incomePc['Argentina - ARG'])-1))-1)
-
-plt.scatter(savingRate.mean(),g)
-
-
-# In[15]:
-
-savingRate.mean()
-
-
-# In[6]:
+# In[ ]:
 
 # 4. Plot for website
 data = pd.read_csv('crossCountryIncomePerCapita.csv',index_col='year')
@@ -222,7 +212,7 @@ fig.tight_layout()
 # plt.savefig('fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
-# In[7]:
+# In[ ]:
 
 #5. Export notebook to python script
 runProcs.exportNb('crossCountryIncomeData')
