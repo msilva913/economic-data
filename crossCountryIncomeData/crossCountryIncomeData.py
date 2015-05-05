@@ -58,7 +58,7 @@ def findDateIndex(dateStr,fredObj):
 pwt = pd.read_excel('pwt81.xlsx',sheetname='Data')
 
 
-# In[ ]:
+# In[4]:
 
 # 2. lists of countries, codes, and years
 year0 = 1960
@@ -83,7 +83,7 @@ for year in pwt['year']:
 year0= years.index(year0)
 
 
-# In[ ]:
+# In[5]:
 
 # 3. Create deatasets
 
@@ -165,7 +165,7 @@ def createDataSet(pwtCode='cgdpe',perCapita=True,perWorker=False,fileName='test'
     if perCapita == True:
         newPc.to_csv(fileName+'.csv',index_label='year')
         return newPc
-    elif perCapita == True:
+    elif perWorker == True:
         newPw.to_csv(fileName+'.csv',index_label='year')
         return newPw
     else:
@@ -187,7 +187,7 @@ laborShare = createDataSet(pwtCode='labsh',perCapita=False,perWorker=False,fileN
 depreciation = createDataSet(pwtCode='delta',perCapita=False,perWorker=False,fileName='crossCountryDepreciationRate')
 
 
-# In[ ]:
+# In[6]:
 
 # 4. Plot for website
 data = pd.read_csv('crossCountryIncomePerCapita.csv',index_col='year')
@@ -212,7 +212,7 @@ fig.tight_layout()
 # plt.savefig('fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
-# In[ ]:
+# In[7]:
 
 #5. Export notebook to python script
 runProcs.exportNb('crossCountryIncomeData')
