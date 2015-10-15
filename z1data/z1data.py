@@ -13,7 +13,7 @@ import requests
 import zipfile
 import os
 import runProcs
-# get_ipython().magic(u'matplotlib inline')
+# get_ipython().magic('matplotlib inline')
 
 
 # In[2]:
