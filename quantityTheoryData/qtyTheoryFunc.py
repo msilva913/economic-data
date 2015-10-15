@@ -26,7 +26,7 @@ def create(dataFrame,indicators,isoCodes,levels=None,csvFilename=None,decimals =
 
         # Check if an entire series is missing
         if any(all(np.isnan(x) for x in newDf[l]) for l in indicatorNames):
-            print 'At least one series missing for '+str(country)
+            print('At least one series missing for '+str(country))
             dropped.append(str(country))
 
         else:

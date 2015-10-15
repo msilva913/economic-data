@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[4]:
 
 from __future__ import division
 import matplotlib.pyplot as plt
@@ -10,13 +10,13 @@ import numpy as np
 import runProcs
 from scipy.stats import gaussian_kde
 import pandas as pd
-# get_ipython().magic(u'matplotlib inline')
+# get_ipython().magic('matplotlib inline')
 
 # This program requires the Penn World Tables data file: pwt81.xlsx
 # available at https://pwt.sas.upenn.edu/
 
 
-# In[2]:
+# In[5]:
 
 # 0. Setup
 
@@ -52,13 +52,13 @@ def findDateIndex(dateStr,fredObj):
             return n
 
 
-# In[3]:
+# In[6]:
 
 # 1. Import data
 pwt = pd.read_excel('pwt81.xlsx',sheetname='Data')
 
 
-# In[4]:
+# In[7]:
 
 # 2. lists of countries, codes, and years
 year0 = 1960
@@ -83,7 +83,7 @@ for year in pwt['year']:
 year0= years.index(year0)
 
 
-# In[5]:
+# In[8]:
 
 # 3. Create deatasets
 
@@ -116,7 +116,7 @@ incomePcLog = np.round(np.log(incomePc),5)
 # totalIncome = income.sum(axis=1)
 # totalIncomePc = totalIncome/totalPop
 
-print count,' countries in the sample.'
+print(count,' countries in the sample.')
 
 incomePc.to_csv('crossCountryIncomePerCapita.csv',index_label='year')
 incomePcLog.to_csv('crossCountryIncomePerCapitaLog.csv',index_label='year')
@@ -187,7 +187,7 @@ laborShare = createDataSet(pwtCode='labsh',perCapita=False,perWorker=False,fileN
 depreciation = createDataSet(pwtCode='delta',perCapita=False,perWorker=False,fileName='crossCountryDepreciationRate')
 
 
-# In[6]:
+# In[ ]:
 
 # 4. Plot for website
 data = pd.read_csv('crossCountryIncomePerCapita.csv',index_col='year')
@@ -212,7 +212,7 @@ fig.tight_layout()
 # plt.savefig('fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
-# In[7]:
+# In[ ]:
 
 #5. Export notebook to python script
 runProcs.exportNb('crossCountryIncomeData')
