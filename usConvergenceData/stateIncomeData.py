@@ -1,18 +1,18 @@
 
 # coding: utf-8
 
-# In[ ]:
+# In[7]:
 
 from __future__ import division,unicode_literals
-# get_ipython().magic(u'matplotlib inline')
+# get_ipython().magic('matplotlib inline')
 import numpy as np
 import pandas as pd
 import json
 import runProcs
-from urllib2 import urlopen
+from urllib.request import urlopen
 
 
-# In[ ]:
+# In[8]:
 
 # 0. State abbreviations
 
@@ -75,17 +75,21 @@ u'Wyoming':u'WY'
 stateList = [s for s in stateAbbr]
 
 
-# In[ ]:
+# In[13]:
 
 # 1. Construct series for price deflator
 
 # 1.1 Obtain data from BEA
 gdpDeflator = urlopen('http://bea.gov/api/data/?UserID=3EDEAA66-4B2B-4926-83C9-FD2089747A5B&method=GetData&datasetname=NIPA&TableID=13&Frequency=A&Year=X&ResultFormat=JSON&')
-result = gdpDeflator.read()
+
+
+result = gdpDeflator.readall().decode('utf-8')
+# obj = json.loads(str_response)
+# result = gdpDeflator.read()
 jsonResponse = json.loads(result)
 
 
-# In[ ]:
+# In[17]:
 
 # 1.2 Construct the data frame for the deflator series
 values = []
@@ -100,10 +104,10 @@ values = np.array([values]).T
 dataP = pd.DataFrame(values,index = years,columns = ['price level'])
 
 # 1.3 Display the data
-print dataP
+print(dataP)
 
 
-# In[ ]:
+# In[18]:
 
 # 2. Construct series for per capita income by state, region, and the entire us
 
@@ -114,7 +118,7 @@ jsonResponse = json.loads(result)
 # jsonResponse['BEAAPI']['Results']['Data'][0]['GeoName']
 
 
-# In[ ]:
+# In[21]:
 
 # 2.2 Construct the data frame for the per capita income series
 
@@ -151,7 +155,7 @@ dataY.columns=columns
 dataY
 
 
-# In[ ]:
+# In[19]:
 
 # 3. Export data to csv
 series = dataY
@@ -162,8 +166,13 @@ for c in dropCols:
 series.to_csv('stateIncomeData.csv',na_rep='NaN')
 
 
-# In[ ]:
+# In[20]:
 
 # 4. Export notebook to .py
 runProcs.exportNb('stateIncomeData')
+
+
+# In[ ]:
+
+
 

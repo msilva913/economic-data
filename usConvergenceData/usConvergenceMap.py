@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 import simplemapplot
 import subprocess,os
 import runProcs
-# get_ipython().magic(u'matplotlib inline')
+# get_ipython().magic('matplotlib inline')
 
 
 # In[2]:
@@ -205,7 +205,7 @@ soup = BeautifulSoup(svg)
 paths = soup.findAll('path')
 
 
-# In[ ]:
+# In[20]:
 
 # 4.4 Create color-coded maps for each year
 
@@ -263,16 +263,15 @@ for t,year in enumerate(stateIncome.index):
     svg = svg+u'<text style="font-size:20px" id="tcol0" x="915" y="530"> below '+str(bins[0])+'</text>\n'
     
     svg = svg+soup.prettify()[-24:-17]
-    with open("images/stateRelativeIncome"+str(year)+".svg", "wb") as file:
-        file.write(svg)
-#     html = soup.prettify("utf-8")
-#     with open("stateRelativeIncome"+year+".html", "wb") as file:
-#         file.write(html)
+#     with open("images/stateRelativeIncome"+str(year)+".svg", "wb") as file:
+#         file.write(svg)
+
+    file = open("images/stateRelativeIncome"+str(year)+".svg", "a")
     convert = 'convert -density 144 images/stateRelativeIncome'+str(year)+'.svg images/stateRelativeIncome'+str(year)+'.png'
     subprocess.call(convert,shell=True)
 
 
-# In[ ]:
+# In[21]:
 
 # 4.5 Creat gif with imagemagick
 makegif = 'convert -loop 0 -delay 50x100 images/*.png usStateConvergence.gif'
