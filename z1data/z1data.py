@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[13]:
 
 from __future__ import division
 from lxml import etree
@@ -16,7 +16,7 @@ import runProcs
 # get_ipython().magic('matplotlib inline')
 
 
-# In[2]:
+# In[ ]:
 
 # 0. Define a functions for managing parsed z1 data
 
@@ -84,7 +84,7 @@ def getDataSet(dataList):
     return df
 
 
-# In[3]:
+# In[ ]:
 
 # 1. Download .zip file and extract .xml (and other contents if necessary)
 
@@ -118,7 +118,7 @@ fh.close()
 os.remove('FRB_Z1.zip')
 
 
-# In[4]:
+# In[ ]:
 
 # 2. Import the xml data and create a legend
 
@@ -130,14 +130,14 @@ root = tree.getroot()
 # legend= createLegend(root)
 
 
-# In[5]:
+# In[ ]:
 
 # 3. Sample plot: US T-bill volume
 tBills = getSeries('FL313161113.A')
 tBills.plot(x_compat=True)
 
 
-# In[6]:
+# In[ ]:
 
 # 4. export the notebook
 runProcs.exportNb('z1data')
