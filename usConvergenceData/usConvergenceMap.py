@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 from __future__ import division
 import numpy as np
@@ -12,10 +12,10 @@ from bs4 import BeautifulSoup
 import simplemapplot
 import subprocess,os
 import runProcs
-# get_ipython().magic('matplotlib inline')
+# get_ipython().magic(u'matplotlib inline')
 
 
-# In[2]:
+# In[ ]:
 
 # 0. Setup
 
@@ -51,7 +51,7 @@ def findDateIndex(dateStr,fredObj):
             return n
 
 
-# In[3]:
+# In[ ]:
 
 # 1. Load and manage income data
 
@@ -70,7 +70,7 @@ csa = ['SC','MS','FL','AL','GA','LA','TX','VA','AR','TN','NC']
 stateIncome.index
 
 
-# In[4]:
+# In[ ]:
 
 # 2. Compute statistics
 
@@ -90,7 +90,7 @@ slope=model.beta[0]
 inter=model.beta[1]
 
 
-# In[5]:
+# In[ ]:
 
 # 3.1 Plots
 
@@ -116,7 +116,7 @@ plt.tight_layout()
 # plt.savefig('fig_us_statesIncomeGrowth.png',bbox_inches='tight',dpi=120)
 
 
-# In[6]:
+# In[ ]:
 
 # 3.2 Plot income per capita in all states
 fig = plt.figure()
@@ -146,7 +146,7 @@ plt.tight_layout()
 # plt.savefig('fig_us_statesIncome.png',bbox_inches='tight',dpi=120)
 
 
-# In[7]:
+# In[ ]:
 
 # 3.2 Plot income per capita in all states
 fig = plt.figure()
@@ -176,7 +176,7 @@ plt.tight_layout()
 # plt.savefig('fig_us_statesIncomeRelative.png',bbox_inches='tight',dpi=120)
 
 
-# In[8]:
+# In[ ]:
 
 # 4. Make the maps. Reference: http://flowingdata.com/2009/11/12/how-to-make-a-us-county-thematic-map-using-free-tools/
 
@@ -191,21 +191,21 @@ bins = [-.25,-.15,-.05,.05,.15,.25]
 # bins = [-.45,-.25,-.1,-.05-.025,.025,.05,.1,.25,.45]
 
 
-# In[9]:
+# In[ ]:
 
 # 4.2 Create an svg map using the simplemapplot module
 simplemapplot.make_us_state_map({"GA":0},colors=['#7FA9CF'],output_img='usMap.svg')
 svg = open('usMap.svg', 'r').read()
 
 
-# In[10]:
+# In[ ]:
 
 # 4.3 Load svg with Beautiful Soup
 soup = BeautifulSoup(svg)
 paths = soup.findAll('path')
 
 
-# In[20]:
+# In[ ]:
 
 # 4.4 Create color-coded maps for each year
 
@@ -271,7 +271,7 @@ for t,year in enumerate(stateIncome.index):
     subprocess.call(convert,shell=True)
 
 
-# In[21]:
+# In[ ]:
 
 # 4.5 Creat gif with imagemagick
 makegif = 'convert -loop 0 -delay 50x100 images/*.png usStateConvergence.gif'

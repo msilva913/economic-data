@@ -8,43 +8,52 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as dts
 import pandas as pd
-from fredclass import fred, window_equalize, quickplot
+from fredpy import series, window_equalize
 import datetime,dateutil,urllib,runProcs
-# get_ipython().magic(u'matplotlib inline')
+from selenium import webdriver
+import requests
+# get_ipython().magic('matplotlib inline')
 
 
 # In[2]:
 
 # 1. Import the most recent inflation forecast data from the Philadelphia Fed, Survey of Professional Forecasters
-dls = "http://www.philadelphiafed.org/research-and-data/real-time-center/survey-of-professional-forecasters/data-files/files/Median_PGDP_Level.xls"
-urllib.urlretrieve(dls, "gdpDeflatorForecast.xls")
 
-# dls = "http://www.philadelphiafed.org/research-and-data/real-time-center/survey-of-professional-forecasters/data-files/files/Median_RGDP_Level.xls"
-# urllib.urlretrieve(dls, "realGdpForecast.xls")
+url = 'https://www.philadelphiafed.org/-/media/research-and-data/real-time-center/survey-of-professional-forecasters/data-files/files/median_pgdp_level.xls?la=en'
+r = requests.get(url,verify=False)
+with open("gdpDeflatorForecast.xls", "wb") as code:
+    code.write(r.content)
+    
+# dls = "http://www.philadelphiafed.org/research-and-data/real-time-center/survey-of-professional-forecasters/data-files/files/Median_PGDP_Level.xls"
+# dls = "http://www.philadelphiafed.org/-/media/research-and-data/real-time-center/survey-of-professional-forecasters/data-files/files/median_pgdp_level.xls?la=en"
+# urllib.request.urlretrieve(dls, "gdpDeflatorForecast.xls")
+      
+# # dls = "http://www.philadelphiafed.org/research-and-data/real-time-center/survey-of-professional-forecasters/data-files/files/Median_RGDP_Level.xls"
+# # urllib.urlretrieve(dls, "realGdpForecast.xls")
 
-# dls = "http://www.philadelphiafed.org/research-and-data/real-time-center/survey-of-professional-forecasters/data-files/files/Median_RCONSUM_Level.xls"
-# urllib.urlretrieve(dls, "realConsumptionForecast.xls")
+# # dls = "http://www.philadelphiafed.org/research-and-data/real-time-center/survey-of-professional-forecasters/data-files/files/Median_RCONSUM_Level.xls"
+# # urllib.urlretrieve(dls, "realConsumptionForecast.xls")
 
 
-# In[3]:
+# In[4]:
 
 # 2. Download and manage data from FRED
 
 # 2.1 Download
-interestA = fred('GS1')
-realInterestExAnteA = fred('GS1')
+interestA = series('GS1')
+realInterestExAnteA = series('GS1')
 
-popA = fred('CNP16OV')
+popA = series('CNP16OV')
 
 
-gdpDeflatorA = fred('A191RD3A086NBEA')
-consGrowthA= fred('PCECCA')
-gdpGrowthA= fred('GDPCA')
+gdpDeflatorA = series('A191RD3A086NBEA')
+consGrowthA= series('PCECCA')
+gdpGrowthA= series('GDPCA')
 
 # 2.2 manage data
-interestA.monthtoannual(method='AVG')
-realInterestExAnteA.monthtoannual(method='AVG')
-popA.monthtoannual(method='END')
+interestA.monthtoannual(method='average')
+realInterestExAnteA.monthtoannual(method='average')
+popA.monthtoannual(method='end')
 gdpDeflatorA.apc(method='forward')
 consGrowthA.apc(method='forward')
 gdpGrowthA.apc(method='forward')
@@ -59,7 +68,7 @@ gdpGrowthA.window(win)
 popA.window(win)
 
 
-# In[4]:
+# In[5]:
 
 # 3. Create forecast series as FRED objects
 
@@ -73,10 +82,10 @@ inflationForecast[['PGDP6','PGDP3','PGDP2']] = inflationForecast[['PGDP6','PGDP3
 inflationForecast['inflation A'] = 100* ( inflationForecast['PGDP6']/inflationForecast['PGDP2']-1)
 
 # 3.2 initialize a FRED object
-inflationForecastA=fred('GDPDEF')
+inflationForecastA=series('GDPDEF')
 
 
-# In[5]:
+# In[6]:
 
 # 4 Define function to associate forecasts with dates.
 def forecastDates(forecastDataFrame):
@@ -99,17 +108,17 @@ def forecastDates(forecastDataFrame):
     return dates, dateNumbers
 
 
-# In[6]:
+# In[7]:
 
 # 5. Create FRED forecast objects
 
 inflationForecastA.data = inflationForecast['inflation A'].values.tolist()
-inflationForecastA.dates, inflationForecastA.datenums = forecastDates(inflationForecast)
+inflationForecastA.dates, inflationForecastA.datenumbers = forecastDates(inflationForecast)
 inflationForecastA.title = 'one-year ahead inflation forecast'
-inflationForecastA.quartertoannual(method='AVG')
+inflationForecastA.quartertoannual(method='average')
 
 
-# In[7]:
+# In[8]:
 
 # 5.3 Create the ex ante real interest rate data
 window_equalize([realInterestExAnteA,interestA,inflationForecastA,gdpDeflatorA,consGrowthA,gdpGrowthA,popA])
@@ -117,7 +126,7 @@ realInterestExAnteA.data = [i-p for i,p in zip(interestA.data,inflationForecastA
 realInterestExAnteA.title = 'ex ante real interest rate'
 
 
-# In[8]:
+# In[9]:
 
 # 6. Export the data
 
@@ -125,7 +134,7 @@ inflationForecastDf=np.round(pd.DataFrame({'1-year inflation forecast':inflation
 inflationForecastDf[[u'1-year nominal interest rate', u'1-year inflation forecast', u'1-year actual inflation', u'1-year ahead consumption growth',u'1-year population growth']].to_csv('inflationForecastDataAnnual.csv',index=True,index_label='date')
 
 
-# In[9]:
+# In[10]:
 
 # 7. Plot
 
@@ -161,11 +170,11 @@ def findDateIndex(dateStr,fredObj):
             return n
 
 
-# In[10]:
+# In[11]:
 
 # 7.2 Define a function for importing pandas series into FRED objects
 def pdSeriesToFRED(data,dates,title=None,t=None,season=None,freq=None,source=None,units=None,daterange=None,idCode=None,updated=None):
-    f = fred('UNRATE')
+    f = series('UNRATE')
     f.data = data
     f.dates = dates
     f.datenums = [dateutil.parser.parse(s) for s in f.dates]
@@ -210,7 +219,7 @@ fig.autofmt_xdate()
 plt.savefig('fig_US_Inflation_Forecast_site.png',bbox_inches='tight')
 
 
-# In[11]:
+# In[12]:
 
 #8. Export notebook to python script
 progName = 'realRateData'
