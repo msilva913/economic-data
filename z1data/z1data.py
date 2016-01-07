@@ -16,7 +16,7 @@ import runProcs
 # get_ipython().magic('matplotlib inline')
 
 
-# In[ ]:
+# In[14]:
 
 # 0. Define a functions for managing parsed z1 data
 
@@ -84,7 +84,7 @@ def getDataSet(dataList):
     return df
 
 
-# In[ ]:
+# In[15]:
 
 # 1. Download .zip file and extract .xml (and other contents if necessary)
 
@@ -118,7 +118,7 @@ fh.close()
 os.remove('FRB_Z1.zip')
 
 
-# In[ ]:
+# In[16]:
 
 # 2. Import the xml data and create a legend
 
@@ -130,14 +130,14 @@ root = tree.getroot()
 # legend= createLegend(root)
 
 
-# In[ ]:
+# In[17]:
 
 # 3. Sample plot: US T-bill volume
 tBills = getSeries('FL313161113.A')
 tBills.plot(x_compat=True)
 
 
-# In[ ]:
+# In[18]:
 
 # 4. export the notebook
 runProcs.exportNb('z1data')
