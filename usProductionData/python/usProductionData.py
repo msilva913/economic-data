@@ -46,7 +46,7 @@ majorLocator_y   = plt.MultipleLocator(3)
 majorLocator_shares = plt.MultipleLocator(0.2)
 
 
-# In[3]:
+# In[ ]:
 
 # 1. Setup for the construction of K and A
 
@@ -81,7 +81,7 @@ def capitalSeries(i,k0,delta):
     return np.array(k)
 
 
-# In[4]:
+# In[ ]:
 
 # 2. Import and manage data from FRED
 
@@ -149,7 +149,7 @@ baseYear = deflatorA.units[6:10]
 laborBaseYear= laborQ.units[6:10]
 
 
-# In[5]:
+# In[ ]:
 
 # 3. Parameter calibration using the annual series
 
@@ -192,7 +192,7 @@ print('delta:',delta)
 print('s:', iYRatio)
 
 
-# In[6]:
+# In[ ]:
 
 # 4. Implement the perpetual inventory method
 
@@ -205,7 +205,7 @@ k0Q = investmentQ4.data[0]/(delta/4 + g/4)
 capitalQ.data = capitalSeries(investmentQ4.data,k0Q,delta/4)
 
 
-# In[7]:
+# In[ ]:
 
 # 5. Plot the capital series. Note that the annual and quarterly series should and do align approximately.
 
@@ -242,10 +242,10 @@ capitalA.recessions()
 fig.autofmt_xdate()
 plt.title('Capital Stock: Quarterly')
 ax.grid(True)
-# plt.savefig('fig_US_Production_Capital_A.png',bbox_inches='tight')
+# plt.savefig('../img/fig_US_Production_Capital_A.png',bbox_inches='tight')
 
 
-# In[8]:
+# In[ ]:
 
 # 6. Save data to csv files
 
@@ -276,7 +276,7 @@ df = pd.DataFrame({
     'Capital [Bil. of '+baseYear+' Dollars]':CapitalA,
     'Labor [Mil. of Hours]':LaborA})
 df = df[columnsA]
-df.to_csv('US_Production_A_Data.csv',index=False)
+df.to_csv('../csv/US_Production_A_Data.csv',index=False)
 
 # 6.2 Quarterly data
 
@@ -305,10 +305,10 @@ df = pd.DataFrame({
     'Capital [Bil. of '+baseYear+' Dollars]':CapitalQ,
     'Labor [Index: '+laborBaseYear+'=100]':LaborQ})
 df = df[columnsQ]
-df.to_csv('US_Production_Q_Data.csv',index=False)
+df.to_csv('../csv/US_Production_Q_Data.csv',index=False)
 
 
-# In[9]:
+# In[ ]:
 
 # 7. Compute the Solow residuals: 
 
@@ -352,7 +352,7 @@ gKQ = capitalQ.data
 tfpQ.data = gYQ - alpha*gKQ - (1-alpha)*gLQ
 
 
-# In[10]:
+# In[ ]:
 
 # 11. Construct some plots
 
@@ -409,7 +409,7 @@ capitalA.recessions()
 fig.autofmt_xdate()
 ax.grid(True)
 
-plt.savefig('fig_US_Production_A_site.png',bbox_inches='tight')
+plt.savefig('../img/fig_US_Production_A_site.png',bbox_inches='tight')
 
 
 # 11.3 Quarterly GDP growth and the SOlow residual
@@ -424,10 +424,10 @@ fig.autofmt_xdate()
 ax.grid(True)
 ax.legend(['GDP growth','Solow Residual'],bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
        ncol=3, mode="expand", borderaxespad=0.,fontsize=15)
-# plt.savefig('fig_US_Production_ya_growth_Q.png',bbox_inches='tight')
+# plt.savefig('../img/fig_US_Production_ya_growth_Q.png',bbox_inches='tight')
 
 
-# In[11]:
+# In[ ]:
 
 # 10. Save growth rate data to csv files
 
@@ -453,7 +453,7 @@ for n,c in enumerate(columnsA):
 
 df = pd.DataFrame(dA)
 df = df[columnsA]
-df.to_csv('US_Production_A_Data_Growth_Rates.csv',index=False)
+df.to_csv('../csv/US_Production_A_Data_Growth_Rates.csv',index=False)
 
 
 # 10.2 Quarterly data
@@ -477,10 +477,10 @@ for n,c in enumerate(columnsQ):
 
 df = pd.DataFrame(dQ)
 df = df[columnsQ]
-df.to_csv('US_Production_Q_Data_Growth_Rates.csv',index=False)
+df.to_csv('../csv/US_Production_Q_Data_Growth_Rates.csv',index=False)
 
 
-# In[12]:
+# In[ ]:
 
 # 11. Export notebook to python script
 progName = 'usProductionData'
