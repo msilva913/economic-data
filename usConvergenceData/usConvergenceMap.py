@@ -14,7 +14,7 @@ import runProcs
 # get_ipython().magic('matplotlib inline')
 
 
-# In[14]:
+# In[2]:
 
 # -1.0 Create an svg map using the simplemapplot package
 
@@ -26,7 +26,7 @@ import runProcs
 svg = open('usMap.svg', 'r').read()
 
 
-# In[15]:
+# In[3]:
 
 # 0. Setup
 
@@ -62,7 +62,7 @@ def findDateIndex(dateStr,fredObj):
             return n
 
 
-# In[16]:
+# In[4]:
 
 # 1. Load and manage income data
 
@@ -81,7 +81,7 @@ csa = ['SC','MS','FL','AL','GA','LA','TX','VA','AR','TN','NC']
 stateIncome.index
 
 
-# In[17]:
+# In[5]:
 
 # 2. Compute statistics
 
@@ -101,7 +101,7 @@ slope=model.beta[0]
 inter=model.beta[1]
 
 
-# In[18]:
+# In[6]:
 
 # 3.1 Plots
 
@@ -127,7 +127,7 @@ plt.tight_layout()
 plt.savefig('fig_us_statesIncomeGrowth.png',bbox_inches='tight',dpi=120)
 
 
-# In[19]:
+# In[7]:
 
 # 3.2 Plot income per capita in all states
 fig = plt.figure()
@@ -157,7 +157,7 @@ plt.tight_layout()
 plt.savefig('fig_us_statesIncome.png',bbox_inches='tight',dpi=120)
 
 
-# In[ ]:
+# In[8]:
 
 # 3.2 Plot income per capita in all states
 fig = plt.figure()
@@ -187,7 +187,7 @@ plt.tight_layout()
 plt.savefig('fig_us_statesIncomeRelative.png',bbox_inches='tight',dpi=120)
 
 
-# In[ ]:
+# In[9]:
 
 # 4. Make the maps. Reference: http://flowingdata.com/2009/11/12/how-to-make-a-us-county-thematic-map-using-free-tools/
 
@@ -202,19 +202,14 @@ bins = [-.25,-.15,-.05,.05,.15,.25]
 # bins = [-.45,-.25,-.1,-.05-.025,.025,.05,.1,.25,.45]
 
 
-# In[ ]:
+# In[10]:
 
 # 4.2 Load svg with Beautiful Soup
 soup = BeautifulSoup(svg)
 paths = soup.findAll('path')
 
 
-# In[11]:
-
-soup
-
-
-# In[12]:
+# In[ ]:
 
 # 4.3 Create color-coded maps for each year
 
@@ -272,19 +267,20 @@ for t,year in enumerate(stateIncome.index):
     svg = svg+u'<text style="font-size:20px" id="tcol0" x="915" y="530"> below '+str(bins[0])+'</text>\n'
     
     svg = svg+soup.prettify()[-24:-17]
-    svg.replace('<html>','').replace('<body>','')
+    
+    svg = svg.split('<body>')[1]
+    
+    head = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<?xml-stylesheet href="Blank_US_Map.css" type="text/css"?>'
+    svg = head + svg
+    svg = svg.replace('width="959"','width="1035"')
+    
+    
     with open("images/stateRelativeIncome"+str(year)+".svg", "wb") as file:
         file.write(bytes(svg, 'UTF-8'))
 
     file = open("images/stateRelativeIncome"+str(year)+".svg", "a")
     convert = 'convert -density 144 images/stateRelativeIncome'+str(year)+'.svg images/stateRelativeIncome'+str(year)+'.png'
     subprocess.call(convert,shell=True)
-
-
-# In[13]:
-
-# soup.prettify()
-# soup.prettify().replace('<html>','')
 
 
 # In[ ]:
