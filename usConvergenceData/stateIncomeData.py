@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[7]:
+# In[1]:
 
 from __future__ import division,unicode_literals
 # get_ipython().magic('matplotlib inline')
@@ -12,7 +12,7 @@ import runProcs
 from urllib.request import urlopen
 
 
-# In[8]:
+# In[2]:
 
 # 0. State abbreviations
 
@@ -75,21 +75,17 @@ u'Wyoming':u'WY'
 stateList = [s for s in stateAbbr]
 
 
-# In[13]:
+# In[3]:
 
 # 1. Construct series for price deflator
 
 # 1.1 Obtain data from BEA
 gdpDeflator = urlopen('http://bea.gov/api/data/?UserID=3EDEAA66-4B2B-4926-83C9-FD2089747A5B&method=GetData&datasetname=NIPA&TableID=13&Frequency=A&Year=X&ResultFormat=JSON&')
-
-
 result = gdpDeflator.readall().decode('utf-8')
-# obj = json.loads(str_response)
-# result = gdpDeflator.read()
 jsonResponse = json.loads(result)
 
 
-# In[17]:
+# In[4]:
 
 # 1.2 Construct the data frame for the deflator series
 values = []
@@ -107,18 +103,18 @@ dataP = pd.DataFrame(values,index = years,columns = ['price level'])
 print(dataP)
 
 
-# In[18]:
+# In[5]:
 
 # 2. Construct series for per capita income by state, region, and the entire us
 
 # 2.1 Obtain data from BEA
 stateYpc = urlopen('http://bea.gov/api/data/?UserID=3EDEAA66-4B2B-4926-83C9-FD2089747A5B&method=GetData&datasetname=RegionalData&KeyCode=PCPI_SI&Year=ALL&GeoFips=STATE&ResultFormat=JSON&')
-result = stateYpc.read()
+result = stateYpc.readall().decode('utf-8')
 jsonResponse = json.loads(result)
 # jsonResponse['BEAAPI']['Results']['Data'][0]['GeoName']
 
 
-# In[21]:
+# In[6]:
 
 # 2.2 Construct the data frame for the per capita income series
 
@@ -155,10 +151,10 @@ dataY.columns=columns
 dataY
 
 
-# In[19]:
+# In[7]:
 
 # 3. Export data to csv
-series = dataY
+series = dataY.sort()
 dropCols = [u'AK', u'HI', u'New England', u'Mideast', u'Great Lakes', u'Plains', u'Southeast', u'Southwest', u'Rocky Mountain', u'Far West']
 for c in dropCols:
     series = series.drop([c],axis=1)
@@ -166,13 +162,8 @@ for c in dropCols:
 series.to_csv('stateIncomeData.csv',na_rep='NaN')
 
 
-# In[20]:
+# In[8]:
 
 # 4. Export notebook to .py
 runProcs.exportNb('stateIncomeData')
-
-
-# In[ ]:
-
-
 

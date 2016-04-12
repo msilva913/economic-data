@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 from __future__ import division
 import numpy as np
@@ -9,13 +9,24 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as dts
 import pandas as pd
 from bs4 import BeautifulSoup
-import simplemapplot
 import subprocess,os
 import runProcs
-# get_ipython().magic(u'matplotlib inline')
+# get_ipython().magic('matplotlib inline')
 
 
-# In[ ]:
+# In[14]:
+
+# -1.0 Create an svg map using the simplemapplot package
+
+# If the map file usMap.svg is not available locally uncomment the following.
+# Note that simplemapplot is not compatible with python 3.
+
+# import simplemapplot
+# simplemapplot.make_us_state_map({"GA":0},colors=['#7FA9CF'],output_img='usMap.svg')
+svg = open('usMap.svg', 'r').read()
+
+
+# In[15]:
 
 # 0. Setup
 
@@ -51,7 +62,7 @@ def findDateIndex(dateStr,fredObj):
             return n
 
 
-# In[ ]:
+# In[16]:
 
 # 1. Load and manage income data
 
@@ -70,7 +81,7 @@ csa = ['SC','MS','FL','AL','GA','LA','TX','VA','AR','TN','NC']
 stateIncome.index
 
 
-# In[ ]:
+# In[17]:
 
 # 2. Compute statistics
 
@@ -90,7 +101,7 @@ slope=model.beta[0]
 inter=model.beta[1]
 
 
-# In[ ]:
+# In[18]:
 
 # 3.1 Plots
 
@@ -113,10 +124,10 @@ ax.set_ylabel('average growth')
 plt.grid()
 
 plt.tight_layout()
-# plt.savefig('fig_us_statesIncomeGrowth.png',bbox_inches='tight',dpi=120)
+plt.savefig('fig_us_statesIncomeGrowth.png',bbox_inches='tight',dpi=120)
 
 
-# In[ ]:
+# In[19]:
 
 # 3.2 Plot income per capita in all states
 fig = plt.figure()
@@ -143,7 +154,7 @@ plt.legend(lns,labs,loc='upper left')
 
 
 plt.tight_layout()
-# plt.savefig('fig_us_statesIncome.png',bbox_inches='tight',dpi=120)
+plt.savefig('fig_us_statesIncome.png',bbox_inches='tight',dpi=120)
 
 
 # In[ ]:
@@ -173,7 +184,7 @@ plt.legend(lns,labs,loc='upper right',ncol=2)
 
 
 plt.tight_layout()
-# plt.savefig('fig_us_statesIncomeRelative.png',bbox_inches='tight',dpi=120)
+plt.savefig('fig_us_statesIncomeRelative.png',bbox_inches='tight',dpi=120)
 
 
 # In[ ]:
@@ -193,21 +204,19 @@ bins = [-.25,-.15,-.05,.05,.15,.25]
 
 # In[ ]:
 
-# 4.2 Create an svg map using the simplemapplot module
-simplemapplot.make_us_state_map({"GA":0},colors=['#7FA9CF'],output_img='usMap.svg')
-svg = open('usMap.svg', 'r').read()
-
-
-# In[ ]:
-
-# 4.3 Load svg with Beautiful Soup
+# 4.2 Load svg with Beautiful Soup
 soup = BeautifulSoup(svg)
 paths = soup.findAll('path')
 
 
-# In[ ]:
+# In[11]:
 
-# 4.4 Create color-coded maps for each year
+soup
+
+
+# In[12]:
+
+# 4.3 Create color-coded maps for each year
 
 path_style = 'font-size:12px;fill-rule:nonzero;stroke:#FFFFFF;stroke-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-linecap:butt;marker-start:none;stroke-linejoin:bevel;fill:'
 states = stateIncome.columns.tolist()
@@ -263,17 +272,24 @@ for t,year in enumerate(stateIncome.index):
     svg = svg+u'<text style="font-size:20px" id="tcol0" x="915" y="530"> below '+str(bins[0])+'</text>\n'
     
     svg = svg+soup.prettify()[-24:-17]
-#     with open("images/stateRelativeIncome"+str(year)+".svg", "wb") as file:
-#         file.write(svg)
+    svg.replace('<html>','').replace('<body>','')
+    with open("images/stateRelativeIncome"+str(year)+".svg", "wb") as file:
+        file.write(bytes(svg, 'UTF-8'))
 
     file = open("images/stateRelativeIncome"+str(year)+".svg", "a")
     convert = 'convert -density 144 images/stateRelativeIncome'+str(year)+'.svg images/stateRelativeIncome'+str(year)+'.png'
     subprocess.call(convert,shell=True)
 
 
+# In[13]:
+
+# soup.prettify()
+# soup.prettify().replace('<html>','')
+
+
 # In[ ]:
 
-# 4.5 Creat gif with imagemagick
+# 4.4 Creat gif with imagemagick
 makegif = 'convert -loop 0 -delay 50x100 images/*.png usStateConvergence.gif'
 subprocess.call(makegif,shell=True)
 
@@ -281,10 +297,10 @@ subprocess.call(makegif,shell=True)
 # In[ ]:
 
 # 5. Clean up
-os.chdir(os.getcwd())
-for files in os.listdir('.'):
-    if files.endswith('.css') or files.endswith('.svg'):
-        os.remove(files)
+# os.chdir(os.getcwd())
+# for files in os.listdir('.'):
+#     if files.endswith('.css') or files.endswith('.svg'):
+#         os.remove(files)
 
 
 # In[ ]:
