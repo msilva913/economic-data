@@ -197,7 +197,7 @@ full_data_frame[['deflator inflation - 3mo forecast','deflator inflation - 3mo a
                 ]].plot(ax=ax,lw=4,alpha = 0.6,grid=True)
 
 
-# In[ ]:
+# In[13]:
 
 # Construct annual data and export
 
@@ -218,17 +218,16 @@ annual_data_frame[['deflator inflation - 1yr forecast','deflator inflation - 1yr
                 ]].to_csv('../csv/realRateDataA.csv')
 
 
-# In[ ]:
+# In[14]:
 
 fig = plt.figure(figsize = (12,8))
 ax = fig.add_subplot(1,1,1)
 annual_data_frame.plot(ax=ax,lw=4,alpha = 0.6,grid=True)
-y.plot(ax=ax,lw=4,alpha = 0.6,grid=True)
 
 
 # ## Figure for website
 
-# In[ ]:
+# In[15]:
 
 # Formatter for inserting commas in y axis labels with magnitudes in the thousands
 
@@ -265,7 +264,7 @@ def findDateIndex(dateStr,fredObj):
             return n
 
 
-# In[ ]:
+# In[16]:
 
 # Figure
 
@@ -294,7 +293,7 @@ fig.autofmt_xdate()
 plt.savefig('../img/fig_US_Inflation_Forecast_site.png',bbox_inches='tight')
 
 
-# In[ ]:
+# In[17]:
 
 progName = 'realRateData'
 runProcs.exportNb(progName)
