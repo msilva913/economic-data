@@ -5,7 +5,7 @@
 # 
 # This program downloads, manages, and exports to .csv files inflation forecast data from the Federal Reserve Bank of Philadelphia, and actual inflation and interest rate data from FRED. The purpose is to learn about historical *ex ante* real interest rates in the US.
 
-# In[14]:
+# In[1]:
 
 # get_ipython().magic('matplotlib inline')
 import numpy as np
@@ -19,7 +19,7 @@ import requests
 
 # # Import forecast data
 
-# In[15]:
+# In[2]:
 
 # url = "https://www.philadelphiafed.org/-/media/research-and-data/real-time-center/survey-of-professional-forecasters/historical-data/inflation.xls?la=en"
 # r = requests.get(url,verify=False)
@@ -32,14 +32,14 @@ with open("../xls/medianLevel.xls", "wb") as code:
     code.write(r.content)
 
 
-# In[16]:
+# In[3]:
 
 # inflationForecasts = pd.read_excel('inflationForecasts.xls')
 # inflationForecasts=inflationForecasts.interpolate()
 # # inflationForecasts.iloc[0:5]
 
 
-# In[17]:
+# In[4]:
 
 deflatorForecasts = pd.read_excel('../xls/medianLevel.xls',sheetname = 'PGDP')
 deflatorForecasts=deflatorForecasts.interpolate()
@@ -47,7 +47,7 @@ deflatorForecasts = deflatorForecasts.iloc[5:]
 # deflatorForecasts.iloc[0:5]
 
 
-# In[18]:
+# In[5]:
 
 # cpiForecasts = pd.read_excel('medianLevel.xls',sheetname = 'CPI')
 # cpiForecasts = cpiForecasts.iloc[5:]
@@ -57,7 +57,7 @@ deflatorForecasts = deflatorForecasts.iloc[5:]
 
 # ## GDP deflator inflation forecasts
 
-# In[19]:
+# In[6]:
 
 # Create some fredpy instances
 defl_forecast_1q = series('GDPDEF')
@@ -114,7 +114,7 @@ deflator_frame = deflator_frame.set_index(pd.DatetimeIndex(defl_forecast_1q.date
 
 # ## Actual data
 
-# In[20]:
+# In[7]:
 
 interest3mo = series('TB3MS')
 interest6mo = series('TB6MS')
@@ -126,13 +126,13 @@ interest1yr.monthtoquarter()
 
 window_equalize([interest3mo,interest6mo,interest1yr])
 
-interest_frame = pd.DataFrame({'interest 3mo':interest3mo.data,
-                             'interest 6mo':interest6mo.data,
-                             'interest 1yr':interest1yr.data})
+interest_frame = pd.DataFrame({'nominal interest - 3mo':interest3mo.data,
+                             'nominal interest - 6mo':interest6mo.data,
+                             'nominal interest - 1yr':interest1yr.data})
 interest_frame = interest_frame.set_index(pd.DatetimeIndex(interest3mo.datenumbers))
 
 
-# In[21]:
+# In[8]:
 
 defl_3mo = series('GDPDEF')
 defl_6mo = series('GDPDEF')
@@ -167,14 +167,14 @@ defl_1yr_frame = pd.DataFrame({'deflator inflation - 1yr actual':defl_1yr.data})
 defl_1yr_frame = defl_1yr_frame.set_index(pd.DatetimeIndex(defl_1yr.datenumbers))
 
 
-# In[22]:
+# In[9]:
 
 actual_rates_frame = pd.concat([interest_frame,defl_3mo_frame,defl_6mo_frame,defl_1yr_frame],axis = 1)
 
 
 # ## Organize actual and forecasted data and export to csv files
 
-# In[23]:
+# In[10]:
 
 full_data_frame = pd.concat([actual_rates_frame,deflator_frame],axis=1)
 full_data_frame = full_data_frame.dropna(subset=['deflator inflation - 1yr forecast',
@@ -182,42 +182,53 @@ full_data_frame = full_data_frame.dropna(subset=['deflator inflation - 1yr forec
                                                  'deflator inflation - 6mo forecast'])
 
 
-# In[24]:
+# In[11]:
 
 # Export quarterly data
-full_data_frame[['deflator inflation - 3mo forecast','deflator inflation - 3mo actual','interest 3mo'
+full_data_frame[['deflator inflation - 3mo forecast','deflator inflation - 3mo actual','nominal interest - 3mo'
                 ]].to_csv('../csv/realRateDataQ.csv')
 
 
-# In[25]:
+# In[12]:
 
 fig = plt.figure(figsize = (12,8))
 ax = fig.add_subplot(1,1,1)
-full_data_frame[['deflator inflation - 3mo forecast','deflator inflation - 3mo actual','interest 3mo'
+full_data_frame[['deflator inflation - 3mo forecast','deflator inflation - 3mo actual','nominal interest - 3mo'
                 ]].plot(ax=ax,lw=4,alpha = 0.6,grid=True)
 
 
-# In[26]:
+# In[ ]:
 
 # Construct annual data and export
-annual_data_frame = full_data_frame[['deflator inflation - 1yr forecast','deflator inflation - 1yr actual','interest 1yr'
-                ]].resample('A', how='mean')
-annual_data_frame.index = annual_data_frame.index-pd.offsets.YearBegin()
 
-annual_data_frame[['deflator inflation - 1yr forecast','deflator inflation - 1yr actual','interest 1yr'
+# Resample to annual freq and count occurences per year
+annual_data_frame = full_data_frame[['deflator inflation - 1yr forecast','deflator inflation - 1yr actual','nominal interest - 1yr'
+                ]].resample('AS', how=[np.mean,pd.Series.count])
+
+# drop years with less than 4 quarters interest or inflation forecast 
+annual_data_frame = annual_data_frame[(annual_data_frame['deflator inflation - 1yr forecast']['count'] == 4) & 
+                 (annual_data_frame['nominal interest - 1yr']['count'] == 4)]
+
+# Drop the count  columns and multilevel index
+annual_data_frame = annual_data_frame.iloc[:, annual_data_frame.columns.get_level_values(1)=='mean']
+annual_data_frame.columns = annual_data_frame.columns.droplevel(level = 1)
+
+# Export to csv
+annual_data_frame[['deflator inflation - 1yr forecast','deflator inflation - 1yr actual','nominal interest - 1yr'
                 ]].to_csv('../csv/realRateDataA.csv')
 
 
-# In[27]:
+# In[ ]:
 
 fig = plt.figure(figsize = (12,8))
 ax = fig.add_subplot(1,1,1)
 annual_data_frame.plot(ax=ax,lw=4,alpha = 0.6,grid=True)
+y.plot(ax=ax,lw=4,alpha = 0.6,grid=True)
 
 
 # ## Figure for website
 
-# In[28]:
+# In[ ]:
 
 # Formatter for inserting commas in y axis labels with magnitudes in the thousands
 
@@ -254,7 +265,7 @@ def findDateIndex(dateStr,fredObj):
             return n
 
 
-# In[29]:
+# In[ ]:
 
 # Figure
 
@@ -283,7 +294,7 @@ fig.autofmt_xdate()
 plt.savefig('../img/fig_US_Inflation_Forecast_site.png',bbox_inches='tight')
 
 
-# In[30]:
+# In[ ]:
 
 progName = 'realRateData'
 runProcs.exportNb(progName)
