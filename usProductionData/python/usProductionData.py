@@ -46,29 +46,15 @@ majorLocator_y   = plt.MultipleLocator(3)
 majorLocator_shares = plt.MultipleLocator(0.2)
 
 
-# In[ ]:
+# In[3]:
 
 # 1. Setup for the construction of K and A
 
 # 1.1 Parameters for the model
-
-delta0= 0.06
-g0    = 0.03
 alpha = 0.35
 
-# 1.2 Some options for the program:
-# 
-#    If output_solow == TRUE, then Y = C + I.                   Else: Y = C + I + G + NX (default)
-#    If calibrate_delta == 'TRUE', then calibrate.              Else: delta=delta0 (default)
-#    If calibrate_g == 'TRUE', then calibrate. (default)        Else: g = g0 
-#    If growth_I == 'TRUE', then use g(I) for calbrating delta. Else: use G(Y) (default)
-# 
-
+# If output_solow == TRUE, then Y = C + I.  Else: Y = C + I + G + NX (default)
 output_solow = False
-calibrate_delta = False
-calibrate_g = True
-growth_I = False
-
 
 # 1.3 Define the function for computing the capital series
 
@@ -81,7 +67,7 @@ def capitalSeries(i,k0,delta):
     return np.array(k)
 
 
-# In[ ]:
+# In[4]:
 
 # 2. Import and manage data from FRED
 
@@ -126,8 +112,8 @@ tfpQ  = series('GDP')
 capitalQ  = series('GDP')
 laborQ    = series('HOANBS') # L    = fred('B4701C0A222NBEA')
 
-quarterlySeries = [investmentQ,consumptionQ,governmentQ,exportsQ,importsQ,netExportsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ]
-window_equalize([investmentQ,consumptionQ,governmentQ,netExportsQ,exportsQ,importsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ])
+quarterlySeries = [investmentQ,investmentQ4,consumptionQ,governmentQ,exportsQ,importsQ,netExportsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ]
+window_equalize([investmentQ,investmentQ4,consumptionQ,governmentQ,netExportsQ,exportsQ,importsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ])
 
 # 2.2 Compute real annual data series
 investmentQ.data= 100*investmentQ.data/deflatorQ.data
@@ -141,15 +127,15 @@ gdpQ.data= 100*gdpQ.data/deflatorQ.data
 TQ     = len(investmentQ.data)
 
 # 2.4 Compute real annual data series. Note that investment is at a quarterly rate
-# investmentQ4= [a/4 for a in investmentQ.data]
-# realGdpQ= [100*a/b for a,b in zip(gdpQ.data,deflatorQ.data)]
+investmentQ4.data= [a/4 for a in investmentQ.data]
+realGdpQ= [100*a/b for a,b in zip(gdpQ.data,deflatorQ.data)]
 
 # 2.5 Find the base year for the deflator:
 baseYear = deflatorA.units[6:10]
 laborBaseYear= laborQ.units[6:10]
 
 
-# In[ ]:
+# In[5]:
 
 # 3. Parameter calibration using the annual series
 
@@ -161,7 +147,7 @@ if output_solow == True:
     gdpQ.data = y0Q
 
 # 3.2 form the ratios of depreciation and investment to output
-depreciationYRatio= np.mean([d/y for d,y in zip(depreciationA.data,gdpA.data)])
+# depreciationYRatio= np.mean([d/y for d,y in zip(depreciationA.data,gdpA.data)])
 iYRatio = np.mean([i/y for i,y in zip(investmentA.data,gdpA.data)])
 
 
@@ -169,43 +155,33 @@ iYRatio = np.mean([i/y for i,y in zip(investmentA.data,gdpA.data)])
 growthY = (gdpA.data[-1]/gdpA.data[0])**(1/TA)-1
 growthI = (investmentA.data[-1]/investmentA.data[0])**(1/TA)-1
 
-# 3.4 Use the either the growth rate of Y or I to calibrate g if specified above
-if calibrate_g == True:
-    if growth_I == True:
-        g = growthI
-    else:
-        g = growthY
-else:
-    g = g0
+g = growthY
 
-    
-# 3.5 use the ratios of depreciation and investment to output to calibrate delta if requested
-if calibrate_delta == True:
-    delta = depreciationYRatio*g/(iYRatio-depreciationYRatio)
-else:
-    delta = delta0
+# 3.4 Compute delta based on requirement that K/Y = 2.5
+delta = iYRatio/2.5-g
 
-# 3.6 print the computed rates for inspection
+# 3.5 print the computed rates for inspection
 print('gI:'   ,growthI)
 print('gY:'   ,growthY)
 print('delta:',delta)
 print('s:', iYRatio)
+print('g:', g)
 
 
-# In[ ]:
+# In[6]:
 
 # 4. Implement the perpetual inventory method
 
 # 4.1 Annual capital series
-k0A = investmentA.data[0]/(delta + g)
-capitalA.data = capitalSeries(investmentA.data,k0A,delta)
+k0A = gdpA.data[0]*iYRatio/(delta + g)
+capitalA.data = capitalSeries(investmentA.data,k0A,delta=0.0375)
 
 # 4.2 Quarterly capital series
-k0Q = investmentQ4.data[0]/(delta/4 + g/4)
+k0Q = gdpQ.data[0]*iYRatio/(delta + g)
 capitalQ.data = capitalSeries(investmentQ4.data,k0Q,delta/4)
 
 
-# In[ ]:
+# In[7]:
 
 # 5. Plot the capital series. Note that the annual and quarterly series should and do align approximately.
 
@@ -245,7 +221,7 @@ ax.grid(True)
 # plt.savefig('../img/fig_US_Production_Capital_A.png',bbox_inches='tight')
 
 
-# In[ ]:
+# In[8]:
 
 # 6. Save data to csv files
 
@@ -308,7 +284,7 @@ df = df[columnsQ]
 df.to_csv('../csv/US_Production_Q_Data.csv',index=False)
 
 
-# In[ ]:
+# In[9]:
 
 # 7. Compute the Solow residuals: 
 
@@ -352,7 +328,7 @@ gKQ = capitalQ.data
 tfpQ.data = gYQ - alpha*gKQ - (1-alpha)*gLQ
 
 
-# In[ ]:
+# In[10]:
 
 # 11. Construct some plots
 
@@ -427,7 +403,7 @@ ax.legend(['GDP growth','Solow Residual'],bbox_to_anchor=(0., 1.02, 1., .102), l
 # plt.savefig('../img/fig_US_Production_ya_growth_Q.png',bbox_inches='tight')
 
 
-# In[ ]:
+# In[11]:
 
 # 10. Save growth rate data to csv files
 
@@ -480,7 +456,7 @@ df = df[columnsQ]
 df.to_csv('../csv/US_Production_Q_Data_Growth_Rates.csv',index=False)
 
 
-# In[ ]:
+# In[12]:
 
 # 11. Export notebook to python script
 progName = 'usProductionData'
