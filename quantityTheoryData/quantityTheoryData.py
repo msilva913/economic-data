@@ -6,7 +6,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import Quandl
+import quandl as Quandl
 import wbdata as wb
 from scipy import stats
 import runProcs
@@ -296,7 +296,11 @@ countriesIncomeAll =  [i['id'] for i in wb.get_country(incomelevel=['LIC','MIC',
 countriesIncomeH = [i['id'] for i in wb.get_country(incomelevel=['HIC'],display=False)]
 countriesIncomeM = [i['id'] for i in wb.get_country(incomelevel=['MIC'],display=False)]
 countriesIncomeL = [i['id'] for i in wb.get_country(incomelevel=['LIC'],display=False)]
-countriesIncomeOecd = [i['id'] for i in wb.get_country(incomelevel="OEC", display=False)]
+# countriesIncomeOecd = [i['id'] for i in wb.get_country(incomelevel="OECx", display=False)]
+
+
+countriesIncomeOecd = ['AUS','CAN','CHL','CZE','DNK','EST','HUN','ISL','ISR','JPN'
+                       ,'KOR','NZL','NOR''POL','SVK','SVN','SWE','CHE','USA']
 
 
 # # Import data from Quandl
