@@ -154,7 +154,7 @@ dataY
 # In[7]:
 
 # 3. Export data to csv
-series = dataY.sort()
+series = dataY.sort_index()
 dropCols = [u'AK', u'HI', u'New England', u'Mideast', u'Great Lakes', u'Plains', u'Southeast', u'Southwest', u'Rocky Mountain', u'Far West']
 for c in dropCols:
     series = series.drop([c],axis=1)

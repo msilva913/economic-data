@@ -19,7 +19,7 @@ import requests
 
 # # Import forecast data
 
-# In[2]:
+# In[3]:
 
 # url = "https://www.philadelphiafed.org/-/media/research-and-data/real-time-center/survey-of-professional-forecasters/historical-data/inflation.xls?la=en"
 # r = requests.get(url,verify=False)
@@ -32,14 +32,14 @@ with open("../xls/medianLevel.xls", "wb") as code:
     code.write(r.content)
 
 
-# In[3]:
+# In[4]:
 
 # inflationForecasts = pd.read_excel('inflationForecasts.xls')
 # inflationForecasts=inflationForecasts.interpolate()
 # # inflationForecasts.iloc[0:5]
 
 
-# In[4]:
+# In[5]:
 
 deflatorForecasts = pd.read_excel('../xls/medianLevel.xls',sheetname = 'PGDP')
 deflatorForecasts=deflatorForecasts.interpolate()
@@ -47,7 +47,7 @@ deflatorForecasts = deflatorForecasts.iloc[5:]
 # deflatorForecasts.iloc[0:5]
 
 
-# In[5]:
+# In[6]:
 
 # cpiForecasts = pd.read_excel('medianLevel.xls',sheetname = 'CPI')
 # cpiForecasts = cpiForecasts.iloc[5:]
@@ -57,7 +57,7 @@ deflatorForecasts = deflatorForecasts.iloc[5:]
 
 # ## GDP deflator inflation forecasts
 
-# In[6]:
+# In[7]:
 
 # Create some fredpy instances
 defl_forecast_1q = series('GDPDEF')
@@ -114,7 +114,7 @@ deflator_frame = deflator_frame.set_index(pd.DatetimeIndex(defl_forecast_1q.date
 
 # ## Actual data
 
-# In[7]:
+# In[8]:
 
 interest3mo = series('TB3MS')
 interest6mo = series('TB6MS')
@@ -132,7 +132,7 @@ interest_frame = pd.DataFrame({'nominal interest - 3mo':interest3mo.data,
 interest_frame = interest_frame.set_index(pd.DatetimeIndex(interest3mo.datenumbers))
 
 
-# In[8]:
+# In[9]:
 
 defl_3mo = series('GDPDEF')
 defl_6mo = series('GDPDEF')
@@ -167,14 +167,14 @@ defl_1yr_frame = pd.DataFrame({'deflator inflation - 1yr actual':defl_1yr.data})
 defl_1yr_frame = defl_1yr_frame.set_index(pd.DatetimeIndex(defl_1yr.datenumbers))
 
 
-# In[9]:
+# In[10]:
 
 actual_rates_frame = pd.concat([interest_frame,defl_3mo_frame,defl_6mo_frame,defl_1yr_frame],axis = 1)
 
 
 # ## Organize actual and forecasted data and export to csv files
 
-# In[10]:
+# In[11]:
 
 full_data_frame = pd.concat([actual_rates_frame,deflator_frame],axis=1)
 full_data_frame = full_data_frame.dropna(subset=['deflator inflation - 1yr forecast',
@@ -182,14 +182,14 @@ full_data_frame = full_data_frame.dropna(subset=['deflator inflation - 1yr forec
                                                  'deflator inflation - 6mo forecast'])
 
 
-# In[11]:
+# In[12]:
 
 # Export quarterly data
 full_data_frame[['deflator inflation - 3mo forecast','deflator inflation - 3mo actual','nominal interest - 3mo'
                 ]].to_csv('../csv/realRateDataQ.csv')
 
 
-# In[12]:
+# In[13]:
 
 fig = plt.figure(figsize = (12,8))
 ax = fig.add_subplot(1,1,1)
@@ -197,12 +197,15 @@ full_data_frame[['deflator inflation - 3mo forecast','deflator inflation - 3mo a
                 ]].plot(ax=ax,lw=4,alpha = 0.6,grid=True)
 
 
-# In[13]:
+# In[14]:
 
 # Construct annual data and export
 
 # Resample to annual freq and count occurences per year
 annual_data_frame = full_data_frame[['deflator inflation - 1yr forecast','deflator inflation - 1yr actual','nominal interest - 1yr'
+                ]].resample('AS', how=[np.mean,pd.Series.count])
+
+annual_data_frame2 = full_data_frame[['deflator inflation - 1yr forecast','deflator inflation - 1yr actual','nominal interest - 1yr'
                 ]].resample('AS', how=[np.mean,pd.Series.count])
 
 # drop years with less than 4 quarters interest or inflation forecast 
@@ -218,7 +221,12 @@ annual_data_frame[['deflator inflation - 1yr forecast','deflator inflation - 1yr
                 ]].to_csv('../csv/realRateDataA.csv')
 
 
-# In[14]:
+# In[16]:
+
+help(full_data_frame.resample)
+
+
+# In[15]:
 
 fig = plt.figure(figsize = (12,8))
 ax = fig.add_subplot(1,1,1)

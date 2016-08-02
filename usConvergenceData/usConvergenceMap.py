@@ -209,7 +209,7 @@ soup = BeautifulSoup(svg)
 paths = soup.findAll('path')
 
 
-# In[ ]:
+# In[11]:
 
 # 4.3 Create color-coded maps for each year
 
@@ -283,14 +283,14 @@ for t,year in enumerate(stateIncome.index):
     subprocess.call(convert,shell=True)
 
 
-# In[ ]:
+# In[12]:
 
 # 4.4 Creat gif with imagemagick
 makegif = 'convert -loop 0 -delay 50x100 images/*.png usStateConvergence.gif'
 subprocess.call(makegif,shell=True)
 
 
-# In[ ]:
+# In[13]:
 
 # 5. Clean up
 # os.chdir(os.getcwd())
@@ -299,7 +299,7 @@ subprocess.call(makegif,shell=True)
 #         os.remove(files)
 
 
-# In[ ]:
+# In[14]:
 
 # 6. Export notebook to .py
 runProcs.exportNb('usConvergenceMap')

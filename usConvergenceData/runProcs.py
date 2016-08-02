@@ -70,7 +70,7 @@ def exportNb(notebookName):
     '''Exports the ipython notebook file notebookName to a python script'''
     if notebookName.endswith('.ipynb')==False:
         notebookName = notebookName+'.ipynb'
-    run = subprocess.call('ipython nbconvert '+notebookName+' --to python', shell=True)
+    run = subprocess.call('jupyter nbconvert '+notebookName+' --to python', shell=True)
     with open(notebookName[:-6]+'.py') as Lines, open('file.tmp', "w") as newLines:
         for n,line in enumerate(Lines):
             if line[0:13]=='get_ipython()':

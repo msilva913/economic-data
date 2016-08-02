@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[7]:
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,7 +17,7 @@ import runProcs
 # 
 # Import country codes and country lists by income
 
-# In[ ]:
+# In[8]:
 
 # 1. Import country codes and organize
 
@@ -305,7 +305,7 @@ countriesIncomeOecd = ['AUS','CAN','CHL','CZE','DNK','EST','HUN','ISL','ISR','JP
 
 # # Import data from Quandl
 
-# In[ ]:
+# In[9]:
 
 # 2. Import data from Quandl
 
@@ -367,14 +367,14 @@ for name,key in countryCodes.items():
 
 # # Create data sets: money, prices, and output
 
-# In[ ]:
+# In[29]:
 
 # 3. Create datasets for quantity theory without interest and exchange rates
 
 # 3.1 Dataframes to use
 dataFrames = [moneyDf, deflatorDf, gdpDf]
 
-# 3.2 Identify the codes for countries with at leaset 10 years of consecutive data for each series
+# 3.2 Identify the codes for countries with at least 10 years of consecutive data for each series
 availableCodes = []
 for code in countryCodes.values():
     if all(code in frame for frame in dataFrames):
@@ -447,7 +447,10 @@ for country in qtyTheoryData.index:
         indexH.append(country)
     if code in countriesIncomeOecd:
         indexOecd.append(country)
-        
+
+# Drop countries with inf values
+qtyTheoryData = qtyTheoryData.replace([np.inf, -np.inf], np.nan).dropna()
+
 qtyTheoryDataL = qtyTheoryData.loc[indexL]
 qtyTheoryDataM = qtyTheoryData.loc[indexM]
 qtyTheoryDataH = qtyTheoryData.loc[indexH]
@@ -463,7 +466,7 @@ qtyTheoryDataOecd.to_csv('qtyTheoryDataOecd.csv',index=True,index_label='country
 
 # # Create data sets: money, prices, output, interest, and exchange rates
 
-# In[ ]:
+# In[30]:
 
 # 4. Create datasets for quantity theory with interest and exchange rates
 
@@ -549,6 +552,9 @@ for country in qtyTheoryData.index:
         indexH.append(country)
     if code in countriesIncomeOecd:
         indexOecd.append(country)
+        
+# Drop countries with inf values
+qtyTheoryData = qtyTheoryData.replace([np.inf, -np.inf], np.nan).dropna()
         
 qtyTheoryDataL = qtyTheoryData.loc[indexL]
 qtyTheoryDataM = qtyTheoryData.loc[indexM]
