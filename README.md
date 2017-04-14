@@ -33,7 +33,7 @@ Program for constructing a dataset that includes the 1-year T-bill rate, the 1-y
 Programs for constucting a dataset of per capita income by US state and region from 1929 to the present and for constructing the of the data gif found on http://www.briancjenkins.com/data/usconvergence/.
 
 1. US state income per capita dataset
-  - Instructions: Run either **stateIncomeData.ipynb or **stateIncomeData.py**
+  - Instructions: Run either **stateIncomeData.ipynb** or **stateIncomeData.py**
   - Ouput:
     - stateIncomeData.csv
   - Dependencies: numpy, pandas, json
