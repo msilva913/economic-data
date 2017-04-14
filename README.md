@@ -1,7 +1,7 @@
 # economicData
 Python programs for downloading economic data and constructing datasets.
 
-##crossCountryIncomeData
+## crossCountryIncomeData
 Program for constructing a .csv files containing real GDP per capita from 1970 to present including every country for which data is available for every year. Data is downloaded from the World Bank World Development Indicators using the wbdata api. 
 
   - Instructions: Run either **crossCountryIncomeData.ipynb** or **crossCountryIncomeData.py**
@@ -10,7 +10,7 @@ Program for constructing a .csv files containing real GDP per capita from 1970 t
      - crossCountryIncomeLog.csv data in logs
   - Dependencies: wbdata, pandas, numpy, runProcs.py
 
-##quantityTheoryData
+## quantityTheoryData
 Program for constructing datasets including long-run average rates of money (M1) growth, real GDP growth, and CPI inflation for each country for which there is at least 10 years of continuously available data for each variable. Data is downloaded from the World Bank World Development Indicators using the wbdata api.
 
   - Instructions: Run either **quantityTheoryData.ipynb** or **quantityTheoryData.py**
@@ -21,7 +21,7 @@ Program for constructing datasets including long-run average rates of money (M1)
     - qtyTheoryDataL.csv
   - Dependencies: wbdata, pandas, numpy, runProcs.py, qtyTheoryFunc.py
 
-##realRateData
+## realRateData
 Program for constructing a dataset that includes the 1-year T-bill rate, the 1-year ahead inflation forecast from the Survey of Professional Forecasters reported by the Federal Reserve Bank of Philadelphia, the 1-year ahead actual rate of inflation, and the one-year ahead actual growth rate in real consumption expenditures for the US. The data are from 1971.
 
 - Instructions: Run either **realRateData.ipynb** or **realRateData.py**
@@ -29,7 +29,7 @@ Program for constructing a dataset that includes the 1-year T-bill rate, the 1-y
    - inflationForecastDataAnnual.csv
 - Dependencies: pandas, numpy, runProcs.py, fredclass.py
   
-##usConvergenceData
+## usConvergenceData
 Programs for constucting a dataset of per capita income by US state and region from 1929 to the present and for constructing the of the data gif found on http://www.briancjenkins.com/data/usconvergence/.
 
 1. US state income per capita dataset
@@ -44,7 +44,7 @@ Programs for constucting a dataset of per capita income by US state and region f
     - usStateConvergence.gif
   - Dependencies: bs4 (BeautifulSoup), simplemapplot, runProcs.py
   
-##usProductionData
+## usProductionData
 Program for constructing a dataset for the US that includes real GDP, consumption, investment, government consumption, exports, imports, capital, and labor. The capital stock is constructed using the perpetual inventory method and there are some options for customizing the capital construction available in the program.
 
 - Instructions: Run either **crossCountryIncomeData.ipynb** or **crossCountryIncomeData.py**
@@ -55,7 +55,7 @@ Program for constructing a dataset for the US that includes real GDP, consumptio
   - US_Production_Q_Data_Growth_Rates.csv: Quarterly data, growth rates 
 - Dependencies: pandas, numpy, runProcs.py, fredclass.py
 
-##z1data
+## z1data
 Program for downloading the z.1 statistical release from the Federal Reserve and for parsing the xml file.
 - Instructions: Run either **z1data.ipynb** or **z1data.py**
 - Ouput: 
