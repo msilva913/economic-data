@@ -85,8 +85,8 @@ tfpA = series('GDPA')
 capitalA = series('GDPA')
 laborA = series('B4701C0A222NBEA')# BEA index: fred('HOANBS') / .quartertoannual(method='AVG')
 
-annualSeries = [investmentA,consumptionA,governmentA,exportsA,importsA,netExportsA,deflatorA,depreciationA,gdpA,tfpA,capitalA,laborA]
-window_equalize([investmentA,consumptionA,governmentA,netExportsA,exportsA,importsA,deflatorA,depreciationA,gdpA,tfpA,capitalA,laborA])
+# annualSeries = [investmentA,consumptionA,governmentA,exportsA,importsA,netExportsA,deflatorA,depreciationA,gdpA,tfpA,capitalA,laborA]
+investmentA,consumptionA,governmentA,netExportsA,exportsA,importsA,deflatorA,depreciationA,gdpA,tfpA,capitalA,laborA = window_equalize([investmentA,consumptionA,governmentA,netExportsA,exportsA,importsA,deflatorA,depreciationA,gdpA,tfpA,capitalA,laborA])
 
 # 2.2 Compute real annual data series
 investmentA.data= 100*investmentA.data/deflatorA.data
@@ -98,7 +98,10 @@ netExportsA.data = 100*netExportsA.data/deflatorA.data
 gdpA.data= 100*gdpA.data/deflatorA.data
 TA     = len(investmentA.data)
 
-# 2.3 Quarterly data
+# 2.3 Convert labor from millions of hours to billions
+laborA.data = laborA.data/1000
+
+# 2.4 Quarterly data
 investmentQ  = series('GPDI')
 investmentQ4  = series('GPDI')
 consumptionQ  = series('PCEC')
@@ -112,10 +115,10 @@ tfpQ  = series('GDP')
 capitalQ  = series('GDP')
 laborQ    = series('HOANBS') # L    = fred('B4701C0A222NBEA')
 
-quarterlySeries = [investmentQ,investmentQ4,consumptionQ,governmentQ,exportsQ,importsQ,netExportsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ]
-window_equalize([investmentQ,investmentQ4,consumptionQ,governmentQ,netExportsQ,exportsQ,importsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ])
+# quarterlySeries = [investmentQ,investmentQ4,consumptionQ,governmentQ,exportsQ,importsQ,netExportsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ]
+investmentQ,investmentQ4,consumptionQ,governmentQ,netExportsQ,exportsQ,importsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ = window_equalize([investmentQ,investmentQ4,consumptionQ,governmentQ,netExportsQ,exportsQ,importsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ])
 
-# 2.2 Compute real annual data series
+# 2.5 Compute real annual data series
 investmentQ.data= 100*investmentQ.data/deflatorQ.data
 investmentQ4.data= 100*investmentQ4.data/deflatorQ.data
 consumptionQ.data = 100*consumptionQ.data/deflatorQ.data
@@ -126,11 +129,11 @@ importsQ.data = 100*importsQ.data/deflatorQ.data
 gdpQ.data= 100*gdpQ.data/deflatorQ.data
 TQ     = len(investmentQ.data)
 
-# 2.4 Compute real annual data series. Note that investment is at a quarterly rate
-investmentQ4.data= [a/4 for a in investmentQ.data]
-realGdpQ= [100*a/b for a,b in zip(gdpQ.data,deflatorQ.data)]
+# 2.6 Compute real annual data series. Note that investment is at a quarterly rate
+investmentQ4.data= investmentQ.data/4
+realGdpQ= 100*gdpQ.data/deflatorQ.data
 
-# 2.5 Find the base year for the deflator:
+# 2.7 Find the base year for the deflator:
 baseYear = deflatorA.units[6:10]
 laborBaseYear= laborQ.units[6:10]
 
@@ -148,21 +151,24 @@ if output_solow == True:
 
 # 3.2 form the ratios of depreciation and investment to output
 # depreciationYRatio= np.mean([d/y for d,y in zip(depreciationA.data,gdpA.data)])
-iYRatio = np.mean([i/y for i,y in zip(investmentA.data,gdpA.data)])
+iYRatio = np.mean(investmentA.data/gdpA.data)
 
 
 # 3.3 compute the annual growth rates of output and investment
-growthY = (gdpA.data[-1]/gdpA.data[0])**(1/TA)-1
-growthI = (investmentA.data[-1]/investmentA.data[0])**(1/TA)-1
+growthY = (gdpA.data[-1]/gdpA.data[0])**(1/(TA-1))-1
+growthI = (investmentA.data[-1]/investmentA.data[0])**(1/(TA-1))-1
+growthL = (laborA.data[-1]/laborA.data[0])**(1/(TA-1))-1
 
 g = growthY
+n = growthL
 
 # 3.4 Compute delta based on requirement that K/Y = 2.5
-delta = iYRatio/2.5-g
+delta = iYRatio/2.5-g-n
 
 # 3.5 print the computed rates for inspection
 print('gI:'   ,growthI)
 print('gY:'   ,growthY)
+print('gL:'   ,growthL)
 print('delta:',delta)
 print('s:', iYRatio)
 print('g:', g)
@@ -173,11 +179,11 @@ print('g:', g)
 # 4. Implement the perpetual inventory method
 
 # 4.1 Annual capital series
-k0A = gdpA.data[0]*iYRatio/(delta + g)
-capitalA.data = capitalSeries(investmentA.data,k0A,delta=0.0375)
+k0A = gdpA.data[0]*iYRatio/(delta + g + n)
+capitalA.data = capitalSeries(investmentA.data,k0A,delta)
 
 # 4.2 Quarterly capital series
-k0Q = gdpQ.data[0]*iYRatio/(delta + g)
+k0Q = gdpQ.data[0]*iYRatio/(delta + g + n)
 capitalQ.data = capitalSeries(investmentQ4.data,k0Q,delta/4)
 
 
@@ -187,8 +193,8 @@ capitalQ.data = capitalSeries(investmentQ4.data,k0Q,delta/4)
 
 fig = plt.figure()
 ax = fig.add_subplot(1,1,1)
-ax.plot_date(capitalA.datenumbers,capitalA.data/1000,'b-',lw = 3)
-ax.plot_date(capitalQ.datenumbers,capitalQ.data/1000,'r-',lw = 3)
+ax.plot_date(capitalA.datetimes,capitalA.data/1000,'b-',lw = 3)
+ax.plot_date(capitalQ.datetimes,capitalQ.data/1000,'r-',lw = 3)
 ax.xaxis.set_major_locator(years10)
 ax.set_ylabel('Trillions of \n '+baseYear+' $')
 capitalA.recessions()
@@ -200,7 +206,7 @@ ax.grid(True)
 
 fig = plt.figure()
 ax = fig.add_subplot(1,1,1)
-ax.plot_date(capitalA.datenumbers,capitalA.data/1000,'b-',lw = 3)
+ax.plot_date(capitalA.datetimes,capitalA.data/1000,'b-',lw = 3)
 ax.xaxis.set_major_locator(years10)
 ax.set_ylabel('Trillions of \n '+baseYear+' $')
 capitalA.recessions()
@@ -211,7 +217,7 @@ ax.grid(True)
 
 fig = plt.figure()
 ax = fig.add_subplot(1,1,1)
-ax.plot_date(capitalQ.datenumbers,capitalQ.data/1000,'b-',lw = 3)
+ax.plot_date(capitalQ.datetimes,capitalQ.data/1000,'b-',lw = 3)
 ax.xaxis.set_major_locator(years10)
 ax.set_ylabel('Trillions of \n '+baseYear+' $')
 capitalA.recessions()
@@ -232,17 +238,17 @@ OutputA     = [round(x,1) for x in gdpA.data]
 ConsumptionA= [round(x,1) for x in consumptionA.data]
 InvestmentA = [round(x,1) for x in investmentA.data]
 GovernmentA = [round(x,1) for x in governmentA.data]
-ImportsA = [round(x,1) for x in netExportsA.data]
-ExportsA = [round(x,1) for x in netExportsA.data]
+ImportsA = [round(x,1) for x in importsA.data]
+ExportsA = [round(x,1) for x in exportsA.data]
 NetExportsA = [round(x,1) for x in netExportsA.data]
 CapitalA    = [round(x,1) for x in capitalA.data]
-LaborA      = [round(x,1) for x in laborA.data]
+LaborA      = [round(x,4) for x in laborA.data]
 
-columnsA = ['Year','Output [Bil. of '+baseYear+' Dollars]','Consumption [Bil. of '+baseYear+' Dollars]','Investment [Bil. of '+baseYear+' Dollars]','Government Purchases [Bil. of '+baseYear+' Dollars]','Exports [Bil. of '+baseYear+' Dollars]','Imports [Bil. of '+baseYear+' Dollars]','Net Exports [Bil. of '+baseYear+' Dollars]','Capital [Bil. of '+baseYear+' Dollars]','Labor [Mil. of Hours]']
+columnsA = ['Year','GDP [Bil. of '+baseYear+' Dollars]','Consumption [Bil. of '+baseYear+' Dollars]','Investment [Bil. of '+baseYear+' Dollars]','Government Purchases [Bil. of '+baseYear+' Dollars]','Exports [Bil. of '+baseYear+' Dollars]','Imports [Bil. of '+baseYear+' Dollars]','Net Exports [Bil. of '+baseYear+' Dollars]','Capital [Bil. of '+baseYear+' Dollars]','Labor [Bil. of Hours]']
 
 df = pd.DataFrame({
     'Year':YearA,
-    'Output [Bil. of '+baseYear+' Dollars]':OutputA,
+    'GDP [Bil. of '+baseYear+' Dollars]':OutputA,
     'Consumption [Bil. of '+baseYear+' Dollars]':ConsumptionA,
     'Investment [Bil. of '+baseYear+' Dollars]':InvestmentA,
     'Government Purchases [Bil. of '+baseYear+' Dollars]':GovernmentA,
@@ -250,7 +256,7 @@ df = pd.DataFrame({
     'Imports [Bil. of '+baseYear+' Dollars]':ImportsA,
     'Net Exports [Bil. of '+baseYear+' Dollars]':NetExportsA,
     'Capital [Bil. of '+baseYear+' Dollars]':CapitalA,
-    'Labor [Mil. of Hours]':LaborA})
+    'Labor [Bil. of Hours]':LaborA})
 df = df[columnsA]
 df.to_csv('../csv/US_Production_A_Data.csv',index=False)
 
@@ -268,10 +274,10 @@ CapitalQ  = [round(x,1) for x in capitalQ.data]
 LaborQ    = [round(x,1) for x in laborQ.data]
 
 
-columnsQ = ['Date','Output [Bil. of '+baseYear+' Dollars]','Consumption [Bil. of '+baseYear+' Dollars]','Investment [Bil. of '+baseYear+' Dollars]','Government Purchases [Bil. of '+baseYear+' Dollars]','Exports [Bil. of '+baseYear+' Dollars]','Imports [Bil. of '+baseYear+' Dollars]','Net Exports [Bil. of '+baseYear+' Dollars]','Capital [Bil. of '+baseYear+' Dollars]','Labor [Index: '+laborBaseYear+'=100]']
+columnsQ = ['Date','GDP [Bil. of '+baseYear+' Dollars]','Consumption [Bil. of '+baseYear+' Dollars]','Investment [Bil. of '+baseYear+' Dollars]','Government Purchases [Bil. of '+baseYear+' Dollars]','Exports [Bil. of '+baseYear+' Dollars]','Imports [Bil. of '+baseYear+' Dollars]','Net Exports [Bil. of '+baseYear+' Dollars]','Capital [Bil. of '+baseYear+' Dollars]','Labor [Index: '+laborBaseYear+'=100]']
 df = pd.DataFrame({
     'Date':DateQ,
-    'Output [Bil. of '+baseYear+' Dollars]':OutputQ,
+    'GDP [Bil. of '+baseYear+' Dollars]':OutputQ,
     'Consumption [Bil. of '+baseYear+' Dollars]':ConsumptionQ,
     'Investment [Bil. of '+baseYear+' Dollars]':InvestmentQ,
     'Government Purchases [Bil. of '+baseYear+' Dollars]':GovernmentQ,
@@ -289,16 +295,16 @@ df.to_csv('../csv/US_Production_Q_Data.csv',index=False)
 # 7. Compute the Solow residuals: 
 
 # 7.1 Annual residual
-capitalA.apc()
-tfpA.apc()
-laborA.apc()
-gdpA.apc()
-consumptionA.apc()
-investmentA.apc()
-governmentA.apc()
-exportsA.apc()
-importsA.apc()
-netExportsA.apc()
+capitalA = capitalA.apc()
+tfpA = tfpA.apc()
+laborA = laborA.apc()
+gdpA = gdpA.apc()
+consumptionA = consumptionA.apc()
+investmentA = investmentA.apc()
+governmentA = governmentA.apc()
+exportsA = exportsA.apc()
+importsA = importsA.apc()
+# netExportsA = netExportsA.apc()
 
 gYA = gdpA.data
 gLA = laborA.data
@@ -308,18 +314,18 @@ tfpA.data = gYA - alpha*gKA - (1-alpha)*gLA
 
 # 7.2. Compute the Solow residual: Quarterly
 
-capitalQ.apc()
-tfpQ.apc()
-laborQ.apc()
-gdpQ.apc()
-consumptionQ.apc()
-investmentQ.apc()
-governmentQ.apc()
-exportsQ.apc()
-importsQ.apc()
+capitalQ = capitalQ.apc()
+tfpQ = tfpQ.apc()
+laborQ = laborQ.apc()
+gdpQ = gdpQ.apc()
+consumptionQ = consumptionQ.apc()
+investmentQ = investmentQ.apc()
+governmentQ = governmentQ.apc()
+exportsQ = exportsQ.apc()
+importsQ = importsQ.apc()
 
 netExportsQ.data = np.array(netExportsQ.data)
-netExportsQ.apc()
+# netExportsQ = netExportsQ.apc()
 
 gYQ = gdpQ.data
 gLQ = laborQ.data
@@ -334,8 +340,8 @@ tfpQ.data = gYQ - alpha*gKQ - (1-alpha)*gLQ
 
 fig = plt.figure() 
 ax = fig.add_subplot(1,1,1)
-ax.plot_date(gdpA.datenumbers,gdpA.data,'b-',lw = 3)
-ax.plot_date(tfpA.datenumbers,tfpA.data,'g-',lw = 3)
+ax.plot_date(gdpA.datetimes,gdpA.data,'b-',lw = 3)
+ax.plot_date(tfpA.datetimes,tfpA.data,'g-',lw = 3)
 ax.xaxis.set_major_locator(years10)
 ax.set_ylabel('%')
 gdpA.recessions()
@@ -348,7 +354,7 @@ ax.legend(['GDP growth','Solow Residual'],bbox_to_anchor=(0., 1.02, 1., .102), l
 # 11.2 Figure for website: Annual growth in Y, L, K, and A
 fig = plt.figure(figsize=(10, 6)) 
 ax = fig.add_subplot(2,2,1)
-ax.plot_date(tfpA.datenumbers,tfpA.data,'b-',lw = 3,alpha = 0.75)
+ax.plot_date(tfpA.datetimes,tfpA.data,'b-',lw = 3,alpha = 0.75)
 ax.set_title('TFP Growth')
 ax.xaxis.set_major_locator(years10)
 ax.set_ylabel('%')
@@ -358,7 +364,7 @@ ax.locator_params(axis='y',nbins=6)
 ax.grid(True)
 
 ax = fig.add_subplot(2,2,2)
-ax.plot_date(gdpA.datenumbers,gdpA.data,'b-',lw = 3,alpha = 0.75)
+ax.plot_date(gdpA.datetimes,gdpA.data,'b-',lw = 3,alpha = 0.75)
 ax.set_title('Real GDP Growth')
 ax.xaxis.set_major_locator(years10)
 ax.locator_params(axis='y',nbins=6)
@@ -367,7 +373,7 @@ fig.autofmt_xdate()
 ax.grid(True)
 
 ax = fig.add_subplot(2,2,3)
-ax.plot_date(laborA.datenumbers,laborA.data,'b-',lw = 3,alpha = 0.75)
+ax.plot_date(laborA.datetimes,laborA.data,'b-',lw = 3,alpha = 0.75)
 ax.xaxis.set_major_locator(years10)
 laborA.recessions()
 ax.set_ylabel('%')
@@ -377,7 +383,7 @@ fig.autofmt_xdate()
 ax.grid(True)
 
 ax = fig.add_subplot(2,2,4)
-ax.plot_date(capitalA.datenumbers,capitalA.data,'b-',lw = 3,alpha = 0.75)
+ax.plot_date(capitalA.datetimes,capitalA.data,'b-',lw = 3,alpha = 0.75)
 ax.xaxis.set_major_locator(years10)
 ax.set_title('Capital Growth')
 ax.locator_params(axis='y',nbins=6)
@@ -391,8 +397,8 @@ plt.savefig('../img/fig_US_Production_A_site.png',bbox_inches='tight')
 # 11.3 Quarterly GDP growth and the SOlow residual
 fig = plt.figure() 
 ax = fig.add_subplot(1,1,1)
-ax.plot_date(gdpQ.datenumbers,gdpQ.data,'b-',lw = 3)
-ax.plot_date(tfpQ.datenumbers,tfpQ.data,'g-',lw = 3)
+ax.plot_date(gdpQ.datetimes,gdpQ.data,'b-',lw = 3)
+ax.plot_date(tfpQ.datetimes,tfpQ.data,'g-',lw = 3)
 ax.xaxis.set_major_locator(years10)
 ax.set_ylabel('%')
 gdpQ.recessions()
@@ -421,8 +427,8 @@ ImportsA   = [round(x,1) for x in importsA.data]
 NetExportsA   = [round(x,1) for x in netExportsA.data]
 
 
-columnsA = ['Year','Output Growth','Consumption Growth','Investment Growth','Government Purchases Growth','Exports Growth','Imports Growth','Net Exports Growth','Capital Growth','Labor Growth']
-data = [YearA,OutputA,ConsumptionA,InvestmentA,GovernmentA,ExportsA,ImportsA,NetExportsA,CapitalA,LaborA]
+columnsA = ['Year','GDP Growth','Consumption Growth','Investment Growth','Government Purchases Growth','Exports Growth','Imports Growth','Capital Growth','Labor Growth']
+data = [YearA,OutputA,ConsumptionA,InvestmentA,GovernmentA,ExportsA,ImportsA,CapitalA,LaborA]
 dA ={}
 for n,c in enumerate(columnsA):
     dA[columnsA[n]]=data[n]
@@ -445,8 +451,8 @@ ExportsQ   = [round(x,1) for x in exportsQ.data]
 ImportsQ   = [round(x,1) for x in importsQ.data]
 NetExportsQ   = [round(x,1) for x in netExportsQ.data]
 
-columnsQ = ['Year','Output Growth','Consumption Growth','Investment Growth','Government Purchases Growth','Exports Growth','Imports Growth','Net Exports Growth','Capital Growth','Labor Growth']
-data = [DateQ,OutputQ,ConsumptionQ,InvestmentQ,GovernmentQ,ExportsQ,ImportsQ,NetExportsQ,CapitalQ,LaborQ]
+columnsQ = ['Year','GDP Growth','Consumption Growth','Investment Growth','Government Purchases Growth','Exports Growth','Imports Growth','Capital Growth','Labor Growth']
+data = [DateQ,OutputQ,ConsumptionQ,InvestmentQ,GovernmentQ,ExportsQ,ImportsQ,CapitalQ,LaborQ]
 dQ ={}
 for n,c in enumerate(columnsQ):
     dQ[columnsQ[n]]=data[n]
