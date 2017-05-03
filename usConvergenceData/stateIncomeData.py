@@ -11,6 +11,8 @@ import json
 import runProcs
 from urllib.request import urlopen
 
+import matplotlib.pyplot as plt
+
 
 # In[2]:
 
@@ -81,7 +83,9 @@ stateList = [s for s in stateAbbr]
 
 # 1.1 Obtain data from BEA
 gdpDeflator = urlopen('http://bea.gov/api/data/?UserID=3EDEAA66-4B2B-4926-83C9-FD2089747A5B&method=GetData&datasetname=NIPA&TableID=13&Frequency=A&Year=X&ResultFormat=JSON&')
-result = gdpDeflator.readall().decode('utf-8')
+
+# result = gdpDeflator.readall().decode('utf-8')
+result = gdpDeflator.read().decode('utf-8')
 jsonResponse = json.loads(result)
 
 
@@ -109,7 +113,8 @@ print(dataP)
 
 # 2.1 Obtain data from BEA
 stateYpc = urlopen('http://bea.gov/api/data/?UserID=3EDEAA66-4B2B-4926-83C9-FD2089747A5B&method=GetData&datasetname=RegionalData&KeyCode=PCPI_SI&Year=ALL&GeoFips=STATE&ResultFormat=JSON&')
-result = stateYpc.readall().decode('utf-8')
+# result = stateYpc.readall().decode('utf-8')
+result = stateYpc.read().decode('utf-8')
 jsonResponse = json.loads(result)
 # jsonResponse['BEAAPI']['Results']['Data'][0]['GeoName']
 
@@ -147,14 +152,47 @@ for r in regions:
         
 dataY.columns=columns
 
-# 2.2.4 Display the data
+# 2.2.4 Display the data obtained from the BEA
 dataY
 
 
 # In[7]:
 
+# 3. State income data for 1840, 1880, and 1900
+
+# 3.1.1 Import Easterlin's income data
+easterlin_data = pd.read_csv('Historical Statistics of the US - Easterlin State Income Data.csv',index_col=0)
+
+# 3.1.2 Import historic CPI data
+historic_cpi_data=pd.read_csv('Historical Statistics of the US - cpi.csv',index_col=0)
+historic_cpi_data = historic_cpi_data/historic_cpi_data.loc[1929]*float(dataP.loc['1929'])
+
+
+# In[8]:
+
+# Const
+df_1840 = easterlin_data['Income per capita - 1840 - A [cur dollars]']/float(historic_cpi_data.loc[1840])
+df_1880 = easterlin_data['Income per capita - 1880 [cur dollars]']/float(historic_cpi_data.loc[1890])
+df_1900 = easterlin_data['Income per capita - 1900 [cur dollars]']/float(historic_cpi_data.loc[1900])
+
+df = pd.DataFrame({'1840':df_1840,'1880':df_1880,'1900':df_1900}).transpose()
+
+
+# In[9]:
+
+df = pd.concat([dataY,df]).sort_index()
+
+
+# In[17]:
+
+df.loc['1880'].sort_values()
+
+
+# In[10]:
+
 # 3. Export data to csv
 series = dataY.sort_index()
+series = df.sort_index()
 dropCols = [u'AK', u'HI', u'New England', u'Mideast', u'Great Lakes', u'Plains', u'Southeast', u'Southwest', u'Rocky Mountain', u'Far West']
 for c in dropCols:
     series = series.drop([c],axis=1)
@@ -162,7 +200,12 @@ for c in dropCols:
 series.to_csv('stateIncomeData.csv',na_rep='NaN')
 
 
-# In[8]:
+# In[11]:
+
+len(dataY.columns)
+
+
+# In[12]:
 
 # 4. Export notebook to .py
 runProcs.exportNb('stateIncomeData')

@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as dts
 import pandas as pd
+import statsmodels.api as sm
 from bs4 import BeautifulSoup
 import subprocess,os
 import runProcs
@@ -85,20 +86,26 @@ stateIncome.index
 
 # 2. Compute statistics
 
+stateIncomeFrom1929 = stateIncome.iloc[3:]
+
 # 2.1 Per capita income at start of sample
-origY = stateIncome.iloc[0]
+origY = stateIncomeFrom1929.iloc[0]
 
 # 2.2 Compute average annual growth rates over sample
-T = len(stateIncome.index)-1
+T = len(stateIncomeFrom1929.index)-1
 growth = []
-for i in stateIncome.columns:
-    growth.append( 100*1/T*(np.log(stateIncome[i].iloc[-1]/stateIncome[i].iloc[0])))
+for i in stateIncomeFrom1929.columns:
+    growth.append( 100*1/T*(np.log(stateIncomeFrom1929[i].iloc[-1]/stateIncomeFrom1929[i].iloc[0])))
 
-# OLS of growth on starting income
-model = pd.ols(y=growth, x=origY)
+# 2.3 OLS regression
+X = sm.add_constant(origY)
 
-slope=model.beta[0]
-inter=model.beta[1]
+model = sm.OLS(growth,X)
+results = model.fit()
+results.params
+
+slope = results.params[0]
+inter = results.params[1]
 
 
 # In[6]:
@@ -205,11 +212,11 @@ bins = [-.25,-.15,-.05,.05,.15,.25]
 # In[10]:
 
 # 4.2 Load svg with Beautiful Soup
-soup = BeautifulSoup(svg)
+soup = BeautifulSoup(svg, "lxml")
 paths = soup.findAll('path')
 
 
-# In[11]:
+# In[ ]:
 
 # 4.3 Create color-coded maps for each year
 
@@ -241,7 +248,12 @@ for t,year in enumerate(stateIncome.index):
             else:
                 color_class = 0
 
-            color = colors[color_class]
+            if np.isnan(y):
+                color = '#D3D3D3'
+                print(states[i])
+            else:
+                color = colors[color_class]
+                
             p['style'] = path_style + color
 
     svg = soup.prettify()[17:56]+u'1054'+soup.prettify()[59:-24]
@@ -283,14 +295,14 @@ for t,year in enumerate(stateIncome.index):
     subprocess.call(convert,shell=True)
 
 
-# In[12]:
+# In[ ]:
 
 # 4.4 Creat gif with imagemagick
 makegif = 'convert -loop 0 -delay 50x100 images/*.png usStateConvergence.gif'
 subprocess.call(makegif,shell=True)
 
 
-# In[13]:
+# In[ ]:
 
 # 5. Clean up
 # os.chdir(os.getcwd())
@@ -299,7 +311,7 @@ subprocess.call(makegif,shell=True)
 #         os.remove(files)
 
 
-# In[14]:
+# In[ ]:
 
 # 6. Export notebook to .py
 runProcs.exportNb('usConvergenceMap')
