@@ -104,8 +104,8 @@ model = sm.OLS(growth,X)
 results = model.fit()
 results.params
 
-slope = results.params[0]
-inter = results.params[1]
+slope = results.params[1]
+inter = results.params[0]
 
 
 # In[6]:
@@ -116,6 +116,8 @@ inter = results.params[1]
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
 
+ax.plot(np.arange(0,20,0.001),inter+slope*np.arange(0,20,0.001),'-k',label='best fit line')
+plt.legend(loc='upper right',fontsize='15')
 
 for i,state in enumerate(stateIncome.columns):
     if state in csa:
@@ -123,7 +125,7 @@ for i,state in enumerate(stateIncome.columns):
     else:
         plt.text(origY[i], growth[i], state, color="#11557c",fontsize=12, clip_on=True,horizontalalignment='center',verticalalignment='center',alpha = 1)
 
-ax.plot(np.arange(0,20,0.001),inter+slope*np.arange(0,20,0.001),'-k')
+
 ax.set_ylim([1,3.5])
 ax.set_xlim([2,14])
 ax.set_xlabel('income per capita in 1929 \n (thousands of 2009 $)')
@@ -187,7 +189,8 @@ plt.grid()
 
 lns = north+south
 labs = [l.get_label() for l in lns]
-plt.legend(lns,labs,loc='upper right',ncol=2)
+plt.legend(lns,labs,bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+       ncol=3, mode="expand", borderaxespad=0.,fontsize=15)
 
 
 plt.tight_layout()
