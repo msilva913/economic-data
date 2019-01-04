@@ -1,7 +1,8 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
-# In[4]:
+# In[1]:
+
 
 from __future__ import division
 import matplotlib.pyplot as plt
@@ -10,13 +11,14 @@ import numpy as np
 import runProcs
 from scipy.stats import gaussian_kde
 import pandas as pd
-# get_ipython().magic('matplotlib inline')
+# get_ipython().run_line_magic('matplotlib', 'inline')
 
 # This program requires the Penn World Tables data file: pwt81.xlsx
 # available at https://pwt.sas.upenn.edu/
 
 
-# In[5]:
+# In[2]:
+
 
 # 0. Setup
 
@@ -52,13 +54,27 @@ def findDateIndex(dateStr,fredObj):
             return n
 
 
-# In[6]:
+# In[3]:
+
 
 # 1. Import data
-pwt = pd.read_excel('pwt81.xlsx',sheetname='Data')
+pwt = pd.read_excel('pwt90.xlsx',sheet_name='Data')
 
 
-# In[7]:
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[4]:
+
 
 # 2. lists of countries, codes, and years
 year0 = 1960
@@ -81,9 +97,11 @@ for year in pwt['year']:
         years.append(year)
 
 year0= years.index(year0)
+len(years)
 
 
-# In[8]:
+# In[5]:
+
 
 # 3. Create deatasets
 
@@ -97,9 +115,9 @@ for i,code in enumerate(countryCodes):
     pop = pwt.loc[pwt['countrycode'] == code]['pop'].values
     incomePc = income/pop
     if code =='ZWE':
-        income = income[0:62]
-        incomePc = incomePc[0:62]
-        pop = pop[0:62]
+        income = income[0:len(years)]
+        incomePc = incomePc[0:len(years)]
+        pop = pop[0:len(years)]
     if True not in [np.isnan(x) for x in incomePc[year0:]]:
         incomeDict[countries[i]+' - '+code] = income[year0:].tolist()
         incomePcDict[countries[i]+' - '+code] = incomePc[year0:].tolist()
@@ -142,13 +160,13 @@ def createDataSet(pwtCode='cgdpe',perCapita=True,perWorker=False,fileName='test'
         newPw = new/employed
         
         if code =='ZWE':
-            income = income[0:62]
-            incomePc = incomePc[0:62]
-            new = new[0:62]
-            newPc = newPc[0:62]
-            newPw = newPw[0:62]
-            pop = pop[0:62]
-            employed = employed[0:62]
+            income = income[0:len(years)]
+            incomePc = incomePc[0:len(years)]
+            new = new[0:len(years)]
+            newPc = newPc[0:len(years)]
+            newPw = newPw[0:len(years)]
+            pop = pop[0:len(years)]
+            employed = employed[0:len(years)]
         if True not in [np.isnan(x) for x in incomePc[year0:]]:
             newDict[countries[i]+' - '+code] = new[year0:].tolist()
             newPcDict[countries[i]+' - '+code] = newPc[year0:].tolist()
@@ -187,7 +205,8 @@ laborShare = createDataSet(pwtCode='labsh',perCapita=False,perWorker=False,fileN
 depreciation = createDataSet(pwtCode='delta',perCapita=False,perWorker=False,fileName='crossCountryDepreciationRate')
 
 
-# In[ ]:
+# In[6]:
+
 
 # 4. Plot for website
 data = pd.read_csv('crossCountryIncomePerCapita.csv',index_col='year')
@@ -206,13 +225,14 @@ ax.grid()
 # ax.set_xscale('log')
 ax.set_xlabel('GDP per capita in 1960\n (thousands of 2005 $ PPP)')
 ax.set_ylabel('Real GDP per capita growth\nfrom 1970 to '+str(years[-1])+ ' (%)')
-ax.set_xlim([0,20])
+ax.set_xlim([0,25])
 
 fig.tight_layout()
-# plt.savefig('fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
+plt.savefig('fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
 # In[ ]:
+
 
 #5. Export notebook to python script
 runProcs.exportNb('crossCountryIncomeData')
