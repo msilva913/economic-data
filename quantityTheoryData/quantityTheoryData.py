@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[1]:
 
 
 import numpy as np
 import matplotlib.pyplot as plt
+plt.style.use('classic')
 import pandas as pd
 import quandl as Quandl
 import wbdata as wb
@@ -18,7 +19,7 @@ import runProcs
 # 
 # Import country codes and country lists by income
 
-# In[4]:
+# In[2]:
 
 
 # 1. Import country codes and organize
@@ -298,8 +299,6 @@ countriesIncomeAll =  [i['id'] for i in wb.get_country(incomelevel=['LIC','MIC',
 countriesIncomeH = [i['id'] for i in wb.get_country(incomelevel=['HIC'],display=False)]
 countriesIncomeM = [i['id'] for i in wb.get_country(incomelevel=['MIC'],display=False)]
 countriesIncomeL = [i['id'] for i in wb.get_country(incomelevel=['LIC'],display=False)]
-# countriesIncomeOecd = [i['id'] for i in wb.get_country(incomelevel="OECx", display=False)]
-
 
 countriesIncomeOecd = ['AUS','CAN','CHL','CZE','DNK','EST','HUN','ISL','ISR','JPN'
                        ,'KOR','NZL','NOR''POL','SVK','SVN','SWE','CHE','USA']
@@ -307,7 +306,7 @@ countriesIncomeOecd = ['AUS','CAN','CHL','CZE','DNK','EST','HUN','ISL','ISR','JP
 
 # # Import data from Quandl
 
-# In[5]:
+# In[ ]:
 
 
 # 2. Import data from Quandl

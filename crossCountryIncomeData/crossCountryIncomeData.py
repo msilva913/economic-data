@@ -6,6 +6,7 @@
 
 from __future__ import division
 import matplotlib.pyplot as plt
+plt.style.use('classic')
 import matplotlib.dates as dts
 import numpy as np
 import runProcs
@@ -13,7 +14,7 @@ from scipy.stats import gaussian_kde
 import pandas as pd
 # get_ipython().run_line_magic('matplotlib', 'inline')
 
-# This program requires the Penn World Tables data file: pwt81.xlsx
+# This program requires the Penn World Tables data file: pwt90.xlsx
 # available at https://pwt.sas.upenn.edu/
 
 
@@ -59,18 +60,6 @@ def findDateIndex(dateStr,fredObj):
 
 # 1. Import data
 pwt = pd.read_excel('pwt90.xlsx',sheet_name='Data')
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
 
 
 # In[4]:
@@ -231,7 +220,7 @@ fig.tight_layout()
 plt.savefig('fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
-# In[ ]:
+# In[7]:
 
 
 #5. Export notebook to python script
