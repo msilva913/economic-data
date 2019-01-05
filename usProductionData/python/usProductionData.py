@@ -1,18 +1,21 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[2]:
+
 
 import numpy as np
 import matplotlib.pyplot as plt
+plt.style.use('classic')
 import matplotlib.dates as dts
-from fredpy import series, window_equalize
+import fredpy as fp
 import pandas as pd
 import runProcs
-# get_ipython().magic('matplotlib inline')
+# get_ipython().run_line_magic('matplotlib', 'inline')
 
 
-# In[2]:
+# In[3]:
+
 
 # 0. Setup: Formatting commands and definitions.
 
@@ -41,12 +44,16 @@ y_format = plt.FuncFormatter(func)  # make formatter
 years2,years4,years5,years10,years15= dts.YearLocator(2),dts.YearLocator(4),dts.YearLocator(5),dts.YearLocator(10),dts.YearLocator(15)
 
 
-# 0.4 y label locator for vertical axes plotting gdp
+# 0.4 label locator for vertical axes plotting gdp
 majorLocator_y   = plt.MultipleLocator(3)
 majorLocator_shares = plt.MultipleLocator(0.2)
 
+# 0.5 load fred api key
+fp.api_key = fp.load_api_key('fred_api_key.txt')
 
-# In[3]:
+
+# In[4]:
+
 
 # 1. Setup for the construction of K and A
 
@@ -67,28 +74,29 @@ def capitalSeries(i,k0,delta):
     return np.array(k)
 
 
-# In[4]:
+# In[ ]:
+
 
 # 2. Import and manage data from FRED
 
 # 2.1 Annual data
-investmentA = series('GPDIA')
-consumptionA = series('PCECA')
-governmentA = series('GCEA')
-exportsA = series('EXPGSA')
-importsA = series('IMPGSA')
-netExportsA = series('A019RC1A027NBEA')
-deflatorA = series('A191RD3A086NBEA')
-depreciationA = series('Y0000C1A027NBEA')
-gdpA = series('GDPA')
-tfpA = series('GDPA')
-capitalA = series('GDPA')
-laborA = series('B4701C0A222NBEA')# BEA index: fred('HOANBS') / .quartertoannual(method='AVG')
+investmentA = fp.series('GPDIA')
+consumptionA = fp.series('PCECA')
+governmentA = fp.series('GCEA')
+exportsA = fp.series('EXPGSA')
+importsA = fp.series('IMPGSA')
+netExportsA = fp.series('A019RC1A027NBEA')
+deflatorA = fp.series('A191RD3A086NBEA')
+depreciationA = fp.series('Y0000C1A027NBEA')
+gdpA = fp.series('GDPA')
+tfpA = fp.series('GDPA')
+capitalA = fp.series('GDPA')
+laborA = fp.series('B4701C0A222NBEA')# BEA index: fred('HOANBS') / .quartertoannual(method='AVG')
 
-# annualSeries = [investmentA,consumptionA,governmentA,exportsA,importsA,netExportsA,deflatorA,depreciationA,gdpA,tfpA,capitalA,laborA]
-investmentA,consumptionA,governmentA,netExportsA,exportsA,importsA,deflatorA,depreciationA,gdpA,tfpA,capitalA,laborA = window_equalize([investmentA,consumptionA,governmentA,netExportsA,exportsA,importsA,deflatorA,depreciationA,gdpA,tfpA,capitalA,laborA])
+# annualfp.series = [investmentA,consumptionA,governmentA,exportsA,importsA,netExportsA,deflatorA,depreciationA,gdpA,tfpA,capitalA,laborA]
+investmentA,consumptionA,governmentA,netExportsA,exportsA,importsA,deflatorA,depreciationA,gdpA,tfpA,capitalA,laborA = fp.window_equalize([investmentA,consumptionA,governmentA,netExportsA,exportsA,importsA,deflatorA,depreciationA,gdpA,tfpA,capitalA,laborA])
 
-# 2.2 Compute real annual data series
+# 2.2 Compute real annual data fp.series
 investmentA.data= 100*investmentA.data/deflatorA.data
 consumptionA.data = 100*consumptionA.data/deflatorA.data
 governmentA.data = 100*governmentA.data/deflatorA.data
@@ -102,23 +110,23 @@ TA     = len(investmentA.data)
 laborA.data = laborA.data/1000
 
 # 2.4 Quarterly data
-investmentQ  = series('GPDI')
-investmentQ4  = series('GPDI')
-consumptionQ  = series('PCEC')
-governmentQ = series('GCE')
-exportsQ = series('EXPGS')
-importsQ = series('IMPGS')
-netExportsQ = series('NETEXP')
-deflatorQ  = series('GDPDEF')
-gdpQ  = series('GDP')
-tfpQ  = series('GDP')
-capitalQ  = series('GDP')
-laborQ    = series('HOANBS') # L    = fred('B4701C0A222NBEA')
+investmentQ  = fp.series('GPDI')
+investmentQ4  = fp.series('GPDI')
+consumptionQ  = fp.series('PCEC')
+governmentQ = fp.series('GCE')
+exportsQ = fp.series('EXPGS')
+importsQ = fp.series('IMPGS')
+netExportsQ = fp.series('NETEXP')
+deflatorQ  = fp.series('GDPDEF')
+gdpQ  = fp.series('GDP')
+tfpQ  = fp.series('GDP')
+capitalQ  = fp.series('GDP')
+laborQ    = fp.series('HOANBS') # L    = fred('B4701C0A222NBEA')
 
-# quarterlySeries = [investmentQ,investmentQ4,consumptionQ,governmentQ,exportsQ,importsQ,netExportsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ]
-investmentQ,investmentQ4,consumptionQ,governmentQ,netExportsQ,exportsQ,importsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ = window_equalize([investmentQ,investmentQ4,consumptionQ,governmentQ,netExportsQ,exportsQ,importsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ])
+# quarterlyfp.series = [investmentQ,investmentQ4,consumptionQ,governmentQ,exportsQ,importsQ,netExportsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ]
+investmentQ,investmentQ4,consumptionQ,governmentQ,netExportsQ,exportsQ,importsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ = fp.window_equalize([investmentQ,investmentQ4,consumptionQ,governmentQ,netExportsQ,exportsQ,importsQ,deflatorQ,gdpQ,tfpQ,capitalQ,laborQ])
 
-# 2.5 Compute real annual data series
+# 2.5 Compute real annual data fp.series
 investmentQ.data= 100*investmentQ.data/deflatorQ.data
 investmentQ4.data= 100*investmentQ4.data/deflatorQ.data
 consumptionQ.data = 100*consumptionQ.data/deflatorQ.data
@@ -129,7 +137,7 @@ importsQ.data = 100*importsQ.data/deflatorQ.data
 gdpQ.data= 100*gdpQ.data/deflatorQ.data
 TQ     = len(investmentQ.data)
 
-# 2.6 Compute real annual data series. Note that investment is at a quarterly rate
+# 2.6 Compute real annual data fp.series. Note that investment is at a quarterly rate
 investmentQ4.data= investmentQ.data/4
 realGdpQ= 100*gdpQ.data/deflatorQ.data
 
@@ -138,7 +146,8 @@ baseYear = deflatorA.units[6:10]
 laborBaseYear= laborQ.units[6:10]
 
 
-# In[5]:
+# In[ ]:
+
 
 # 3. Parameter calibration using the annual series
 
@@ -174,7 +183,8 @@ print('s:', iYRatio)
 print('g:', g)
 
 
-# In[6]:
+# In[ ]:
+
 
 # 4. Implement the perpetual inventory method
 
@@ -187,7 +197,8 @@ k0Q = gdpQ.data[0]*iYRatio/(delta + g + n)
 capitalQ.data = capitalSeries(investmentQ4.data,k0Q,delta/4)
 
 
-# In[7]:
+# In[ ]:
+
 
 # 5. Plot the capital series. Note that the annual and quarterly series should and do align approximately.
 
@@ -227,7 +238,8 @@ ax.grid(True)
 # plt.savefig('../img/fig_US_Production_Capital_A.png',bbox_inches='tight')
 
 
-# In[8]:
+# In[ ]:
+
 
 # 6. Save data to csv files
 
@@ -290,7 +302,8 @@ df = df[columnsQ]
 df.to_csv('../csv/US_Production_Q_Data.csv',index=False)
 
 
-# In[9]:
+# In[ ]:
+
 
 # 7. Compute the Solow residuals: 
 
@@ -334,7 +347,8 @@ gKQ = capitalQ.data
 tfpQ.data = gYQ - alpha*gKQ - (1-alpha)*gLQ
 
 
-# In[10]:
+# In[ ]:
+
 
 # 11. Construct some plots
 
@@ -409,7 +423,8 @@ ax.legend(['GDP growth','Solow Residual'],bbox_to_anchor=(0., 1.02, 1., .102), l
 # plt.savefig('../img/fig_US_Production_ya_growth_Q.png',bbox_inches='tight')
 
 
-# In[11]:
+# In[ ]:
+
 
 # 10. Save growth rate data to csv files
 
@@ -462,7 +477,8 @@ df = df[columnsQ]
 df.to_csv('../csv/US_Production_Q_Data_Growth_Rates.csv',index=False)
 
 
-# In[12]:
+# In[ ]:
+
 
 # 11. Export notebook to python script
 progName = 'usProductionData'
