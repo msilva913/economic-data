@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 
 import numpy as np
@@ -14,7 +14,7 @@ import runProcs
 # get_ipython().run_line_magic('matplotlib', 'inline')
 
 
-# In[3]:
+# In[2]:
 
 
 # 0. Setup: Formatting commands and definitions.
@@ -52,7 +52,7 @@ majorLocator_shares = plt.MultipleLocator(0.2)
 fp.api_key = fp.load_api_key('fred_api_key.txt')
 
 
-# In[4]:
+# In[3]:
 
 
 # 1. Setup for the construction of K and A
@@ -74,7 +74,7 @@ def capitalSeries(i,k0,delta):
     return np.array(k)
 
 
-# In[ ]:
+# In[4]:
 
 
 # 2. Import and manage data from FRED
@@ -146,7 +146,7 @@ baseYear = deflatorA.units[6:10]
 laborBaseYear= laborQ.units[6:10]
 
 
-# In[ ]:
+# In[5]:
 
 
 # 3. Parameter calibration using the annual series
@@ -183,7 +183,7 @@ print('s:', iYRatio)
 print('g:', g)
 
 
-# In[ ]:
+# In[6]:
 
 
 # 4. Implement the perpetual inventory method
@@ -197,7 +197,7 @@ k0Q = gdpQ.data[0]*iYRatio/(delta + g + n)
 capitalQ.data = capitalSeries(investmentQ4.data,k0Q,delta/4)
 
 
-# In[ ]:
+# In[7]:
 
 
 # 5. Plot the capital series. Note that the annual and quarterly series should and do align approximately.
@@ -238,7 +238,7 @@ ax.grid(True)
 # plt.savefig('../img/fig_US_Production_Capital_A.png',bbox_inches='tight')
 
 
-# In[ ]:
+# In[8]:
 
 
 # 6. Save data to csv files
@@ -302,7 +302,7 @@ df = df[columnsQ]
 df.to_csv('../csv/US_Production_Q_Data.csv',index=False)
 
 
-# In[ ]:
+# In[9]:
 
 
 # 7. Compute the Solow residuals: 
@@ -347,7 +347,7 @@ gKQ = capitalQ.data
 tfpQ.data = gYQ - alpha*gKQ - (1-alpha)*gLQ
 
 
-# In[ ]:
+# In[10]:
 
 
 # 11. Construct some plots
@@ -423,7 +423,7 @@ ax.legend(['GDP growth','Solow Residual'],bbox_to_anchor=(0., 1.02, 1., .102), l
 # plt.savefig('../img/fig_US_Production_ya_growth_Q.png',bbox_inches='tight')
 
 
-# In[ ]:
+# In[11]:
 
 
 # 10. Save growth rate data to csv files
@@ -477,7 +477,7 @@ df = df[columnsQ]
 df.to_csv('../csv/US_Production_Q_Data_Growth_Rates.csv',index=False)
 
 
-# In[ ]:
+# In[12]:
 
 
 # 11. Export notebook to python script

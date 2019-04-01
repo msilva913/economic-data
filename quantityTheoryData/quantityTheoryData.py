@@ -306,7 +306,7 @@ countriesIncomeOecd = ['AUS','CAN','CHL','CZE','DNK','EST','HUN','ISL','ISR','JP
 
 # # Import data from Quandl
 
-# In[ ]:
+# In[3]:
 
 
 # 2. Import data from Quandl
@@ -369,7 +369,7 @@ for name,key in countryCodes.items():
 
 # # Create data sets: money, prices, and output
 
-# In[ ]:
+# In[4]:
 
 
 # 3. Create datasets for quantity theory without interest and exchange rates
@@ -469,7 +469,7 @@ qtyTheoryDataOecd.to_csv('qtyTheoryDataOecd.csv',index=True,index_label='country
 
 # # Create data sets: money, prices, output, interest, and exchange rates
 
-# In[ ]:
+# In[5]:
 
 
 # 4. Create datasets for quantity theory with interest and exchange rates
@@ -573,7 +573,7 @@ qtyTheoryDataH.to_csv('qtyTheoryOpenDataH.csv',index=True,index_label='country')
 qtyTheoryDataOecd.to_csv('qtyTheoryOpenDataOecd.csv',index=True,index_label='country')
 
 
-# In[ ]:
+# In[6]:
 
 
 # 5. Export notebook to python script
