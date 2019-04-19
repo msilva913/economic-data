@@ -411,9 +411,9 @@ for c in availableCodes:
             break
 
     if count >9:
-        m = (moneyDf[c].loc[ind[-1]]/moneyDf[c].loc[ind[0]])**(1/count)-1
-        p = (deflatorDf[c].loc[ind[-1]]/deflatorDf[c].loc[ind[0]])**(1/count)-1
-        y = (gdpDf[c].loc[ind[-1]]/gdpDf[c].loc[ind[0]])**(1/count)-1
+        m = (moneyDf[c].loc[ind[-1]]/moneyDf[c].loc[ind[0]])**(1/(count-1))-1
+        p = (deflatorDf[c].loc[ind[-1]]/deflatorDf[c].loc[ind[0]])**(1/(count-1))-1
+        y = (gdpDf[c].loc[ind[-1]]/gdpDf[c].loc[ind[0]])**(1/(count-1))-1
 
         includedCodes.append(c)
         mData.append(np.around(m,5))
@@ -513,10 +513,10 @@ for c in availableCodes:
             break
 
     if count >9:
-        m = (moneyDf[c].loc[ind[-1]]/moneyDf[c].loc[ind[0]])**(1/count)-1
-        p = (deflatorDf[c].loc[ind[-1]]/deflatorDf[c].loc[ind[0]])**(1/count)-1
-        y = (gdpDf[c].loc[ind[-1]]/gdpDf[c].loc[ind[0]])**(1/count)-1
-        e = (exchangeDf[c].loc[ind[-1]]/exchangeDf[c].loc[ind[0]])**(1/count)-1
+        m = (moneyDf[c].loc[ind[-1]]/moneyDf[c].loc[ind[0]])**(1/(count-1))-1
+        p = (deflatorDf[c].loc[ind[-1]]/deflatorDf[c].loc[ind[0]])**(1/(count-1))-1
+        y = (gdpDf[c].loc[ind[-1]]/gdpDf[c].loc[ind[0]])**(1/(count-1))-1
+        e = (exchangeDf[c].loc[ind[-1]]/exchangeDf[c].loc[ind[0]])**(1/(count-1))-1
         rate = np.mean(interestDf[c].iloc[1:])/100
 
         includedCodes.append(c)
