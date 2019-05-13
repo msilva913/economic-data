@@ -9,7 +9,7 @@
 # 
 # 2. **This notebook requires the X-13ARIMA-SEATS binary**. Binaries for Windows and Linux/Unix are available from https://www.census.gov/srd/www/x13as/. To compile X-13 for Mac OS X, see the instructions here: https://github.com/christophsax/seasonal/wiki/Compiling-X-13ARIMA-SEATS-from-Source-for-OS-X.
 
-# In[1]:
+# In[24]:
 
 
 import statsmodels as sm
@@ -39,7 +39,7 @@ fp.api_key = fp.load_api_key('fred_api_key.txt')
 # 3. Seasonally adjusted unemployment rate for the United States from January 1947 through  December 1947. FRED series ID: M0892CUSM156NNBR. NBER Indicator: m08292c.  Note: The source data are not seasonally adjusted and contain observations through December 1966. We seasonally adjust the entire series through December 1966 using the U.S. Census Bureau's X-12-ARIMA seasonal adjustment program. We then discard values after December 1947.
 # 4. Seasonally adjusted unemployment rate for the United States from January 1948 through the most recent date available. FRED series ID: UNRATE.
 
-# In[2]:
+# In[25]:
 
 
 # Historical US unemployment rate from the NBER Macrohistory Database: 1929-04-01 to 1940-02-01;
@@ -50,7 +50,7 @@ unemp_1 = fp.series('M0892AUSM156SNBR')
 unemp_1 = unemp_1.window(['04-01-1929','02-01-1940']).data
 
 
-# In[3]:
+# In[26]:
 
 
 # Historical US unemployment rate from the NBER Macrohistory Database: 1940-03-01 to 1946-12-01;
@@ -61,7 +61,7 @@ unemp_2 = fp.series('M0892BUSM156SNBR')
 unemp_2 = unemp_2.window(['03-01-1940','12-01-1946']).data
 
 
-# In[4]:
+# In[27]:
 
 
 # Historical US unemployment rate from the NBER Macrohistory Database: 1947-01-01 to 1966-12-01;
@@ -78,7 +78,7 @@ unemp_3 = pd.Series(x13results.seasadj.values,index=unemp_3.index)
 unemp_3 = unemp_3[(unemp_3.index>=pd.to_datetime('01-01-1947')) & (unemp_3.index<=pd.to_datetime('12-01-1947'))]
 
 
-# In[5]:
+# In[28]:
 
 
 # US civilian unemployment rate from the BLS: 1948-01-01 to most recent;
@@ -87,7 +87,7 @@ unemp_4 = fp.series('UNRATE')
 unemp_4 = unemp_4.window(['01-01-1948','01-01-2200']).data
 
 
-# In[6]:
+# In[29]:
 
 
 # Concatenate the series
@@ -114,7 +114,7 @@ plt.savefig('../img/fig_data_unrate.png',bbox_inches='tight',dpi=120)
 # 2. Composite help-wanted index from January 1960 through January 2001 constructed using the method described in and Barnichon (2010). We obtained the data from Barnichon's website https://sites.google.com/site/regisbarnichon/data. We scale this series so that its value in January 1960 equals the value of the NBER's help-wanted index for the same date.
 # 3. Job openings, total nonfarm for the United States from January 2001 to the most recent date available. FRED series ID: JTSJOL. We scale this series so that its value in January 2001 equals the value of the scaled help-wanted index from Barnichon for the same date.
 
-# In[7]:
+# In[30]:
 
 
 # Met life help-wanted index: 1919-01-01 to 1960-08-01;
@@ -131,7 +131,7 @@ vac_1 = pd.Series(x13results.seasadj.values,index=vac_1.index)
 vac_1 = vac_1[(vac_1.index>=pd.to_datetime('04-01-1929')) ]
 
 
-# In[8]:
+# In[31]:
 
 
 # Composite help-wanted index from Regis Barnichon's site: https://sites.google.com/site/regisbarnichon;
@@ -142,7 +142,10 @@ dls = 'https://sites.google.com/site/regisbarnichon/cv/HWI_index.txt?attredirect
 try:
     urllib.urlretrieve(dls, '../txt/HWI_index.txt')
 except:
-    urllib.request.urlretrieve(dls, '../txt/HWI_index.txt')
+    try:
+        urllib.request.urlretrieve(dls, '../txt/HWI_index.txt')
+    except:
+        print('HWI_index.txt is no longer available at given URL')
 
 vac_2 = pd.read_csv('../txt/HWI_index.txt',delimiter='\t',skiprows=6)
 vac_2.columns = ['Date','composite HWI']
@@ -160,7 +163,7 @@ scaling = vac_1.loc['01-01-1960']/vac_2.loc['1960-01-01']
 vac_2 = scaling* vac_2
 
 
-# In[9]:
+# In[32]:
 
 
 # Job Openings and Labor Turnover Survey (JOLTS) : December 1, 2000 to present
@@ -174,7 +177,7 @@ scaling = vac_2.loc['12-01-2000']/vac_3.loc['12-01-2000']
 vac_3 = scaling* vac_3
 
 
-# In[10]:
+# In[33]:
 
 
 # Truncate each series
@@ -192,7 +195,7 @@ ax.set_title('Vacancies (unscaled)')
 ax.grid()
 
 
-# In[11]:
+# In[34]:
 
 
 # Create the vacancy series
@@ -216,7 +219,7 @@ plt.savefig('../img/fig_data_vacancies.png',bbox_inches='tight',dpi=120)
 # 1. Civilian labor force for the United States from January 1948 to the most recent date available. FRED series ID: CLF16OV.
 # 2. Historical national population estimates from  Population Estimates Program, Population Division, U.S. Census Bureau. The source data are annual from July 1, 1900 to July 1, 1999 and not seasonally adjusted. We extend the data to monthly frequency by linear interpolation and discard observations before April 1929 and after January 1948. Then we scale this series so that its value in January 1948 equals the value of the civilian labor force series for the same date.
 
-# In[12]:
+# In[35]:
 
 
 # Civilian labor force over 16 years of age in thousands of persons: January 1948 to present;
@@ -225,7 +228,7 @@ lf_1 = fp.series('CLF16OV')
 lf_1 = lf_1.window(['01-01-1800','06-01-2216']).data
 
 
-# In[13]:
+# In[36]:
 
 
 # Historical National Population Estimates:  July 1, 1900 to July 1, 1999
@@ -239,7 +242,10 @@ dls = 'https://www.census.gov/population/estimates/nation/popclockest.txt'
 try:
     urllib.urlretrieve(dls, '../txt/popclockest.txt')
 except:
-    urllib.request.urlretrieve(dls, '../txt/popclockest.txt')
+    try:
+        urllib.request.urlretrieve(dls, '../txt/popclockest.txt')
+    except:
+        print('popclockest.txt is no longer available at given URL')
 
 # Import data and edit file
 with open('../txt/popclockest.txt','r') as newfile:
@@ -282,7 +288,7 @@ scaling = lf_1.iloc[0]/lf_2[lf_2.index==pd.to_datetime('1948-01-01')].values[0]
 lf_2 = scaling*lf_2[(lf_2.index>=pd.to_datetime('1929-04-01')) & (lf_2.index<pd.to_datetime('1948-01-01'))]
 
 
-# In[14]:
+# In[37]:
 
 
 # Plot the two truncated and scaled series to verify that they line up
@@ -296,7 +302,7 @@ ax.grid()
 fig.tight_layout()
 
 
-# In[15]:
+# In[38]:
 
 
 # form the labor force series
@@ -318,7 +324,7 @@ plt.savefig('../img/fig_data_labor_force.png',bbox_inches='tight',dpi=120)
 # 
 # Now that we have a vacancy series and a labor force series, we compute the monthly vacancy rate for the Unite States by dividing the vacancy rate series by the labor force series. Following Petrosky-Nadeau and Zhang (2013), we scale the result so that the average vacancy rate for 1965 is 2.05\% in order to match the vacancy rate estimate for 1965 obtained by Zagorsky (1998).
 
-# In[16]:
+# In[39]:
 
 
 # Construct the vacancy_rate series
@@ -334,7 +340,7 @@ unemployment_series = unemployment_rate_series*labor_force_series/100
 market_tightness_series = vacancy_series/unemployment_series
 
 
-# In[17]:
+# In[40]:
 
 
 # plot the series and save the figure
@@ -352,7 +358,7 @@ plt.savefig('../img/fig_data_vacancy_rate.png',bbox_inches='tight',dpi=120)
 # 
 # In the rest of the program, we organize the data into dataframes, construct plots that we use in our paper, and export datasets that can be used to replicate our figures and to investigate carefully the data more carefully.
 
-# In[18]:
+# In[41]:
 
 
 # Organize data into DataFrames
@@ -369,7 +375,7 @@ df_pre_gr = df_all[(df_all.index< '12-01-2007')]
 df_post_gr = df_all[(df_all.index>= '12-01-2007')]
 
 
-# In[19]:
+# In[42]:
 
 
 # plot the labor market tightness series and save the figure
@@ -385,7 +391,7 @@ fig.tight_layout()
 plt.savefig('../img/fig_data_market_tightness.png',bbox_inches='tight',dpi=120)
 
 
-# In[20]:
+# In[43]:
 
 
 # Plot the Beveridge curve for the US: vacancy rate v unemployment rate
@@ -404,7 +410,7 @@ ax.grid()
 plt.savefig('../img/fig_beveridge_curve.png',bbox_inches='tight',dpi=120)
 
 
-# In[21]:
+# In[44]:
 
 
 # Plot the modified Beveridge curve for the US: market tightness v unemployment rate
@@ -423,7 +429,7 @@ ax.grid()
 plt.savefig('../img/fig_modified_beveridge_curve.png',bbox_inches='tight',dpi=120)
 
 
-# In[22]:
+# In[45]:
 
 
 # Construct figure for paper
@@ -459,7 +465,7 @@ ax.grid()
 plt.savefig('../img/fig_modified_beveridge_curve_both.png',bbox_inches='tight',dpi=120)
 
 
-# In[23]:
+# In[46]:
 
 
 # Export data to csv
