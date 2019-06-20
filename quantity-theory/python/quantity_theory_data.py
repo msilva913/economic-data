@@ -306,7 +306,7 @@ countries_income_oecd = ['AUS','CAN','CHL','CZE','DNK','EST','HUN','ISL','ISR','
 
 # # Import data from Quandl
 
-# In[3]:
+# In[ ]:
 
 
 # 2. Import data from Quandl
@@ -369,7 +369,7 @@ for name,key in country_codes.items():
 
 # # Create data sets: money, prices, and output
 
-# In[4]:
+# In[ ]:
 
 
 # 3. Create datasets for quantity theory without interest and exchange rates
@@ -460,16 +460,16 @@ quantity_theory_data_H = quantity_theory_data.loc[index_H]
 quantity_theory_data_oecd = quantity_theory_data.loc[index_oecd]
 
 # 3.6 Export data_frames to csv
-quantity_theory_data.to_csv('quantity_theory_data.csv',index=True,index_label='country')
-quantity_theory_data_L.to_csv('quantity_theory_data_L.csv',index=True,index_label='country')
-quantity_theory_data_M.to_csv('quantity_theory_data_M.csv',index=True,index_label='country')
-quantity_theory_data_H.to_csv('quantity_theory_data_H.csv',index=True,index_label='country')
-quantity_theory_data_oecd.to_csv('quantity_theory_data_oecd.csv',index=True,index_label='country')
+quantity_theory_data.to_csv('../csv/quantity_theory_data.csv',index=True,index_label='country')
+quantity_theory_data_L.to_csv('../csv/quantity_theory_data_L.csv',index=True,index_label='country')
+quantity_theory_data_M.to_csv('../csv/quantity_theory_data_M.csv',index=True,index_label='country')
+quantity_theory_data_H.to_csv('../csv/quantity_theory_data_H.csv',index=True,index_label='country')
+quantity_theory_data_oecd.to_csv('../csv/quantity_theory_data_oecd.csv',index=True,index_label='country')
 
 
 # # Create data sets: money, prices, output, interest, and exchange rates
 
-# In[5]:
+# In[ ]:
 
 
 # 4. Create datasets for quantity theory with interest and exchange rates
@@ -566,16 +566,16 @@ quantity_theory_data_H = quantity_theory_data.loc[index_H]
 quantity_theory_data_oecd = quantity_theory_data.loc[index_oecd]
 
 # 4.6 Export data_frames to csv
-quantity_theory_data.to_csv('qty_theory_open_data.csv',index=True,index_label='country')
-quantity_theory_data_L.to_csv('qty_theory_open_data_L.csv',index=True,index_label='country')
-quantity_theory_data_M.to_csv('qty_theory_open_data_M.csv',index=True,index_label='country')
-quantity_theory_data_H.to_csv('qty_theory_open_data_H.csv',index=True,index_label='country')
-quantity_theory_data_oecd.to_csv('qty_theory_open_dataOecd.csv',index=True,index_label='country')
+quantity_theory_data.to_csv('../csv/quantity_theory_open_data.csv',index=True,index_label='country')
+quantity_theory_data_L.to_csv('../csv/quantity_theory_open_data_L.csv',index=True,index_label='country')
+quantity_theory_data_M.to_csv('../csv/quantity_theory_open_data_M.csv',index=True,index_label='country')
+quantity_theory_data_H.to_csv('../csv/quantity_theory_open_data_H.csv',index=True,index_label='country')
+quantity_theory_data_oecd.to_csv('../csv/quantity_theory_open_dataOecd.csv',index=True,index_label='country')
 
 
 # In[ ]:
 
 
 # 5. Export notebook to python script
-runProcs.exportNb('quantityTheory_data')
+runProcs.exportNb('quantity_theory_data')
 
