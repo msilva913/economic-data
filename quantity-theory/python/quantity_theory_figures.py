@@ -318,7 +318,7 @@ countriesIncomeOecd = ['AUS','CAN','CHL','CZE','DNK','EST','HUN','ISL','ISR','JP
 
 # # Figures: money, prices, and output
 
-# In[ ]:
+# In[4]:
 
 
 # 4. Graph of quantity theory data without exchange or interest rates
@@ -329,7 +329,7 @@ quantity_theory_data = pd.read_csv('../csv/quantity_theory_data.csv')
 quantity_theory_data_L = pd.read_csv('../csv/quantity_theory_data_L.csv')
 quantity_theory_data_M = pd.read_csv('../csv/quantity_theory_data_M.csv')
 quantity_theory_data_H = pd.read_csv('../csv/quantity_theory_data_H.csv')
-quantity_theory_data_Oecd = pd.read_csv('../csv/quantity_theory_data_Oecd.csv')
+quantity_theory_data_oecd = pd.read_csv('../csv/quantity_theory_data_oecd.csv')
 
 
 # 4.1 Money growth inflation with country codes
@@ -361,13 +361,13 @@ ax1.set_ylabel('inflation')
 plt.grid()
 
 plt.tight_layout()
-plt.savefig('../png/fig_moneyInflationCoded.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_money_inflation_coded.png',bbox_inches='tight',dpi=120)
 
 
 print('regression coefficient:',np.round(a_p,2))
 
 
-# In[ ]:
+# In[5]:
 
 
 # 4.2 Money growth and inflation
@@ -396,7 +396,7 @@ ax1.set_ylim([ymin,ymax])
 plt.legend(['$45^\circ$'],loc='lower right',fontsize='15')
 
 plt.tight_layout()
-plt.savefig('../png/fig_moneyInflation.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_money_inflation.png',bbox_inches='tight',dpi=120)
 
 # 4.3 Money growth and real gdp growth
 
@@ -424,7 +424,7 @@ ax1.set_ylim([ymin,ymax])
 plt.legend(['$0^\circ$'],loc='lower right',fontsize='15')
 
 plt.tight_layout()
-plt.savefig('../png/fig_moneyGDP.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_money_gdp.png',bbox_inches='tight',dpi=120)
 
 # 4.4 Money growth and real gdp growth
 
@@ -452,48 +452,48 @@ ax1.set_ylim([ymin,ymax])
 plt.legend(['$0^\circ$'],loc='lower right',fontsize='15')
 
 plt.tight_layout()
-plt.savefig('../png/fig_inflationGDP.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_inflation_gdp.png',bbox_inches='tight',dpi=120)
 
 
-# In[ ]:
+# In[6]:
 
 
 # 5. Make tex files for figures
 
 # 5.0 Money growth and inflation with codes
-nf = open('../tex/figure_moneyInflationCoded.tex', 'w')
+nf = open('../tex/figure_money_inflation_coded.tex', 'w')
 nf.write('\\begin{figure}[h]\n')
-nf.write('\\caption{\\label{fig_moneyInflationCoded} \\textbf{Money growth and deflator inflation for '),nf.write(str(len(quantity_theory_data))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
-nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{../png/fig_moneyInflationCoded.png}\n')
+nf.write('\\caption{\\label{fig:money_inflation_coded} \\textbf{Money growth and deflator inflation for '),nf.write(str(len(quantity_theory_data))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
+nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{../png/fig_moneyInflation_coded.png}\n')
 nf.write('\\end{figure}')
 nf.close()
 
 # 5.1 Money growth and inflation
-nf = open('../tex/figure_moneyInflation.tex', 'w')
+nf = open('../tex/figure_money_inflation.tex', 'w')
 nf.write('\\begin{figure}[h]\n')
-nf.write('\\caption{\\label{fig_moneyInflation} \\textbf{Money growth and deflator inflation for '),nf.write(str(len(quantity_theory_data))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
-nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{../png/fig_moneyInflation.png}\n')
+nf.write('\\caption{\\label{fig:money_inflation} \\textbf{Money growth and deflator inflation for '),nf.write(str(len(quantity_theory_data))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
+nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{../png/fig_money_inflation.png}\n')
 nf.write('\\end{figure}')
 nf.close()
 
 # 5.2 Inflation and real GDP
-nf = open('../tex/figure_inflationGDP.tex', 'w')
+nf = open('../tex/figure_inflation_gdp.tex', 'w')
 nf.write('\\begin{figure}[h]\n')
-nf.write('\\caption{\\label{fig_moneyGDP} \\textbf{Deflator inflation and real GDP growth for '),nf.write(str(len(quantity_theory_data))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
-nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{../png/fig_inflationGDP.png}\n')
+nf.write('\\caption{\\label{fig:money_gdp} \\textbf{Deflator inflation and real GDP growth for '),nf.write(str(len(quantity_theory_data))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
+nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{../png/fig_inflation_gdp.png}\n')
 nf.write('\\end{figure}')
 nf.close()
 
 # 5.3 Inflation and real GDP
-nf = open('../tex/figure_moneyGDP.tex', 'w')
+nf = open('../tex/figure_money_gdp.tex', 'w')
 nf.write('\\begin{figure}[h]\n')
-nf.write('\\caption{\\label{fig_inflationGDP} \\textbf{Money growth and real GDP growth for '),nf.write(str(len(quantity_theory_data))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
-nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{../png/fig_moneyGDP.png}\n')
+nf.write('\\caption{\\label{fig:money_gdp} \\textbf{Money growth and real GDP growth for '),nf.write(str(len(quantity_theory_data))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
+nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{../png/fig_money_gdp.png}\n')
 nf.write('\\end{figure}')
 nf.close()
 
 
-# In[ ]:
+# In[7]:
 
 
 # 6. Correlations
@@ -501,12 +501,12 @@ print(quantity_theory_data[['money growth','inflation','gdp growth']].corr())
 print(quantity_theory_data_H[['money growth','inflation','gdp growth']].corr())
 print(quantity_theory_data_M[['money growth','inflation','gdp growth']].corr())
 print(quantity_theory_data_L[['money growth','inflation','gdp growth']].corr())
-print(quantity_theory_data_Oecd[['money growth','inflation','gdp growth']].corr())
+print(quantity_theory_data_oecd[['money growth','inflation','gdp growth']].corr())
 
 
 # # Figures: money, prices, output, interest, and exchange rates
 
-# In[ ]:
+# In[8]:
 
 
 quantity_theory_data = pd.read_csv('../csv/quantity_theory_open_data.csv',index_col=0)
@@ -542,7 +542,7 @@ ax1.set_ylim([ymin,ymax])
 plt.legend(['$45^\circ$'],loc='lower right',fontsize='15')
 
 plt.tight_layout()
-plt.savefig('../png/fig_moneyInflationOpen.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_money_inflation_open.png',bbox_inches='tight',dpi=120)
 
 # 8.2 Money growth and real gdp growth
 
@@ -570,7 +570,7 @@ ax1.set_ylim([ymin,ymax])
 plt.legend(['$0^\circ$'],loc='lower right',fontsize='15')
 
 plt.tight_layout()
-plt.savefig('../png/fig_moneyGDPOpen.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_money_gdp_open.png',bbox_inches='tight',dpi=120)
 
 # 8.3 Money growth and real gdp growth
 
@@ -598,7 +598,7 @@ ax1.set_ylim([ymin,ymax])
 plt.legend(['$0^\circ$'],loc='lower right',fontsize='15')
 
 plt.tight_layout()
-plt.savefig('../png/fig_inflationGDPOpen.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_inflation_gdp_open.png',bbox_inches='tight',dpi=120)
 
 # 8.4 Money growth differential depreciation
 
@@ -626,7 +626,7 @@ ax1.set_ylim([ymin,ymax])
 plt.legend(['$45^\circ$'],loc='lower right',fontsize='15')
 
 plt.tight_layout()
-plt.savefig('../png/fig_inflationInterestDifferentialsOpen.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_inflation_interest_differentials_open.png',bbox_inches='tight',dpi=120)
 
 # 8.5 Money growth differential depreciation
 
@@ -654,69 +654,69 @@ ax1.set_ylim([ymin,ymax])
 plt.legend(['$45^\circ$'],loc='lower right',fontsize='15')
 
 plt.tight_layout()
-plt.savefig('../png/fig_moneyDifferentialDepreciationOpen.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_money_differential_depreciation_open.png',bbox_inches='tight',dpi=120)
 
 
-# In[ ]:
+# In[9]:
 
 
 # 9. Make tex files for figures
 
 # 9.1 Money growth and inflation
-nf = open('../tex/figure_moneyInflationOpen.tex', 'w')
+nf = open('../tex/figure_money_inflation_open.tex', 'w')
 nf.write('\\begin{figure}[h]\n')
-nf.write('\\caption{\\label{fig_moneyInflationOpen} \\textbf{Money growth and deflator inflation for '),nf.write(str(len(quantity_theory_data_))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
-nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{./png/fig_moneyInflationOpen.png}\n')
+nf.write('\\caption{\\label{fig:money_inflation_open} \\textbf{Money growth and deflator inflation for '),nf.write(str(len(quantity_theory_data))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
+nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{./png/fig_money_inflation_open.png}\n')
 nf.write('\\end{figure}')
 nf.close()
 
 # 9.2 Inflation and real GDP
-nf = open('../tex/figure_inflationGDPOpen.tex', 'w')
+nf = open('../tex/figure_inflation_gdp_open.tex', 'w')
 nf.write('\\begin{figure}[h]\n')
-nf.write('\\caption{\\label{fig_moneyGDPOpen} \\textbf{Deflator inflation and real GDP growth for '),nf.write(str(len(quantity_theory_data_))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
-nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{./png/fig_inflationGDPOpen.png}\n')
+nf.write('\\caption{\\label{fig:inflation_gdp_open} \\textbf{Deflator inflation and real GDP growth for '),nf.write(str(len(quantity_theory_data))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
+nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{./png/fig_inflation_gdp_open.png}\n')
 nf.write('\\end{figure}')
 nf.close()
 
 # 9.3 Inflation and real GDP
-nf = open('../tex/figure_moneyGDPOpen.tex', 'w')
+nf = open('../tex/figure_money_gdp_open.tex', 'w')
 nf.write('\\begin{figure}[h]\n')
-nf.write('\\caption{\\label{fig_inflationGDPOpen} \\textbf{Money growth and real GDP growth for '),nf.write(str(len(quantity_theory_data_))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
-nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{./png/fig_moneyGDPOpen.png}\n')
+nf.write('\\caption{\\label{fig:money_gdp_open} \\textbf{Money growth and real GDP growth for '),nf.write(str(len(quantity_theory_data))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
+nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{./png/fig_money_gdp_open.png}\n')
 nf.write('\\end{figure}')
 nf.close()
 
 # 9.4 Inflation and interest rate differentials
-nf = open('../tex/figure_inflationInterestDifferentialsOpen.tex', 'w')
+nf = open('../tex/figure_inflation_interest_differentials_open.tex', 'w')
 nf.write('\\begin{figure}[h]\n')
-nf.write('\\caption{\\label{fig_inflationInterestDifferentialsOpen} \\textbf{Interest and inflation relative to US for '),nf.write(str(len(quantity_theory_data_))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
-nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{./png/fig_inflationInterestDifferentialsOpen.png}\n')
+nf.write('\\caption{\\label{fig:inflation_interest_differentials_open} \\textbf{Interest and inflation relative to US for '),nf.write(str(len(quantity_theory_data))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
+nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{./png/fig_inflation_interest_differentials_open.png}\n')
 nf.write('\\end{figure}')
 nf.close()
 
 # 9.5 Money growth and exchange rate depreciation
-nf = open('../tex/figure_moneyDifferentialDepreciationOpen.tex', 'w')
+nf = open('../tex/figure_money_differential_depreciation_open.tex', 'w')
 nf.write('\\begin{figure}[h]\n')
-nf.write('\\caption{\\label{fig_moneyDifferentialDepreciationOpen} \\textbf{Money growth and depreciation for '),nf.write(str(len(quantity_theory_data_))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
-nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{./png/fig_moneyDifferentialDepreciationOpen.png}\n')
+nf.write('\\caption{\\label{fig:money_differential_depreciation_open} \\textbf{Money growth and depreciation for '),nf.write(str(len(quantity_theory_data))),nf.write(' countries.} High-income countries: blue circles, medium-income: green squares, and low-income: red triangles. {\\tiny Source: Quandl, World Development Indicators, World Bank}}\n')
+nf.write('\\hspace*{-.5cm}\\includegraphics[height = 7.cm]{./png/fig_money_differential_depreciation_open.png}\n')
 nf.write('\\end{figure}')
 nf.close()
 
 
-# In[ ]:
+# In[10]:
 
 
 # 10. Correlations
-print(quantity_theory_data_[['money growth','inflation','gdp growth','nominal interest rate','exchange rate depreciation']].corr())
+print(quantity_theory_data[['money growth','inflation','gdp growth','nominal interest rate','exchange rate depreciation']].corr())
 print(quantity_theory_data_H[['money growth','inflation','gdp growth','nominal interest rate','exchange rate depreciation']].corr())
 print(quantity_theory_data_M[['money growth','inflation','gdp growth','nominal interest rate','exchange rate depreciation']].corr())
 print(quantity_theory_data_L[['money growth','inflation','gdp growth','nominal interest rate','exchange rate depreciation']].corr())
-print(quantity_theory_data_Oecd[['money growth','inflation','gdp growth','nominal interest rate','exchange rate depreciation']].corr())
+print(quantity_theory_data_oecd[['money growth','inflation','gdp growth','nominal interest rate','exchange rate depreciation']].corr())
 
 
-# In[ ]:
+# In[11]:
 
 
 # 11. Export notebook to python script
-runProcs.exportNb('quantityTheoryFigures')
+runProcs.exportNb('quantity_theory_figures')
 
