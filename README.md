@@ -1,14 +1,21 @@
-# economicData
-Python programs for downloading economic data and constructing datasets.
+# Economic Data
+Python programs for downloading economic data and constructing data sets.
 
-## crossCountryIncomeData
+## Covered Interest Parity
+Construct data sets containing spot and forward exchange rates and interest rates for the Japanes yen, Swiss franc, and US dollar. Code is in the `python` directory and exports data to `csv` and `xslx` directories.
+
+## Cross-Country Income
 Program for constructing a .csv files containing real GDP per capita from 1970 to present including every country for which data is available for every year. Data is downloaded from the World Bank World Development Indicators using the wbdata api. 
 
-  - Instructions: Run either **crossCountryIncomeData.ipynb** or **crossCountryIncomeData.py**
-  - Ouput: 
-     - crossCountryIncome.csv: data in levels
-     - crossCountryIncomeLog.csv data in logs
-  - Dependencies: wbdata, pandas, numpy, runProcs.py
+  - Instructions: Run either `cross_country_income_data.ipynb`** or `cross_country_income_data.py`
+  - Ouput to `csv` directory:
+     - `cross_country_income.csv`: data in levels
+     - `cross_country_income_log.csv` data in logs
+     - A bunch of other data files.
+     
+ ## dmp
+ Construct a data set containing labor and vacancy statistics for the US
+     
 
 ## quantityTheoryData
 Program for constructing datasets including long-run average rates of money (M1) growth, real GDP growth, and CPI inflation for each country for which there is at least 10 years of continuously available data for each variable. Data is downloaded from the World Bank World Development Indicators using the wbdata api.
