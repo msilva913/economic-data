@@ -1,13 +1,13 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[13]:
 
 
 import numpy as np
 from scipy.optimize import fsolve
 import matplotlib.dates as dts
-import fredpy2 as fp
+import fredpy as fp
 import pandas as pd
 import runProcs
 import matplotlib.pyplot as plt
@@ -15,7 +15,7 @@ plt.style.use('classic')
 # get_ipython().run_line_magic('matplotlib', 'inline')
 
 
-# In[2]:
+# In[14]:
 
 
 # 0. load fred api key
@@ -25,7 +25,7 @@ fp.api_key = fp.load_api_key('fred_api_key.txt')
 years2,years4,years5,years10,years15= dts.YearLocator(2),dts.YearLocator(4),dts.YearLocator(5),dts.YearLocator(10),dts.YearLocator(15)
 
 
-# In[3]:
+# In[15]:
 
 
 # 1. Setup for the construction of K and A
@@ -49,7 +49,7 @@ def capitalSeries(i,k0,delta):
     return np.array(k)
 
 
-# In[ ]:
+# In[16]:
 
 
 # 2. Import and manage data from FRED
@@ -119,7 +119,7 @@ baseYear = deflatorA.units[6:10]
 laborBaseYear= laborQ.units[6:10]
 
 
-# In[ ]:
+# In[17]:
 
 
 # 3. Parameter calibration using the annual series
@@ -143,7 +143,7 @@ print('g:    ',round(g,5))
 print('n:    ',round(n,5))
 
 
-# In[ ]:
+# In[18]:
 
 
 # 4. Implement the perpetual inventory method
@@ -173,7 +173,7 @@ tfpA.data = gdpA.data/capitalA.data**alpha/laborA.data**(1-alpha)
 tfpQ.data = gdpQ.data/capitalQ.data**alpha/laborQ.data**(1-alpha)
 
 
-# In[ ]:
+# In[19]:
 
 
 # 5. Plot the capital series. Note that the annual and quarterly series should and do align approximately.
@@ -187,7 +187,7 @@ fig.autofmt_xdate()
 plt.title('Capital Stock')
 ax.legend(['Annual','Quarterly'],loc='upper left')
 ax.grid(True)
-# plt.savefig('fig_US_Production_Capital_QA.png',bbox_inches='tight')
+# plt.savefig('../png/fig_US_Production_Capital_QA.png',bbox_inches='tight')
 
 ax = fig.add_subplot(4,1,2)
 ax.plot(tfpA.data,'b-',lw = 3)
@@ -198,7 +198,7 @@ fig.autofmt_xdate()
 plt.title('TFP')
 ax.legend(['Annual','Quarterly'],loc='upper left')
 ax.grid(True)
-# plt.savefig('fig_US_Production_Capital_QA.png',bbox_inches='tight')
+# plt.savefig('../png/fig_US_Production_Capital_QA.png',bbox_inches='tight')
 
 
 ax = fig.add_subplot(4,1,3)
@@ -210,7 +210,7 @@ fig.autofmt_xdate()
 plt.title('Marginal Product of Capital')
 ax.legend(['Annual','Quarterly'],loc='upper left')
 ax.grid(True)
-# plt.savefig('fig_US_Production_Capital_QA.png',bbox_inches='tight')
+# plt.savefig('../png/fig_US_Production_Capital_QA.png',bbox_inches='tight')
 
 ax = fig.add_subplot(4,1,4)
 ax.plot(0.35*gdpA.data/laborA.data,'b-',lw = 3)
@@ -221,10 +221,10 @@ fig.autofmt_xdate()
 plt.title('Marginal Product of Labor')
 ax.legend(['Annual','Quarterly'],loc='upper left')
 ax.grid(True)
-# plt.savefig('fig_US_Production_Capital_QA.png',bbox_inches='tight')
+# plt.savefig('../png/fig_US_Production_Capital_QA.png',bbox_inches='tight')
 
 
-# In[ ]:
+# In[20]:
 
 
 # 6. Save data to csv files
@@ -260,7 +260,7 @@ df = pd.DataFrame({
 df.loc['1950-01-01':].to_csv('../csv/US_Production_Q_Data.csv',index=False)
 
 
-# In[ ]:
+# In[21]:
 
 
 # 7. Compute the Solow residuals: 
@@ -309,7 +309,7 @@ exportsQ_growth = exportsQ_growth.window(['1950-01-01','2000-01-01'])
 importsQ_growth = importsQ_growth.window(['1950-01-01','2000-01-01'])
 
 
-# In[ ]:
+# In[22]:
 
 
 # 11. Construct some plots
@@ -326,7 +326,7 @@ fig.autofmt_xdate()
 ax.grid(True)
 ax.set_title('Annual data')
 ax.legend(['GDP growth','Solow Residual'],loc='center left', bbox_to_anchor=(1, 0.5))
-# plt.savefig('fig_US_Production_ya_growth_A.png',bbox_inches='tight')
+# plt.savefig('../png/fig_US_Production_ya_growth_A.png',bbox_inches='tight')
 
 # 11.2 Quarterly GDP growth and the Solow residual (Quarterly)
 fig = plt.figure(figsize=(12,4)) 
@@ -340,7 +340,7 @@ fig.autofmt_xdate()
 ax.grid(True)
 ax.set_title('Quarterly data')
 ax.legend(['GDP growth','Solow Residual'],loc='center left', bbox_to_anchor=(1, 0.5))
-# plt.savefig('../img/fig_US_Production_ya_growth_Q.png',bbox_inches='tight')
+# plt.savefig('../png/fig_US_Production_ya_growth_Q.png',bbox_inches='tight')
 
 # 11.3 Figure for website: Annual growth in Y, L, K, and A
 fig = plt.figure(figsize=(10, 6)) 
@@ -381,10 +381,10 @@ capitalA_growth.recessions()
 fig.autofmt_xdate()
 ax.grid(True)
 
-plt.savefig('../img/fig_US_Production_A_site.png',bbox_inches='tight')
+plt.savefig('../png/fig_US_Production_A_site.png',bbox_inches='tight')
 
 
-# In[ ]:
+# In[23]:
 
 
 # 10. Save growth rate data to csv files
@@ -425,10 +425,10 @@ df.columns = ['Date','GDP Growth','Consumption Growth','Investment Growth','Gove
 df.loc['1950-01-01':].to_csv('../csv/US_Production_Q_Data_Growth_Rates.csv',index=False)
 
 
-# In[ ]:
+# In[24]:
 
 
 # 11. Export notebook to python script
-progName = 'usProductionData'
+progName = 'us_production_data'
 runProcs.exportNb(progName)
 
