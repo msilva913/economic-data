@@ -13,8 +13,13 @@ Program for constructing a .csv files containing real GDP per capita from 1970 t
      - `cross_country_income_log.csv` data in logs
      - A bunch of other data files.
      
- ## dmp
+ ## DMP
  Construct a data set containing labor and vacancy statistics for the US
+ 
+ ## Historical Statistics of the US
+ 
+ https://www.census.gov/library/publications/1975/compendia/hist_stats_colonial-1970.html
+
      
 
 ## quantityTheoryData
