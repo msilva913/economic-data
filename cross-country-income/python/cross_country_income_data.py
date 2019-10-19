@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+
 # coding: utf-8
 
 # In[1]:
@@ -209,7 +209,7 @@ ax.set_ylabel('Real GDP per capita growth\nfrom 1970 to '+str(years[-1])+ ' (%)'
 ax.set_xlim([0,25])
 
 fig.tight_layout()
-plt.savefig('../fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
+plt.savefig('../png/fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
 # In[7]:
