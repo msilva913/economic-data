@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 plt.style.use('classic')
 # get_ipython().run_line_magic('matplotlib', 'inline')
 
-# # This program requires the Penn World Tables data file: pwt90.xlsx
+# # This program requires the Penn World Tables data file: pwt91.xlsx
 # # available at https://pwt.sas.upenn.edu/
 
 
@@ -51,7 +51,7 @@ majorLocator_shares   = plt.MultipleLocator(0.2)
 
 
 # 1. Import data
-pwt = pd.read_excel('../xslx/pwt90.xlsx',sheet_name='Data')
+pwt = pd.read_excel('../xslx/pwt91.xlsx',sheet_name='Data')
 
 
 # In[4]:
@@ -175,8 +175,8 @@ income_pw = create_data_set(pwtCode='cgdpe',per_capita=False,per_worker=True,fil
 output_pw = create_data_set(pwtCode='cgdpo',per_capita=False,per_worker=True,file_name='../csv/cross_country_output_per_worker')
 output_pc = create_data_set(pwtCode='cgdpo',per_capita=True,per_worker=False,file_name='../csv/cross_country_output_per_capita')
 consumption_pc = create_data_set(pwtCode='ccon',per_capita=True,per_worker=False,file_name='../csv/cross_country_consumption_per_capita')
-physical_capital_pw = create_data_set(pwtCode='ck',per_capita=False,per_worker=True,file_name='../csv/cross_country_physical_capital_per_worker')
-physical_capital_pc = create_data_set(pwtCode='ck',per_capita=True,per_worker=False,file_name='../csv/cross_country_physical_capital_per_capita')
+physical_capital_pw = create_data_set(pwtCode='cn',per_capita=False,per_worker=True,file_name='../csv/cross_country_physical_capital_per_worker')
+physical_capital_pc = create_data_set(pwtCode='cn',per_capita=True,per_worker=False,file_name='../csv/cross_country_physical_capital_per_capita')
 human_capital_pc = create_data_set(pwtCode='hc',per_capita=False,per_worker=False,file_name='../csv/cross_country_human_capital_per_capita')
 employed = create_data_set(pwtCode='hc',per_capita=False,per_worker=False,file_name='../csv/cross_country_employed')
 hours = create_data_set(pwtCode='avh',per_capita=False,per_worker=False,file_name='../csv/cross_country_hours')
@@ -204,7 +204,7 @@ for i, txt in enumerate(data.columns):
     ax.annotate(txt[-3:], (income60[i],growth[i]),fontsize=10,color = colors[np.mod(i,4)])
 ax.grid()
 # ax.set_xscale('log')
-ax.set_xlabel('GDP per capita in 1960\n (thousands of 2005 $ PPP)')
+ax.set_xlabel('GDP per capita in 1960\n (thousands of 2011 $ PPP)')
 ax.set_ylabel('Real GDP per capita growth\nfrom 1970 to '+str(years[-1])+ ' (%)')
 ax.set_xlim([0,25])
 
