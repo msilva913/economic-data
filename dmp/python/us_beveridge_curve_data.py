@@ -103,7 +103,7 @@ ax.set_ylabel('Percent')
 ax.grid()
 
 fig.tight_layout()
-plt.savefig('../img/fig_data_unrate.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_data_unrate.png',bbox_inches='tight',dpi=120)
 
 
 # 
@@ -210,7 +210,7 @@ ax.set_title('Vacancies (unscaled)')
 ax.grid()
 
 fig.tight_layout()
-plt.savefig('../img/fig_data_vacancies.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_data_vacancies.png',bbox_inches='tight',dpi=120)
 
 
 # ## Labor force data
@@ -317,7 +317,7 @@ ax.set_ylabel('Millions of persons')
 ax.grid()
 
 fig.tight_layout()
-plt.savefig('../img/fig_data_labor_force.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_data_labor_force.png',bbox_inches='tight',dpi=120)
 
 
 # ## Vacancy rate
@@ -351,7 +351,7 @@ ax.set_ylabel('Vacancy rate')
 ax.grid()
 
 fig.tight_layout()
-plt.savefig('../img/fig_data_vacancy_rate.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_data_vacancy_rate.png',bbox_inches='tight',dpi=120)
 
 
 # ## Organize data
@@ -388,7 +388,7 @@ ax.set_ylim([0,5])
 ax.grid()
 
 fig.tight_layout()
-plt.savefig('../img/fig_data_market_tightness.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_data_market_tightness.png',bbox_inches='tight',dpi=120)
 
 
 # In[43]:
@@ -407,7 +407,7 @@ ax.set_xlabel('Unemployment rate')
 ax.set_ylabel('Vacancy rate')
 ax.grid()
 
-plt.savefig('../img/fig_beveridge_curve.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_beveridge_curve.png',bbox_inches='tight',dpi=120)
 
 
 # In[44]:
@@ -426,7 +426,7 @@ ax.set_xlabel('Unemployment rate ($\%$)')
 ax.set_ylabel('Market tightness ($\\theta$)')
 ax.grid()
 
-plt.savefig('../img/fig_modified_beveridge_curve.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_modified_beveridge_curve.png',bbox_inches='tight',dpi=120)
 
 
 # In[45]:
@@ -453,7 +453,7 @@ plt.scatter(df_post_gr['Unemployment rate'].values,df_post_gr['Market tightness'
 
 cbar = plt.colorbar(ax = ax)
 cbar.set_ticks([int(i) for i in cbar.get_ticks()])
-cbar.set_ticklabels([df_post_gr.index[int(i)].strftime('%b %Y') for i in cbar.get_ticks()])
+cbar.set_ticklabels([df_post_gr.index[int(i)].strftime('%b %Y') for i in cbar.get_ticks()[:-1]])
 
 plt.plot(df_post_gr['Unemployment rate'].values,df_post_gr['Market tightness'].values,'-')
 
@@ -462,7 +462,7 @@ ax.set_xlabel('Unemployment rate ($u$)')
 ax.set_ylabel('Market tightness ($\\theta$)')
 ax.grid()
 
-plt.savefig('../img/fig_modified_beveridge_curve_both.png',bbox_inches='tight',dpi=120)
+plt.savefig('../png/fig_modified_beveridge_curve_both.png',bbox_inches='tight',dpi=120)
 
 
 # In[46]:
