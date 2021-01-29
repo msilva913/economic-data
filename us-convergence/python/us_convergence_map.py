@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[20]:
+# In[1]:
 
 
 import numpy as np
@@ -16,7 +16,7 @@ plt.style.use('classic')
 # get_ipython().run_line_magic('matplotlib', 'inline')
 
 
-# In[44]:
+# In[2]:
 
 
 # -1.0 Create an svg map using the simplemapplot package
@@ -29,7 +29,7 @@ plt.style.use('classic')
 svg = open('../svg/usMap.svg', 'r').read()
 
 
-# In[45]:
+# In[3]:
 
 
 # 0. Setup
@@ -60,7 +60,7 @@ majorLocator_y   = plt.MultipleLocator(3)
 majorLocator_shares   = plt.MultipleLocator(0.2)
 
 
-# In[46]:
+# In[4]:
 
 
 # 1. Load and manage income data
@@ -80,7 +80,7 @@ csa = ['SC','MS','FL','AL','GA','LA','TX','VA','AR','TN','NC']
 state_income.index
 
 
-# In[47]:
+# In[5]:
 
 
 # 2. Compute statistics
@@ -107,7 +107,7 @@ slope = results.params[1929]
 inter = results.params['const']
 
 
-# In[48]:
+# In[6]:
 
 
 # 3.1 Plots
@@ -127,7 +127,7 @@ for i,state in enumerate(state_income.columns):
 
 
 ax.set_ylim([1,3.5])
-ax.set_xlim([2,14])
+ax.set_xlim([2,16])
 ax.set_xlabel('income per capita in 1929 \n (thousands of 2009 $)')
 ax.set_ylabel('average growth')
 plt.grid()
@@ -136,7 +136,7 @@ plt.tight_layout()
 plt.savefig('../png/fig_us_statesIncomeGrowth.png',bbox_inches='tight',dpi=120)
 
 
-# In[49]:
+# In[7]:
 
 
 # 3.2 Plot income per capita in all states
@@ -167,7 +167,7 @@ plt.tight_layout()
 plt.savefig('../png/fig_us_statesIncome.png',bbox_inches='tight',dpi=120)
 
 
-# In[50]:
+# In[8]:
 
 
 # 3.2 Plot income per capita in all states
@@ -199,7 +199,7 @@ plt.tight_layout()
 plt.savefig('../png/fig_us_statesIncomeRelative.png',bbox_inches='tight',dpi=120)
 
 
-# In[51]:
+# In[9]:
 
 
 # 4. Make the maps. Reference: http://flowingdata.com/2009/11/12/how-to-make-a-us-county-thematic-map-using-free-tools/
@@ -215,7 +215,7 @@ bins = [-.25,-.15,-.05,.05,.15,.25]
 # bins = [-.45,-.25,-.1,-.05-.025,.025,.05,.1,.25,.45]
 
 
-# In[52]:
+# In[10]:
 
 
 # 4.2 Load svg with Beautiful Soup
@@ -223,7 +223,7 @@ soup = BeautifulSoup(svg, "lxml")
 paths = soup.findAll('path')
 
 
-# In[53]:
+# In[11]:
 
 
 # 4.3 Create color-coded maps for each year
@@ -295,23 +295,23 @@ for t,year in enumerate(state_income.index):
     svg = svg.replace('width="959"','width="1035"')
     
     
-    with open("../images/state_relative_income"+str(year)+".svg", "wb") as file:
+    with open("../frames/state_relative_income"+str(year)+".svg", "wb") as file:
         file.write(bytes(svg, 'UTF-8'))
 
-    file = open("../images/state_relative_income"+str(year)+".svg", "a")
-    convert = 'convert -density 144 ../images/state_relative_income'+str(year)+'.svg ../images/state_relative_income'+str(year)+'.png'
+    file = open("../frames/state_relative_income"+str(year)+".svg", "a")
+    convert = 'convert -density 144 ../frames/state_relative_income'+str(year)+'.svg ../frames/state_relative_income'+str(year)+'.png'
     subprocess.call(convert,shell=True)
 
 
-# In[54]:
+# In[ ]:
 
 
 # 4.4 Creat gif with imagemagick
-makegif = 'convert -loop 0 -delay 50x100 ../images/*.png ../gif/us_state_convergence.gif'
+makegif = 'convert -loop 0 -delay 50x100 ../frames/*.png ../gif/us_state_convergence.gif'
 subprocess.call(makegif,shell=True)
 
 
-# In[13]:
+# In[ ]:
 
 
 # 5. Clean up
@@ -321,7 +321,7 @@ subprocess.call(makegif,shell=True)
 #         os.remove(files)
 
 
-# In[14]:
+# In[ ]:
 
 
 # 6. Export notebook to .py
