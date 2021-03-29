@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
 # In[1]:
@@ -47,14 +47,17 @@ majorLocator_y   = plt.MultipleLocator(3)
 majorLocator_shares   = plt.MultipleLocator(0.2)
 
 
-# In[3]:
+# In[5]:
 
 
 # 1. Import data
-pwt = pd.read_excel('../xslx/pwt91.xlsx',sheet_name='Data')
+try:
+    pwt = pd.read_excel('https://www.rug.nl/ggdc/docs/pwt100.xlsx',sheet_name='Data')
+except:
+    pwt = pd.read_excel('../xslx/pwt100.xlsx',sheet_name='Data')
 
 
-# In[4]:
+# In[6]:
 
 
 # 2. lists of countries, codes, and years
@@ -81,7 +84,7 @@ year0= years.index(year0)
 len(years)
 
 
-# In[5]:
+# In[ ]:
 
 
 # 3. Create deatasets
@@ -186,7 +189,7 @@ laborShare = create_data_set(pwtCode='labsh',per_capita=False,per_worker=False,f
 depreciation = create_data_set(pwtCode='delta',per_capita=False,per_worker=False,file_name='../csv/cross_country_depreciation_rate')
 
 
-# In[6]:
+# In[ ]:
 
 
 # 4. Plot for website
@@ -212,9 +215,15 @@ fig.tight_layout()
 plt.savefig('../png/fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
-# In[7]:
+# In[ ]:
 
 
 #5. Export notebook to python script
 runProcs.exportNb('cross_country_income_data')
+
+
+# In[ ]:
+
+
+
 
