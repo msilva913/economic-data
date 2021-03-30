@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[53]:
+# In[1]:
 
 
 import numpy as np
@@ -16,7 +16,7 @@ plt.style.use('classic')
 # get_ipython().run_line_magic('matplotlib', 'inline')
 
 
-# In[54]:
+# In[2]:
 
 
 # 0. Import BEA API key or set manually to variable api_key
@@ -31,7 +31,7 @@ except:
     api_key = None
 
 
-# In[69]:
+# In[3]:
 
 
 # 1. State abbreviations
@@ -95,7 +95,7 @@ u'Wyoming':u'WY'
 stateList = [s for s in stateAbbr]
 
 
-# In[70]:
+# In[4]:
 
 
 # 2. Construct series for price deflator
@@ -107,7 +107,7 @@ result = gdp_deflator.read().decode('utf-8')
 json_response = json.loads(result)
 
 
-# In[71]:
+# In[5]:
 
 
 # 2.2 Construct the data frame for the deflator series
@@ -126,7 +126,7 @@ data_p = pd.DataFrame(values,index = years,columns = ['price level'])
 print(data_p)
 
 
-# In[72]:
+# In[6]:
 
 
 # 3. Construct series for per capita income by state, region, and the entire us
@@ -139,11 +139,10 @@ json_response = json.loads(result)
 # json_response['BEAAPI']['Results']['Data'][0]['GeoName']
 
 
-# In[73]:
+# In[7]:
 
 
 # 3.2 Construct the data frame for the per capita income series
-
 
 # 3.2.1 Initialize the dataframe
 regions = []
@@ -177,84 +176,8 @@ data_y.columns=columns
 # 3.2.4 Display the data obtained from the BEA
 data_y
 
-data_y
 
-
-# In[ ]:
-
-
-
-
-
-# In[74]:
-
-
-# # 3.2.2 Populate the dataframe with values
-# for element in json_response['BEAAPI']['Results']['Data']:
-    
-#     if 'Alaska' in element['GeoName']:
-#         print(element['TimePeriod'],element[u'DataValue'])
-# #     try:
-# #         data_y[element['GeoName']][element['TimePeriod']] = np.round(float(element[u'DataValue'].replace(',',''))/float(data_p.loc[element['TimePeriod']]),2)# real
-# #     except:
-# #         data_y[element['GeoName']][element['TimePeriod']] = np.nan
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[75]:
+# In[8]:
 
 
 # 4. State income data for 1840, 1880, and 1900
@@ -267,7 +190,7 @@ historic_cpi_data=pd.read_csv('../historic_data/Historical Statistics of the US 
 historic_cpi_data = historic_cpi_data/historic_cpi_data.loc[1929]*float(data_p.loc['1929'])
 
 
-# In[76]:
+# In[9]:
 
 
 # 4.2 Append to data beginning in 1929
@@ -282,7 +205,7 @@ df = pd.DataFrame({'1840':df_1840,'1880':df_1880,'1900':df_1900}).transpose()
 df = pd.concat([data_y,df]).sort_index()
 
 
-# In[77]:
+# In[10]:
 
 
 # 5. Export data to csv
@@ -294,15 +217,9 @@ for c in dropCols:
 series.to_csv('../csv/state_income_data.csv',na_rep='NaN')
 
 
-# In[78]:
+# In[11]:
 
 
 # 6. Export notebook to .py
 runProcs.exportNb('state_income_data')
-
-
-# In[ ]:
-
-
-
 
