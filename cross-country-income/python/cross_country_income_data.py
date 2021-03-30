@@ -9,6 +9,7 @@ import numpy as np
 import runProcs
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 plt.style.use('classic')
 # get_ipython().run_line_magic('matplotlib', 'inline')
 
@@ -17,6 +18,12 @@ plt.style.use('classic')
 
 
 # In[2]:
+
+
+current_pwt_file = 'pwt100.xlsx'
+
+
+# In[3]:
 
 
 # 0. Setup
@@ -47,17 +54,17 @@ majorLocator_y   = plt.MultipleLocator(3)
 majorLocator_shares   = plt.MultipleLocator(0.2)
 
 
-# In[5]:
+# In[4]:
 
 
 # 1. Import data
-try:
-    pwt = pd.read_excel('https://www.rug.nl/ggdc/docs/pwt100.xlsx',sheet_name='Data')
-except:
-    pwt = pd.read_excel('../xslx/pwt100.xlsx',sheet_name='Data')
+if os.path.exists('../xslx/pwt100.xlsx'):
+    pwt = pd.read_excel('../xslx/'+current_pwt_file,sheet_name='Data')
+else:
+    pwt = pd.read_excel('https://www.rug.nl/ggdc/docs/'+current_pwt_file,sheet_name='Data')
 
 
-# In[6]:
+# In[5]:
 
 
 # 2. lists of countries, codes, and years
@@ -220,10 +227,4 @@ plt.savefig('../png/fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 #5. Export notebook to python script
 runProcs.exportNb('cross_country_income_data')
-
-
-# In[ ]:
-
-
-
 
