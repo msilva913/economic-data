@@ -12,14 +12,14 @@ import quandl as Quandl
 import wbdata as wb
 from scipy import stats
 import runProcs
-# get_ipython().run_line_magic('matplotlib', 'inline')
+get_ipython().run_line_magic('matplotlib', 'inline')
 
 
 # # Preliminaries
 # 
 # Import country codes and country lists by income
 
-# In[2]:
+# In[4]:
 
 
 # 1. Import country codes and organize
@@ -295,10 +295,10 @@ except:
     
         
 #1.2 Use wbdata to get lists of country codes by income groups
-countries_income_all =  [i['id'] for i in wb.get_country(incomelevel=['LIC','MIC','HIC'],display=False)]
-countries_income_H = [i['id'] for i in wb.get_country(incomelevel=['HIC'],display=False)]
-countries_income_M = [i['id'] for i in wb.get_country(incomelevel=['MIC'],display=False)]
-countries_income_L = [i['id'] for i in wb.get_country(incomelevel=['LIC'],display=False)]
+countries_income_all =  [i['id'] for i in wb.get_country(incomelevel=['LIC','MIC','HIC'])]
+countries_income_H = [i['id'] for i in wb.get_country(incomelevel=['HIC'])]
+countries_income_M = [i['id'] for i in wb.get_country(incomelevel=['MIC'])]
+countries_income_L = [i['id'] for i in wb.get_country(incomelevel=['LIC'])]
 
 countries_income_oecd = ['AUS','CAN','CHL','CZE','DNK','EST','HUN','ISL','ISR','JPN'
                        ,'KOR','NZL','NOR''POL','SVK','SVN','SWE','CHE','USA']
@@ -306,7 +306,7 @@ countries_income_oecd = ['AUS','CAN','CHL','CZE','DNK','EST','HUN','ISL','ISR','
 
 # # Import data from Quandl
 
-# In[ ]:
+# In[5]:
 
 
 # 2. Import data from Quandl
@@ -369,7 +369,7 @@ for name,key in country_codes.items():
 
 # # Create data sets: money, prices, and output
 
-# In[ ]:
+# In[6]:
 
 
 # 3. Create datasets for quantity theory without interest and exchange rates
@@ -469,7 +469,7 @@ quantity_theory_data_oecd.to_csv('../csv/quantity_theory_data_oecd.csv',index=Tr
 
 # # Create data sets: money, prices, output, interest, and exchange rates
 
-# In[ ]:
+# In[7]:
 
 
 # 4. Create datasets for quantity theory with interest and exchange rates
@@ -570,10 +570,10 @@ quantity_theory_data.to_csv('../csv/quantity_theory_open_data.csv',index=True,in
 quantity_theory_data_L.to_csv('../csv/quantity_theory_open_data_L.csv',index=True,index_label='country')
 quantity_theory_data_M.to_csv('../csv/quantity_theory_open_data_M.csv',index=True,index_label='country')
 quantity_theory_data_H.to_csv('../csv/quantity_theory_open_data_H.csv',index=True,index_label='country')
-quantity_theory_data_oecd.to_csv('../csv/quantity_theory_open_dataOecd.csv',index=True,index_label='country')
+quantity_theory_data_oecd.to_csv('../csv/quantity_theory_open_data_oecd.csv',index=True,index_label='country')
 
 
-# In[ ]:
+# In[8]:
 
 
 # 5. Export notebook to python script

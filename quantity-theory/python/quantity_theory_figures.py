@@ -12,7 +12,7 @@ import quandl as Quandl
 import wbdata as wb
 from scipy import stats
 import runProcs
-# get_ipython().run_line_magic('matplotlib', 'inline')
+get_ipython().run_line_magic('matplotlib', 'inline')
 
 
 # In[2]:
@@ -31,7 +31,7 @@ plt.rcParams['xtick.major.pad']='8'
 plt.rcParams['ytick.major.pad']='8'
 
 
-# In[3]:
+# In[4]:
 
 
 # 1. Import country codes and organize
@@ -307,10 +307,10 @@ except:
     
         
 #1.2 Use wbdata to get lists of country codes by income groups
-countriesIncomeAll =  [i['id'] for i in wb.get_country(incomelevel=['LIC','MIC','HIC'],display=False)]
-countriesIncomeH = [i['id'] for i in wb.get_country(incomelevel=['HIC'],display=False)]
-countriesIncomeM = [i['id'] for i in wb.get_country(incomelevel=['MIC'],display=False)]
-countriesIncomeL = [i['id'] for i in wb.get_country(incomelevel=['LIC'],display=False)]
+countriesIncomeAll =  [i['id'] for i in wb.get_country(incomelevel=['LIC','MIC','HIC'])]
+countriesIncomeH = [i['id'] for i in wb.get_country(incomelevel=['HIC'])]
+countriesIncomeM = [i['id'] for i in wb.get_country(incomelevel=['MIC'])]
+countriesIncomeL = [i['id'] for i in wb.get_country(incomelevel=['LIC'])]
 
 countriesIncomeOecd = ['AUS','CAN','CHL','CZE','DNK','EST','HUN','ISL','ISR','JPN'
                        ,'KOR','NZL','NOR''POL','SVK','SVN','SWE','CHE','USA']
@@ -318,7 +318,7 @@ countriesIncomeOecd = ['AUS','CAN','CHL','CZE','DNK','EST','HUN','ISL','ISR','JP
 
 # # Figures: money, prices, and output
 
-# In[4]:
+# In[5]:
 
 
 # 4. Graph of quantity theory data without exchange or interest rates
@@ -367,7 +367,7 @@ plt.savefig('../png/fig_money_inflation_coded.png',bbox_inches='tight',dpi=120)
 print('regression coefficient:',np.round(a_p,2))
 
 
-# In[5]:
+# In[6]:
 
 
 # 4.2 Money growth and inflation
@@ -455,7 +455,7 @@ plt.tight_layout()
 plt.savefig('../png/fig_inflation_gdp.png',bbox_inches='tight',dpi=120)
 
 
-# In[6]:
+# In[7]:
 
 
 # 5. Make tex files for figures
@@ -493,7 +493,7 @@ nf.write('\\end{figure}')
 nf.close()
 
 
-# In[7]:
+# In[8]:
 
 
 # 6. Correlations
@@ -506,7 +506,7 @@ print(quantity_theory_data_oecd[['money growth','inflation','gdp growth']].corr(
 
 # # Figures: money, prices, output, interest, and exchange rates
 
-# In[8]:
+# In[9]:
 
 
 quantity_theory_data = pd.read_csv('../csv/quantity_theory_open_data.csv',index_col=0)
@@ -657,7 +657,7 @@ plt.tight_layout()
 plt.savefig('../png/fig_money_differential_depreciation_open.png',bbox_inches='tight',dpi=120)
 
 
-# In[9]:
+# In[10]:
 
 
 # 9. Make tex files for figures
@@ -703,7 +703,7 @@ nf.write('\\end{figure}')
 nf.close()
 
 
-# In[10]:
+# In[11]:
 
 
 # 10. Correlations
@@ -714,7 +714,7 @@ print(quantity_theory_data_L[['money growth','inflation','gdp growth','nominal i
 print(quantity_theory_data_oecd[['money growth','inflation','gdp growth','nominal interest rate','exchange rate depreciation']].corr())
 
 
-# In[11]:
+# In[12]:
 
 
 # 11. Export notebook to python script

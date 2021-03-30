@@ -12,15 +12,15 @@ import datetime,dateutil,urllib,runProcs
 import requests
 import matplotlib.pyplot as plt
 plt.style.use('classic')
-# get_ipython().run_line_magic('matplotlib', 'inline')
+get_ipython().run_line_magic('matplotlib', 'inline')
 
 
 # In[2]:
 
 
 # 1. Import the most recent inflation forecast data from the Philadelphia Fed, Survey of Professional Forecasters
-
-url = "https://www.philadelphiafed.org/-/media/research-and-data/real-time-center/survey-of-professional-forecasters/historical-data/inflation.xls?la=en"
+# Get data here: https://www.philadelphiafed.org/surveys-and-data/real-time-data-research/inflation-forecasts
+url = "https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/historical-data/inflation.xlsx?la=en&hash=F9C3E76769B4586C3E36E403DFA54BDC"
 r = requests.get(url,verify=False)
 with open("../xls/inflation_forecasts.xls", "wb") as code:
     code.write(r.content)
@@ -86,12 +86,6 @@ gdp_deflator_forecast_Q = fp.to_fred_series(data = inflation_forecasts['INFPGDP1
 
 gdp_deflator_forecast_A = fp.to_fred_series(data = inflation_forecasts['INFPGDP1YR'].values,dates=dates,frequency_short='A')
 gdp_deflator_forecast_A = gdp_deflator_forecast_A.as_frequency(freq='A',method='mean')
-
-
-# In[ ]:
-
-
-
 
 
 # In[5]:

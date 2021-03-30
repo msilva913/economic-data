@@ -11,7 +11,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 plt.style.use('classic')
-# get_ipython().run_line_magic('matplotlib', 'inline')
+get_ipython().run_line_magic('matplotlib', 'inline')
 
 # # This program requires the Penn World Tables data file: pwt91.xlsx
 # # available at https://pwt.sas.upenn.edu/
@@ -91,7 +91,7 @@ year0= years.index(year0)
 len(years)
 
 
-# In[ ]:
+# In[6]:
 
 
 # 3. Create deatasets
@@ -196,7 +196,7 @@ laborShare = create_data_set(pwtCode='labsh',per_capita=False,per_worker=False,f
 depreciation = create_data_set(pwtCode='delta',per_capita=False,per_worker=False,file_name='../csv/cross_country_depreciation_rate')
 
 
-# In[ ]:
+# In[7]:
 
 
 # 4. Plot for website
@@ -222,7 +222,7 @@ fig.tight_layout()
 plt.savefig('../png/fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
-# In[ ]:
+# In[8]:
 
 
 #5. Export notebook to python script
