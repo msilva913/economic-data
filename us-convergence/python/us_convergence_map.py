@@ -36,11 +36,11 @@ svg = open('../svg/usMap.svg', 'r').read()
 
 # 0.1 general plot settings
 
-font = {'weight' : 'bold',
-        'size'   : 15}
-plt.rc('font', **font)
-plt.rcParams['xtick.major.pad']='8'
-plt.rcParams['ytick.major.pad']='8'
+# font = {'weight' : 'bold',
+#         'size'   : 15}
+# plt.rc('font', **font)
+# plt.rcParams['xtick.major.pad']='8'
+# plt.rcParams['ytick.major.pad']='8'
 
 
 # 0.2 Formatter for inserting commas in y axis labels with magnitudes in the thousands
@@ -66,7 +66,7 @@ majorLocator_shares   = plt.MultipleLocator(0.2)
 # 1. Load and manage income data
 
 # 1.1 Load state income csv file and convert income to 1000s of dollars
-state_income = pd.read_csv('../csv/state_income_data.csv',index_col=0)
+state_income = pd.read_csv('../csv/state_income_data.csv',index_col=0,parse_dates=True)
 state_income = state_income/1000
 state_income = state_income.sort_index(axis=0, ascending=True)
 
@@ -103,8 +103,8 @@ model = sm.OLS(growth,X)
 results = model.fit()
 results.params
 
-slope = results.params[1929]
-inter = results.params['const']
+slope = results.params[1]
+inter = results.params[0]
 
 
 # In[6]:
@@ -152,9 +152,9 @@ for i,state in enumerate(state_income.columns):
         south = ax.plot(state_income.index,state_income[state],'-r',lw=2,label='South')
 
 ax.set_xlim([state_income.index[0],state_income.index[-1]])
-ax.locator_params(axis='x',nbins=5)
+# ax.locator_params(axis='x',nbins=5)
 ax.set_ylabel('income per capita \n (thousands of 2009 $)')
-ax.locator_params(axis='x',nbins=6)
+# ax.locator_params(axis='x',nbins=6)
 plt.grid()
 
 
@@ -183,9 +183,9 @@ for i,state in enumerate(state_income.columns):
         south = ax.plot(state_income.index,(state_income[state]/usIncome-1),'-r',lw=2,label='South')
 
 ax.set_xlim([state_income.index[0],state_income.index[-1]])
-ax.locator_params(axis='x',nbins=5)
+# ax.locator_params(axis='x',nbins=5)
 ax.set_ylabel('real income per capita \n relative US average')
-ax.locator_params(axis='x',nbins=6)
+# ax.locator_params(axis='x',nbins=6)
 plt.grid()
 
 
@@ -265,7 +265,7 @@ for t,year in enumerate(state_income.index):
             p['style'] = path_style + color
 
     svg = soup.prettify()[17:56]+u'1054'+soup.prettify()[59:-24]
-    svg = svg+u'<text style="font-size:50px" id="tcol0" x="600" y="560">'+str(year)+u'</text>\n'
+    svg = svg+u'<text style="font-size:50px" id="tcol0" x="600" y="560">'+str(year.year)+u'</text>\n'
 
     svg = svg+u'<text style="font-size:20px" id="tcol0" x="875" y="225">'+'Income per capita'+'</text>\n'
     svg = svg+u'<text style="font-size:20px" id="tcol0" x="875" y="250">'+'rel. to US avg.'+'</text>\n'
@@ -295,15 +295,15 @@ for t,year in enumerate(state_income.index):
     svg = svg.replace('width="959"','width="1035"')
     
     
-    with open("../frames/state_relative_income"+str(year)+".svg", "wb") as file:
+    with open("../frames/state_relative_income"+str(year.year)+".svg", "wb") as file:
         file.write(bytes(svg, 'UTF-8'))
 
-    file = open("../frames/state_relative_income"+str(year)+".svg", "a")
-    convert = 'convert -density 144 ../frames/state_relative_income'+str(year)+'.svg ../frames/state_relative_income'+str(year)+'.png'
+    file = open("../frames/state_relative_income"+str(year.year)+".svg", "a")
+    convert = 'convert -density 144 ../frames/state_relative_income'+str(year.year)+'.svg ../frames/state_relative_income'+str(year.year)+'.png'
     subprocess.call(convert,shell=True)
 
 
-# In[12]:
+# In[ ]:
 
 
 # 4.4 Creat gif with imagemagick
@@ -311,7 +311,7 @@ makegif = 'convert -loop 0 -delay 50x100 ../frames/*.png ../gif/us_state_converg
 subprocess.call(makegif,shell=True)
 
 
-# In[13]:
+# In[ ]:
 
 
 # 5. Clean up
@@ -321,7 +321,7 @@ subprocess.call(makegif,shell=True)
 #         os.remove(files)
 
 
-# In[14]:
+# In[ ]:
 
 
 # 6. Export notebook to .py

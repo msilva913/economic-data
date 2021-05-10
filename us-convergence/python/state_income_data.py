@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[121]:
 
 
 import numpy as np
@@ -11,15 +11,24 @@ import runProcs
 from urllib.request import urlopen
 import os
 
-import matplotlib.pyplot as plt
-plt.style.use('classic')
-# get_ipython().run_line_magic('matplotlib', 'inline')
+
+# # State Income Data
+# 
+# Constructs a data set of real income per capita for the continental United States from 1840 to the present.
+# 
+# Nominal income per capita for 1840, 1880, a 1900 were found in Appendix A in "Interregional Differences in Per Capita Income, Population, and Total Income, 1840-1950" by Richard Easterlin in <ins>Trends in the American Economy in the Nineteenth Century</ins> (https://www.nber.org/books-and-chapters/trends-american-economy-nineteenth-century).
+# 
+# The CPI for 1840, 1880, and 1900 was taken from "<ins>Bicentennial Edition: Historical Statistics of the United States, Colonial Times to 1970</ins> (https://www.census.gov/library/publications/1975/compendia/hist_stats_colonial-1970.html)
+# 
+# 
+# Income data from 1929 are obtained from the BEA.
+# 
+# ## Preliminaries
+
+# In[116]:
 
 
-# In[2]:
-
-
-# 0. Import BEA API key or set manually to variable api_key
+# Import BEA API key or set manually to variable api_key
 try:
     items = os.getcwd().split('/')[:3]
     items.append('bea_api_key.txt')
@@ -31,12 +40,10 @@ except:
     api_key = None
 
 
-# In[3]:
+# In[117]:
 
 
-# 1. State abbreviations
-
-# 1.1 dictionary:
+# Dictionary of state abbreviations
 stateAbbr = {
 u'Alabama':u'AL',
 u'Alaska *':u'AK',
@@ -91,124 +98,94 @@ u'Wisconsin':u'WI',
 u'Wyoming':u'WY'
 }
 
-# 1.2 List of states in the US
+# List of states in the US
 stateList = [s for s in stateAbbr]
 
 
-# In[4]:
+# ## Deflator data
+
+# In[122]:
 
 
-# 2. Construct series for price deflator
-
-# 2.1 Obtain data from BEA
+# Obtain data from BEA
 gdp_deflator = urlopen('http://apps.bea.gov/api/data/?UserID='+api_key+'&method=GetData&datasetname=NIPA&TableName=T10109&TableID=13&Frequency=A&Year=X&ResultFormat=JSON&')
-# result = gdp_deflator.readall().decode('utf-8')
+
+# Parse result
 result = gdp_deflator.read().decode('utf-8')
 json_response = json.loads(result)
 
+# Import to DataFrame and organize
+df = pd.DataFrame(json_response['BEAAPI']['Results']['Data'])
+df['DataValue'] = df['DataValue'].astype(float)
+df = df.set_index(['LineDescription',pd.to_datetime(df['TimePeriod'])])
+df.index.names = ['line description','Year']
 
-# In[5]:
-
-
-# 2.2 Construct the data frame for the deflator series
-values = []
-years = []
-for element in json_response['BEAAPI']['Results']['Data']:
-#     if element['LineDescription'] == 'Personal consumption expenditures':
-    if element['LineDescription'] == 'Gross domestic product':
-        years.append(element['TimePeriod'])
-        values.append(float(element['DataValue'])/100)
-
-values = np.array([values]).T
-data_p = pd.DataFrame(values,index = years,columns = ['price level'])
-
-# 2.3 Display the data
-print(data_p)
+# Extract price level data
+data_p = df['DataValue'].loc['Gross domestic product']/100
+data_p.name = 'price level'
+data_p = data_p.sort_index()
+data_p
 
 
-# In[6]:
+# ## Per capital income data
+
+# In[123]:
 
 
-# 3. Construct series for per capita income by state, region, and the entire us
-
-# 3.1 Obtain data from BEA
+# Obtain data from BEA
 state_y_pc = urlopen('http://apps.bea.gov/api/data/?UserID='+api_key+'&method=GetData&DataSetName=Regional&TableName=SAINC1&LineCode=3&Year=ALL&GeoFips=STATE&ResultFormat=JSON')
-# result = state_y_pc.readall().decode('utf-8')
+
+# Parse result
 result = state_y_pc.read().decode('utf-8')
 json_response = json.loads(result)
-# json_response['BEAAPI']['Results']['Data'][0]['GeoName']
+
+# Import to DataFrame and organize
+df = pd.DataFrame(json_response['BEAAPI']['Results']['Data'])
+df.GeoName = df.GeoName.replace(stateAbbr)
+df = df.set_index(['GeoName',pd.DatetimeIndex(df['TimePeriod'])])
+df.index.names = ['State','Year']
+df['DataValue'] = df['DataValue'].replace('(NA)',np.nan)
 
 
-# In[7]:
-
-
-# 3.2 Construct the data frame for the per capita income series
-
-# 3.2.1 Initialize the dataframe
-regions = []
-years = []
-for element in json_response['BEAAPI']['Results']['Data']:
-    if element['GeoName'] not in regions:
-        regions.append(element['GeoName'])
-    if element['TimePeriod'] not in years:
-        years.append(element['TimePeriod'])
-
-df = np.zeros([len(years),len(regions)])
-data_y = pd.DataFrame(df,index = years,columns = regions)
-
-# 3.2.2 Populate the dataframe with values
-for element in json_response['BEAAPI']['Results']['Data']:
-    try:
-        data_y[element['GeoName']][element['TimePeriod']] = np.round(float(element[u'DataValue'].replace(',',''))/float(data_p.loc[element['TimePeriod']]),2)# real
-    except:
-        data_y[element['GeoName']][element['TimePeriod']] = np.nan
-        
-# 3.2.3 Replace the state names in the index with abbreviations
-columns=[]
-for r in regions:
-    if r in stateList:
-        columns.append(stateAbbr[r])
-    else:
-        columns.append(r)
-        
-data_y.columns=columns
-
-# 3.2.4 Display the data obtained from the BEA
+# Extract income data
+data_y = df['DataValue'].str.replace(',','').astype(float)
+data_y.name = 'income'
+data_y = data_y.unstack('State')
+data_y = data_y.sort_index()
+data_y = data_y.divide(data_p,axis=0)
 data_y
 
 
-# In[8]:
+# # Load Easterlin's data
+
+# In[ ]:
 
 
-# 4. State income data for 1840, 1880, and 1900
-
-# 4.1.1 Import Easterlin's income data
+# Import Easterlin's income data
 easterlin_data = pd.read_csv('../historic_data/Historical Statistics of the US - Easterlin State Income Data.csv',index_col=0)
 
-# 4.1.2 Import historic CPI data
+# Import historic CPI data
 historic_cpi_data=pd.read_csv('../historic_data/Historical Statistics of the US - cpi.csv',index_col=0)
 historic_cpi_data = historic_cpi_data/historic_cpi_data.loc[1929]*float(data_p.loc['1929'])
 
 
-# In[9]:
+# In[114]:
 
 
-# 4.2 Append to data beginning in 1929
-
-# 4.2.1 Construct series for real incomes in 1840, 1880, and 1900
+# Construct series for real incomes in 1840, 1880, and 1900
 df_1840 = easterlin_data['Income per capita - 1840 - A [cur dollars]']/float(historic_cpi_data.loc[1840])
 df_1880 = easterlin_data['Income per capita - 1880 [cur dollars]']/float(historic_cpi_data.loc[1890])
 df_1900 = easterlin_data['Income per capita - 1900 [cur dollars]']/float(historic_cpi_data.loc[1900])
 
-# 4.2.2 Put into a DataFrame and concatenate with previous
-df = pd.DataFrame({'1840':df_1840,'1880':df_1880,'1900':df_1900}).transpose()
+# Put into a DataFrame and concatenate with previous data beginning in 1929
+df = pd.DataFrame({pd.to_datetime('1840'):df_1840,pd.to_datetime('1880'):df_1880,pd.to_datetime('1900'):df_1900}).transpose()
 df = pd.concat([data_y,df]).sort_index()
 
 
-# In[10]:
+# In[115]:
 
 
-# 5. Export data to csv
+# Export data to csv
 series = df.sort_index()
 dropCols = [u'AK', u'HI', u'New England', u'Mideast', u'Great Lakes', u'Plains', u'Southeast', u'Southwest', u'Rocky Mountain', u'Far West']
 for c in dropCols:
@@ -220,6 +197,6 @@ series.to_csv('../csv/state_income_data.csv',na_rep='NaN')
 # In[11]:
 
 
-# 6. Export notebook to .py
+# Export notebook to .py
 runProcs.exportNb('state_income_data')
 
