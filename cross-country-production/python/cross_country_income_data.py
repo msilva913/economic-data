@@ -26,7 +26,7 @@ plt.style.use('classic')
 current_pwt_file = 'pwt100.xlsx'
 
 
-# In[3]:
+# In[76]:
 
 
 # Import data from local source or download if not present
@@ -36,7 +36,7 @@ else:
     pwt = pd.read_excel('https://www.rug.nl/ggdc/docs/'+current_pwt_file,sheet_name='Data',index_col=3,parse_dates=True)
 
 
-# In[4]:
+# In[77]:
 
 
 # Replace Côte d'Ivoire with Cote d'Ivoire
@@ -54,11 +54,11 @@ pwt
 
 # ## Contstruct data sets
 
-# In[5]:
+# In[81]:
 
 
 # Define a function that constructs data sets
-def create_data_set(year0,pwtCode,per_capita,per_worker,file_name):
+def create_data_set(year0,pwtCode,per_capita,per_worker):
     
     year0 = str(year0)
     
@@ -73,67 +73,52 @@ def create_data_set(year0,pwtCode,per_capita,per_worker,file_name):
         
     data = data.unstack(level='country').loc[year0:].dropna(axis=1)
     
-    data.to_csv(file_name)
+    return data
 
 
 # ### GDP data
 
-# In[6]:
+# In[91]:
 
 
-# GDP (output-side, constant prices across countries; PWT code: cgdpo)
-create_data_set(year0=1960,pwtCode='cgdpe',per_capita=False,per_worker=False,file_name='../csv/cross_country_gdp.csv')
+# Create data sets
+gdp_pc = create_data_set(year0=1960,pwtCode='cgdpe',per_capita=True,per_worker=False)
+consumption_pc = create_data_set(year0=1960,pwtCode='ccon',per_capita=True,per_worker=False)
+physical_capital_pc = create_data_set(year0=1960,pwtCode='cn',per_capita=True,per_worker=False)
+human_capital_pc = create_data_set(year0=1960,pwtCode='hc',per_capita=False,per_worker=False)
 
-# GDP per capita (output-side, constant prices across countries; PWT code: cgdpo)
-create_data_set(year0=1960,pwtCode='cgdpe',per_capita=True,per_worker=False,file_name='../csv/cross_country_gdp_per_capita.csv')
+# Find intsection of countries with data from 1960
+intersection = gdp_pc.columns & consumption_pc.columns & physical_capital_pc.columns & human_capital_pc.columns
 
-# GDP per worker (output-side, constant prices across countries; PWT code: cgdpo)
-create_data_set(year0=1960,pwtCode='cgdpe',per_capita=False,per_worker=True,file_name='../csv/cross_country_gdp_per_worker.csv')
+# Adjust data
+gdp_pc = gdp_pc[intersection]
+consumption_pc = consumption_pc[intersection]
+physical_capital_pc = physical_capital_pc[intersection]
+human_capital_pc = human_capital_pc[intersection]
 
-
-# ### Consumption data
-
-# In[7]:
-
-
-# Consumption (constant prices across countries; PWT code: ccon)
-create_data_set(year0=1960,pwtCode='ccon',per_capita=False,per_worker=False,file_name='../csv/cross_country_consumption.csv')
-
-# Consumption per capita (constant prices across countries; PWT code: ccon)
-create_data_set(year0=1960,pwtCode='ccon',per_capita=True,per_worker=False,file_name='../csv/cross_country_consumption_per_capita.csv')
-
-# Consumption per worker (constant prices across countries; PWT code: ccon)
-create_data_set(year0=1960,pwtCode='ccon',per_capita=False,per_worker=True,file_name='../csv/cross_country_consumption_per_worker.csv')
+# Export to csv
+gdp_pc.to_csv('../csv/cross_country_gdp_per_capita.csv')
+consumption_pc.to_csv('../csv/cross_country_consumption_per_capita.csv')
+physical_capital_pc.to_csv('../csv/cross_country_physical_capital_per_capita.csv')
+human_capital_pc.to_csv('../csv/cross_country_human_capital_per_capita.csv')
 
 
-# ### Physical capital data
-
-# In[8]:
+# In[ ]:
 
 
-# Physical capital (constant prices across countries; PWT code: cn)
-create_data_set(year0=1960,pwtCode='cn',per_capita=False,per_worker=False,file_name='../csv/cross_country_physical_capital.csv')
-
-# Physical capital (constant prices across countries; PWT code: cn)
-create_data_set(year0=1960,pwtCode='cn',per_capita=True,per_worker=False,file_name='../csv/cross_country_physical_capital_per_capita.csv')
-
-# Physical capital (constant prices across countries; PWT code: cn)
-create_data_set(year0=1960,pwtCode='cn',per_capita=False,per_worker=True,file_name='../csv/cross_country_physical_capital_per_worker.csv')
 
 
-# ### Human capital data
 
-# In[9]:
+# In[ ]:
 
 
-# Human capital (index; PWT code: hc)
-create_data_set(year0=1960,pwtCode='hc',per_capita=False,per_worker=False,file_name='../csv/cross_country_human_capital.csv')
 
-# Human capital per capita (index; PWT code: hc)
-create_data_set(year0=1960,pwtCode='hc',per_capita=True,per_worker=False,file_name='../csv/cross_country_human_capital_per_capita.csv')
 
-# Human capital per worker (index; PWT code: hc)
-create_data_set(year0=1960,pwtCode='hc',per_capita=False,per_worker=True,file_name='../csv/cross_country_human_capital_per_worker.csv')
+
+# In[ ]:
+
+
+
 
 
 # ### Other aggregate series
