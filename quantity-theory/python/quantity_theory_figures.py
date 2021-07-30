@@ -12,7 +12,7 @@ import quandl as Quandl
 import wbdata as wb
 from scipy import stats
 import runProcs
-get_ipython().run_line_magic('matplotlib', 'inline')
+# get_ipython().run_line_magic('matplotlib', 'inline')
 
 
 # In[2]:

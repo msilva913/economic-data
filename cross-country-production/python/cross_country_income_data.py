@@ -26,7 +26,7 @@ plt.style.use('classic')
 current_pwt_file = 'pwt100.xlsx'
 
 
-# In[76]:
+# In[3]:
 
 
 # Import data from local source or download if not present
@@ -36,7 +36,7 @@ else:
     pwt = pd.read_excel('https://www.rug.nl/ggdc/docs/'+current_pwt_file,sheet_name='Data',index_col=3,parse_dates=True)
 
 
-# In[77]:
+# In[4]:
 
 
 # Replace Côte d'Ivoire with Cote d'Ivoire
@@ -54,7 +54,7 @@ pwt
 
 # ## Contstruct data sets
 
-# In[81]:
+# In[5]:
 
 
 # Define a function that constructs data sets
@@ -78,7 +78,7 @@ def create_data_set(year0,pwtCode,per_capita,per_worker):
 
 # ### GDP data
 
-# In[91]:
+# In[6]:
 
 
 # Create data sets
@@ -103,51 +103,9 @@ physical_capital_pc.to_csv('../csv/cross_country_physical_capital_per_capita.csv
 human_capital_pc.to_csv('../csv/cross_country_human_capital_per_capita.csv')
 
 
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# ### Other aggregate series
-
-# In[10]:
-
-
-# Employment (number of persons; PWT code: emp
-create_data_set(year0=1960,pwtCode='emp',per_capita=False,per_worker=False,file_name='../csv/cross_country_employed.csv')
-
-# Hours worked (average annual hours workerd by workers; PWT code: avh)
-create_data_set(year0=1960,pwtCode='avh',per_capita=False,per_worker=False,file_name='../csv/cross_country_hours.csv')
-
-# Population (PWT code: pop)
-popluation = create_data_set(year0=1960,pwtCode='pop',per_capita=False,per_worker=False,file_name='../csv/cross_country_population.csv')
-
-# Saving rate (share of gross capital formation; PWT code: csh_i)
-savingRate = create_data_set(year0=1960,pwtCode='csh_i',per_capita=False,per_worker=False,file_name='../csv/cross_country_saving_rate.csv')
-
-# Labor share of income (PWT code: labsh)
-create_data_set(year0=1960,pwtCode='labsh',per_capita=False,per_worker=False,file_name='../csv/cross_country_labor_share.csv')
-
-# Aggregate capital depreciation (PWT code: delta)
-create_data_set(year0=1960,pwtCode='delta',per_capita=False,per_worker=False,file_name='../csv/cross_country_depreciation_rate.csv')
-
-
 # ## Plot for website
 
-# In[11]:
+# In[7]:
 
 
 # Load data
@@ -177,7 +135,7 @@ fig.tight_layout()
 plt.savefig('../png/fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
-# In[12]:
+# In[8]:
 
 
 # Export notebook to python script

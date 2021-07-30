@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[121]:
+# In[1]:
 
 
 import numpy as np
@@ -25,7 +25,7 @@ import os
 # 
 # ## Preliminaries
 
-# In[116]:
+# In[2]:
 
 
 # Import BEA API key or set manually to variable api_key
@@ -40,7 +40,7 @@ except:
     api_key = None
 
 
-# In[117]:
+# In[3]:
 
 
 # Dictionary of state abbreviations
@@ -104,7 +104,7 @@ stateList = [s for s in stateAbbr]
 
 # ## Deflator data
 
-# In[122]:
+# In[4]:
 
 
 # Obtain data from BEA
@@ -129,7 +129,7 @@ data_p
 
 # ## Per capital income data
 
-# In[123]:
+# In[5]:
 
 
 # Obtain data from BEA
@@ -158,7 +158,7 @@ data_y
 
 # # Load Easterlin's data
 
-# In[ ]:
+# In[6]:
 
 
 # Import Easterlin's income data
@@ -169,7 +169,7 @@ historic_cpi_data=pd.read_csv('../historic_data/Historical Statistics of the US 
 historic_cpi_data = historic_cpi_data/historic_cpi_data.loc[1929]*float(data_p.loc['1929'])
 
 
-# In[114]:
+# In[7]:
 
 
 # Construct series for real incomes in 1840, 1880, and 1900
@@ -182,7 +182,7 @@ df = pd.DataFrame({pd.to_datetime('1840'):df_1840,pd.to_datetime('1880'):df_1880
 df = pd.concat([data_y,df]).sort_index()
 
 
-# In[115]:
+# In[8]:
 
 
 # Export data to csv
@@ -194,7 +194,7 @@ for c in dropCols:
 series.to_csv('../csv/state_income_data.csv',na_rep='NaN')
 
 
-# In[11]:
+# In[9]:
 
 
 # Export notebook to .py

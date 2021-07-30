@@ -12,14 +12,14 @@ import quandl as Quandl
 import wbdata as wb
 from scipy import stats
 import runProcs
-get_ipython().run_line_magic('matplotlib', 'inline')
+# get_ipython().run_line_magic('matplotlib', 'inline')
 
 
 # # Preliminaries
 # 
 # Import country codes and country lists by income
 
-# In[4]:
+# In[2]:
 
 
 # 1. Import country codes and organize
@@ -306,7 +306,7 @@ countries_income_oecd = ['AUS','CAN','CHL','CZE','DNK','EST','HUN','ISL','ISR','
 
 # # Import data from Quandl
 
-# In[5]:
+# In[ ]:
 
 
 # 2. Import data from Quandl
@@ -369,7 +369,7 @@ for name,key in country_codes.items():
 
 # # Create data sets: money, prices, and output
 
-# In[6]:
+# In[ ]:
 
 
 # 3. Create datasets for quantity theory without interest and exchange rates
@@ -469,7 +469,7 @@ quantity_theory_data_oecd.to_csv('../csv/quantity_theory_data_oecd.csv',index=Tr
 
 # # Create data sets: money, prices, output, interest, and exchange rates
 
-# In[7]:
+# In[ ]:
 
 
 # 4. Create datasets for quantity theory with interest and exchange rates
@@ -573,7 +573,7 @@ quantity_theory_data_H.to_csv('../csv/quantity_theory_open_data_H.csv',index=Tru
 quantity_theory_data_oecd.to_csv('../csv/quantity_theory_open_data_oecd.csv',index=True,index_label='country')
 
 
-# In[8]:
+# In[ ]:
 
 
 # 5. Export notebook to python script
