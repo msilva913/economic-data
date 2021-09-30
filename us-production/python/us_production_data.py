@@ -95,7 +95,7 @@ netExportsQ = fp.series('NETEXP')
 deflatorQ  = fp.series('GDPDEF')
 
 
-# In[14]:
+# In[15]:
 
 
 gdpQ  = fp.series('GDP')
@@ -124,7 +124,7 @@ baseYear = deflatorA.units[6:10]
 laborBaseYear= laborQ.units[6:10]
 
 
-# In[ ]:
+# In[16]:
 
 
 # 3. Parameter calibration using the annual series
@@ -148,7 +148,7 @@ print('g:    ',round(g,5))
 print('n:    ',round(n,5))
 
 
-# In[ ]:
+# In[17]:
 
 
 # 4. Implement the perpetual inventory method
@@ -178,7 +178,7 @@ tfpA.data = gdpA.data/capitalA.data**alpha/laborA.data**(1-alpha)
 tfpQ.data = gdpQ.data/capitalQ.data**alpha/laborQ.data**(1-alpha)
 
 
-# In[ ]:
+# In[18]:
 
 
 # 5. Plot the capital series. Note that the annual and quarterly series should and do align approximately.
@@ -229,7 +229,7 @@ ax.grid(True)
 # plt.savefig('../png/fig_US_Production_Capital_QA.png',bbox_inches='tight')
 
 
-# In[ ]:
+# In[19]:
 
 
 # 6. Save data to csv files
@@ -265,7 +265,7 @@ df = pd.DataFrame({
 df.loc['1950-01-01':].to_csv('../csv/US_Production_Q_Data.csv',index=False)
 
 
-# In[ ]:
+# In[20]:
 
 
 # 7. Compute the Solow residuals: 
@@ -314,7 +314,7 @@ exportsQ_growth = exportsQ_growth.window(['1950-01-01','2000-01-01'])
 importsQ_growth = importsQ_growth.window(['1950-01-01','2000-01-01'])
 
 
-# In[ ]:
+# In[21]:
 
 
 # 11. Construct some plots
@@ -389,7 +389,7 @@ ax.grid(True)
 plt.savefig('../png/fig_US_Production_A_site.png',bbox_inches='tight')
 
 
-# In[ ]:
+# In[22]:
 
 
 # 10. Save growth rate data to csv files
@@ -430,7 +430,7 @@ df.columns = ['Date','GDP Growth','Consumption Growth','Investment Growth','Gove
 df.loc['1950-01-01':].to_csv('../csv/US_Production_Q_Data_Growth_Rates.csv',index=False)
 
 
-# In[ ]:
+# In[23]:
 
 
 # 11. Export notebook to python script
