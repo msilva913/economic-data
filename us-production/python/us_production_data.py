@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[5]:
+# In[1]:
 
 
 import numpy as np
@@ -15,7 +15,7 @@ plt.style.use('classic')
 # get_ipython().run_line_magic('matplotlib', 'inline')
 
 
-# In[6]:
+# In[2]:
 
 
 # 0. load fred api key
@@ -25,7 +25,7 @@ fp.api_key = fp.load_api_key('fred_api_key.txt')
 years2,years4,years5,years10,years15= dts.YearLocator(2),dts.YearLocator(4),dts.YearLocator(5),dts.YearLocator(10),dts.YearLocator(15)
 
 
-# In[7]:
+# In[3]:
 
 
 # 1. Setup for the construction of K and A
@@ -49,7 +49,7 @@ def capitalSeries(i,k0,delta):
     return np.array(k)
 
 
-# In[9]:
+# In[4]:
 
 
 # 2. Import and manage data from FRED
@@ -95,7 +95,7 @@ netExportsQ = fp.series('NETEXP')
 deflatorQ  = fp.series('GDPDEF')
 
 
-# In[15]:
+# In[5]:
 
 
 gdpQ  = fp.series('GDP')
@@ -124,7 +124,7 @@ baseYear = deflatorA.units[6:10]
 laborBaseYear= laborQ.units[6:10]
 
 
-# In[16]:
+# In[6]:
 
 
 # 3. Parameter calibration using the annual series
@@ -148,7 +148,7 @@ print('g:    ',round(g,5))
 print('n:    ',round(n,5))
 
 
-# In[17]:
+# In[7]:
 
 
 # 4. Implement the perpetual inventory method
@@ -178,7 +178,7 @@ tfpA.data = gdpA.data/capitalA.data**alpha/laborA.data**(1-alpha)
 tfpQ.data = gdpQ.data/capitalQ.data**alpha/laborQ.data**(1-alpha)
 
 
-# In[18]:
+# In[8]:
 
 
 # 5. Plot the capital series. Note that the annual and quarterly series should and do align approximately.
@@ -229,7 +229,7 @@ ax.grid(True)
 # plt.savefig('../png/fig_US_Production_Capital_QA.png',bbox_inches='tight')
 
 
-# In[19]:
+# In[9]:
 
 
 # 6. Save data to csv files
@@ -265,7 +265,7 @@ df = pd.DataFrame({
 df.loc['1950-01-01':].to_csv('../csv/US_Production_Q_Data.csv',index=False)
 
 
-# In[20]:
+# In[10]:
 
 
 # 7. Compute the Solow residuals: 
@@ -314,7 +314,7 @@ exportsQ_growth = exportsQ_growth.window(['1950-01-01','2000-01-01'])
 importsQ_growth = importsQ_growth.window(['1950-01-01','2000-01-01'])
 
 
-# In[21]:
+# In[11]:
 
 
 # 11. Construct some plots
@@ -389,7 +389,7 @@ ax.grid(True)
 plt.savefig('../png/fig_US_Production_A_site.png',bbox_inches='tight')
 
 
-# In[22]:
+# In[12]:
 
 
 # 10. Save growth rate data to csv files
@@ -430,7 +430,7 @@ df.columns = ['Date','GDP Growth','Consumption Growth','Investment Growth','Gove
 df.loc['1950-01-01':].to_csv('../csv/US_Production_Q_Data_Growth_Rates.csv',index=False)
 
 
-# In[23]:
+# In[13]:
 
 
 # 11. Export notebook to python script
