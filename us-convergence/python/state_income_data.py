@@ -127,7 +127,16 @@ data_p = data_p.sort_index()
 data_p
 
 
-# ## Per capital income data
+# In[18]:
+
+
+base_year = json_response['BEAAPI']['Results']['Notes'][0]['NoteText'].split('Index numbers, ')[-1].split('=')[0]
+
+with open('../csv/state_income_metadata.csv','w') as newfile:
+    newfile.write(',Values\n'+'base_year,'+base_year)
+
+
+# ## Per capita income data
 
 # In[5]:
 
