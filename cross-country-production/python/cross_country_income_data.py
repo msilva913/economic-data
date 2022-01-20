@@ -32,11 +32,25 @@ current_pwt_file = 'pwt100.xlsx'
 # Import data from local source or download if not present
 if os.path.exists('../xslx/pwt100.xlsx'):
     pwt = pd.read_excel('../xslx/'+current_pwt_file,sheet_name='Data',index_col=3,parse_dates=True)
+    legend = pd.read_excel('../xslx/'+current_pwt_file,sheet_name='Legend',index_col=0)
 else:
     pwt = pd.read_excel('https://www.rug.nl/ggdc/docs/'+current_pwt_file,sheet_name='Data',index_col=3,parse_dates=True)
+    legend = pd.read_excel('https://www.rug.nl/ggdc/docs/'+current_pwt_file,sheet_name='Legend',index_col=0)
+    
 
 
 # In[4]:
+
+
+# Find base year for real variables
+base_year = legend.loc['rgdpe']['Variable definition'].split(' ')[-1].split('US')[0]
+
+# Write to file
+with open('../txt/pwt_base_year.txt','w') as newfile:
+    newfile.write(base_year)
+
+
+# In[5]:
 
 
 # Replace Côte d'Ivoire with Cote d'Ivoire
@@ -54,7 +68,7 @@ pwt
 
 # ## Contstruct data sets
 
-# In[5]:
+# In[6]:
 
 
 # Define a function that constructs data sets
@@ -78,7 +92,7 @@ def create_data_set(year0,pwtCode,per_capita,per_worker):
 
 # ### GDP data
 
-# In[6]:
+# In[7]:
 
 
 # Create data sets
@@ -88,7 +102,7 @@ physical_capital_pc = create_data_set(year0=1960,pwtCode='cn',per_capita=True,pe
 human_capital_pc = create_data_set(year0=1960,pwtCode='hc',per_capita=False,per_worker=False)
 
 # Find intsection of countries with data from 1960
-intersection = gdp_pc.columns & consumption_pc.columns & physical_capital_pc.columns & human_capital_pc.columns
+intersection = gdp_pc.columns.intersection(consumption_pc.columns).intersection(physical_capital_pc.columns).intersection(human_capital_pc.columns)
 
 # Adjust data
 gdp_pc = gdp_pc[intersection]
@@ -105,7 +119,7 @@ human_capital_pc.to_csv('../csv/cross_country_human_capital_per_capita.csv')
 
 # ## Plot for website
 
-# In[7]:
+# In[8]:
 
 
 # Load data
@@ -135,7 +149,7 @@ fig.tight_layout()
 plt.savefig('../png/fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
-# In[8]:
+# In[9]:
 
 
 # Export notebook to python script
