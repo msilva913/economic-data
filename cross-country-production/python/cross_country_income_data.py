@@ -41,7 +41,7 @@ else:
     pwt = pd.read_excel('https://www.rug.nl/ggdc/docs/'+current_pwt_file,sheet_name='Data',index_col=3,parse_dates=True)
 
 
-# In[6]:
+# In[4]:
 
 
 # Find PWT version
@@ -54,11 +54,7 @@ metadata = pd.Series(dtype=str,name='Values')
 metadata['version'] = version
 metadata['base_year'] = base_year
 
-metadata.to_csv('../txt/pwt_metadata.txt')
-
-# # Write to file
-# with open('../txt/pwt_metadata.txt','w') as newfile:
-#     newfile.writelines([version+'\n',base_year])
+metadata.to_csv('../csv/pwt_metadata.csv')
 
 
 # In[5]:
@@ -160,7 +156,7 @@ fig.tight_layout()
 plt.savefig('../png/fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
 
 
-# In[9]:
+# In[ ]:
 
 
 # Export notebook to python script
