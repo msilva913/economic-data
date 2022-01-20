@@ -26,24 +26,44 @@ plt.style.use('classic')
 current_pwt_file = 'pwt100.xlsx'
 
 
-# In[3]:
+# In[4]:
 
 
 # Import data from local source or download if not present
 if os.path.exists('../xslx/pwt100.xlsx'):
-    pwt = pd.read_excel('../xslx/'+current_pwt_file,sheet_name='Data',index_col=3,parse_dates=True)
+    info = pd.read_excel('../xslx/'+current_pwt_file,sheet_name='Info')
     legend = pd.read_excel('../xslx/'+current_pwt_file,sheet_name='Legend',index_col=0)
+    pwt = pd.read_excel('../xslx/'+current_pwt_file,sheet_name='Data',index_col=3,parse_dates=True)
+
 else:
-    pwt = pd.read_excel('https://www.rug.nl/ggdc/docs/'+current_pwt_file,sheet_name='Data',index_col=3,parse_dates=True)
+    info = pd.read_excel('https://www.rug.nl/ggdc/docs/'+current_pwt_file,sheet_name='Info',header=False)
     legend = pd.read_excel('https://www.rug.nl/ggdc/docs/'+current_pwt_file,sheet_name='Legend',index_col=0)
-    
+    pwt = pd.read_excel('https://www.rug.nl/ggdc/docs/'+current_pwt_file,sheet_name='Data',index_col=3,parse_dates=True)
+
+
+# In[6]:
+
+
+info.columns[]
+
+
+# In[ ]:
+
+
+
 
 
 # In[4]:
 
 
+# Find PWT version
+
+
 # Find base year for real variables
 base_year = legend.loc['rgdpe']['Variable definition'].split(' ')[-1].split('US')[0]
+
+
+
 
 # Write to file
 with open('../txt/pwt_base_year.txt','w') as newfile:
