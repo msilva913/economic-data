@@ -57,34 +57,12 @@ Financial data from SIFMA on outstanding mortgage-backed securities.
 
 ## `us-convergence`
 
-Programs for constucting a dataset of per capita income by US state and region from 1929 to the present and for constructing the of the data gif found on http://www.briancjenkins.com/data/usconvergence/.
-
-1. US state income per capita dataset
-  - Instructions: Run either **stateIncomeData.ipynb** or **stateIncomeData.py**
-  - Ouput:
-    - stateIncomeData.csv
-  - Dependencies: numpy, pandas, json
-
-2. US state income per capita animated gif.
-  - Instructions: Run **usConvergenceMap.ipynb** or **usConvergenceMap.py**. *You must have ImageMagick (http://www.imagemagick.org/) installed on your system to run this.*
-  - Output: 
-    - usStateConvergence.gif
-  - Dependencies: bs4 (BeautifulSoup), simplemapplot, runProcs.py
+Programs for constucting a dataset of per capita income by US state and region from 1929 to the present and for constructing the of the data gif found on https://www.briancjenkins.com/data/state-convergence.html.
   
-## usProductionData
-Program for constructing a dataset for the US that includes real GDP, consumption, investment, government consumption, exports, imports, capital, and labor. The capital stock is constructed using the perpetual inventory method and there are some options for customizing the capital construction available in the program.
+## `us-production`
 
-- Instructions: Run either **crossCountryIncomeData.ipynb** or **crossCountryIncomeData.py**
-- Ouput: 
-  - US_Production_A_Data.csv: Annual data, levels
-  - US_Production_Q_Data.csv: Quarterly data, levels
-  - US_Production_A_Data_Growth_Rates.csv: Annual data, growth rates
-  - US_Production_Q_Data_Growth_Rates.csv: Quarterly data, growth rates 
-- Dependencies: pandas, numpy, runProcs.py, fredclass.py
+Program for constructing a dataset for the US that includes real GDP, consumption, investment, government expenditures, exports, imports, capital, labor, and total factor productivity. The capital stock is constructed using the perpetual inventory method and there are some options for customizing the capital construction available in the program. Total factor productivity is computed using a Cobb-Douglass production functio augmented with human capital.
 
-## z1data
-Program for downloading the z.1 statistical release from the Federal Reserve and for parsing the xml file.
-- Instructions: Run either **z1data.ipynb** or **z1data.py**
-- Ouput: 
-   - Z1legend.csv: csv file containing codes for each z.1 series (optional)
-- Dependencies: pandas, numpy, requests, zipfile, lxml, runProcs.py
+## `z1data` (No longer maintained)
+
+Program for downloading the Z.1 statistical release from the Federal Reserve and for parsing the xml file. A lot of the data from the Z.1 release is now available on FRED (https://fred.stlouisfed.org/tags/series?t=z1).
