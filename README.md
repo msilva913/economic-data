@@ -1,7 +1,11 @@
 # Economic Data
-Python programs for downloading economic data and constructing data sets.
+Python programs for downloading economic data and constructing data sets. Contents of the main directories in this repo are described below.
 
-## Covered Interest Parity (`covered-interest-parity`)
+## `business-cycle-data`
+
+Code for downloading and managing data about the US business cycle to use as resources for my Computational Macroeconomics class at UC, Irvine. Four data sets are exported. Two contain only real variables and are used to support RBC analysis. The next two contain nominal variables like inflation and the T-Bill rate and unemployment and is used to miotivate a new Keynesian perspective.
+
+## `covered-interest-parity`
 Construct data sets containing spot and forward exchange rates and interest rates for the Japanes yen, Swiss franc, and US dollar. Code is in the `python` directory and exports data to `csv` and `xslx` directories.
 
 ## Cross-Country Income
