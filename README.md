@@ -12,7 +12,8 @@ Construct data sets containing spot and forward exchange rates and interest rate
 
 Program for constructing csv files containing real GDP per capita and other indicators from 1960 to present including every country for which data is available for every year. Original data is from the Penn World Tables (https://www.rug.nl/ggdc/productivity/pwt/).
      
-## ``dmp`
+## `dmp`
+
 Construct a data set containing labor and vacancy statistics for the US from 1929 to the most recenlty available.
  
 ## `historical-statistics-of-the-us`
@@ -26,28 +27,36 @@ Historial data on:
 
 Source: https://www.census.gov/library/publications/1975/compendia/hist_stats_colonial-1970.html
 
-     
+## `inflation-forecasts`
 
-## quantityTheoryData
+Download and manage inflation forecast data from the Survey of Professional Forecasters (https://www.philadelphiafed.org/surveys-and-data/real-time-data-research/survey-of-professional-forecasters).
+
+## `oecd-unemployment`
+
+Download, manage, and export international unemployment data. Primary data source: https://data.oecd.org/unemp/harmonised-unemployment-rate-hur.htm
+
+## `quantity-theory`
+
 Program for constructing datasets including long-run average rates of money (M1) growth, real GDP growth, and CPI inflation for each country for which there is at least 10 years of continuously available data for each variable. Data is downloaded from the World Bank World Development Indicators using the wbdata api.
 
-  - Instructions: Run either **quantityTheoryData.ipynb** or **quantityTheoryData.py**
-  - Output: .csv files for all countries and for countries grouped by high, middle, and low income level.
-    - qtyTheoryData.csv
-    - qtyTheoryDataH.csv
-    - qtyTheoryDataM.csv
-    - qtyTheoryDataL.csv
-  - Dependencies: wbdata, pandas, numpy, runProcs.py, qtyTheoryFunc.py
+## `real-rate`
 
-## realRateData
 Program for constructing a dataset that includes the 1-year T-bill rate, the 1-year ahead inflation forecast from the Survey of Professional Forecasters reported by the Federal Reserve Bank of Philadelphia, the 1-year ahead actual rate of inflation, and the one-year ahead actual growth rate in real consumption expenditures for the US. The data are from 1971.
 
-- Instructions: Run either **realRateData.ipynb** or **realRateData.py**
-- Ouput: 
-   - inflationForecastDataAnnual.csv
-- Dependencies: pandas, numpy, runProcs.py, fredclass.py
-  
-## usConvergenceData
+## `sargent1982`
+
+Data from Sargent's 1982 chapter "The Ends of Four Big Inflations": https://www.nber.org/system/files/chapters/c11452/c11452.pdf
+
+## `seigniorage`
+
+Generates seigniorage data for the US
+
+## `sifma`
+
+Financial data from SIFMA on outstanding mortgage-backed securities.
+
+## `us-convergence`
+
 Programs for constucting a dataset of per capita income by US state and region from 1929 to the present and for constructing the of the data gif found on http://www.briancjenkins.com/data/usconvergence/.
 
 1. US state income per capita dataset
