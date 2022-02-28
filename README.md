@@ -49,11 +49,11 @@ Data from Sargent's 1982 chapter "The Ends of Four Big Inflations": https://www.
 
 ## `seigniorage`
 
-Generates seigniorage data for the US
+Generates seigniorage data for the US.
 
 ## `sifma`
 
-Financial data from SIFMA on outstanding mortgage-backed securities.
+Financial data from SIFMA on outstanding mortgage-backed securities. Data downloaded from https://www.sifma.org/.
 
 ## `us-convergence`
 
