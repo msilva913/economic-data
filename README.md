@@ -1,7 +1,7 @@
 # Economic Data
 Python programs for downloading economic data and constructing data sets.
 
-## Covered Interest Parity
+## Covered Interest Parity (`covered-interest-parity`)
 Construct data sets containing spot and forward exchange rates and interest rates for the Japanes yen, Swiss franc, and US dollar. Code is in the `python` directory and exports data to `csv` and `xslx` directories.
 
 ## Cross-Country Income
