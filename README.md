@@ -8,21 +8,23 @@ Code for downloading and managing data about the US business cycle to use as res
 ## `covered-interest-parity`
 Construct data sets containing spot and forward exchange rates and interest rates for the Japanes yen, Swiss franc, and US dollar. Code is in the `python` directory and exports data to `csv` and `xslx` directories.
 
-## Cross-Country Income
-Program for constructing a .csv files containing real GDP per capita from 1970 to present including every country for which data is available for every year. Data is downloaded from the World Bank World Development Indicators using the wbdata api. 
+## `cross-country-production`
 
-  - Instructions: Run either `cross_country_income_data.ipynb`** or `cross_country_income_data.py`
-  - Ouput to `csv` directory:
-     - `cross_country_income.csv`: data in levels
-     - `cross_country_income_log.csv` data in logs
-     - A bunch of other data files.
+Program for constructing csv files containing real GDP per capita and other indicators from 1960 to present including every country for which data is available for every year. Original data is from the Penn World Tables (https://www.rug.nl/ggdc/productivity/pwt/).
      
- ## DMP
- Construct a data set containing labor and vacancy statistics for the US
+## ``dmp`
+Construct a data set containing labor and vacancy statistics for the US from 1929 to the most recenlty available.
  
- ## Historical Statistics of the US
- 
- https://www.census.gov/library/publications/1975/compendia/hist_stats_colonial-1970.html
+## `historical-statistics-of-the-us`
+
+Historial data on:
+
+* bank suspensions: annual, 1864 - 1970
+* gross national product and deflator: annual, 1889 - 1970
+* components of the money stock annual: 1889 - 1970
+* unemployment: annual, 1890 - 1970
+
+Source: https://www.census.gov/library/publications/1975/compendia/hist_stats_colonial-1970.html
 
      
 
