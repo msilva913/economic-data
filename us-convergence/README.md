@@ -1,11 +1,15 @@
-# usconvergence
+# `us-convergence`
+
 Programs for creating a dataset of US state- and regional-level income per capita from 1929 to present.
 
-Contains:
+1. US state income per capita dataset
+  - Instructions: Run either **state_income_data.ipynb** or **state_income_data.py**
+  - Ouput:
+    - stateIncomeData.csv in the ../csv directory
+  - Dependencies: numpy, pandas, json
 
-1. **stateIncomeData.ipynb**: ipython notebook for downloading and creating state-level income data. Also creates some relevant images
-2. **stateIncomeData.py**: python script for downloading and creating state-level income data. Also creates some relevant images
-3. **usConvergenceMap.ipynb**: ipython notebook for creating an animated gif of relative incomes in the US.
-4. **usConvergenceMap.py**: python script for creating an animated gif of relative incomes in the US.
-5. **runProcs.py**:
-6. **images**: Empty directory for storing images output by usConvergenceMap.ipynb or usConvergenceMap.py
+2. US state income per capita animated gif.
+  - Instructions: Run **us_convergence_map.ipynb** or **us_convergence_map.py**. *You must have ImageMagick (http://www.imagemagick.org/) installed on your system to run this.*
+  - Output: 
+    - us_state_convergence.gif in the ../gif directory
+  - Dependencies: bs4 (BeautifulSoup), simplemapplot, runProcs.py
