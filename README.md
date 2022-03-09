@@ -14,7 +14,7 @@ Program for constructing csv files containing real GDP per capita and other indi
      
 ## `dmp`
 
-Construct a data set containing labor and vacancy statistics for the US from 1929 to the most recenlty available.
+Construct a data set containing labor and vacancy statistics for the US from 1929 to the most recently available.
  
 ## `historical-statistics-of-the-us`
 
