@@ -421,7 +421,7 @@ plt.savefig('../png/fig_data_market_tightness.png',bbox_inches='tight',dpi=120)
 
 # Plot the Beveridge curve for the US: vacancy rate v unemployment rate
 
-fig = plt.figure(figsize=(6,4))
+fig = plt.figure(figsize=(7.5,4))
 ax = fig.add_subplot(1,1,1)
 c = np.arange(len(df_all.index))
 plt.scatter(df_all['Unemployment rate'].values,df_all['Vacancy rate'].values,s=45,c= c,alpha = 0.35)
@@ -432,10 +432,31 @@ ax.set_xlabel('Unemployment rate')
 ax.set_ylabel('Vacancy rate')
 ax.grid()
 
+##############################################################################################
+# Old code to set colorbar labels
+# cbar = plt.colorbar(ax = ax)
+# cbar.get_ticks()
+# cbar.set_ticks([int(i) for i in cbar.get_ticks()[:-1]])
+# cbar.set_ticklabels([df_all.index[int(i)].strftime('%b %Y') for i in cbar.get_ticks()[:]])
+##############################################################################################
+
+cbar = plt.colorbar(ax = ax)
+num_ticks = int((df_all.index[-1].year-1930)/20)+1
+tick_dates = [str(1930 + i*20)+'-01-01' for i in range(num_ticks)]
+ticks = df_all.reset_index().index[df_all.index.isin(tick_dates)].tolist()
+cbar.set_ticks(ticks)
+cbar.set_ticklabels([df_all.index[int(i)].strftime('%Y') for i in ticks])
+
 plt.savefig('../png/fig_beveridge_curve.png',bbox_inches='tight',dpi=120)
 
 
 # In[21]:
+
+
+cbar.get_ticks()
+
+
+# In[22]:
 
 
 # Plot the modified Beveridge curve for the US: market tightness v unemployment rate
@@ -454,7 +475,34 @@ ax.grid()
 plt.savefig('../png/fig_modified_beveridge_curve.png',bbox_inches='tight',dpi=120)
 
 
-# In[22]:
+# In[23]:
+
+
+# Plot the modified Beveridge curve for the US: market tightness v unemployment rate
+
+fig = plt.figure(figsize=(7.5,4))
+ax = fig.add_subplot(1,1,1)
+c = np.arange(len(df_all.index))
+plt.scatter(df_all['Unemployment rate'].values,df_all['Market tightness'].values,s=45,c=c,alpha = 0.25)
+ax.set_xlim([-0.5,26])
+ax.set_ylim([-0.5,5])
+# ax.set_title('Modified Beveridge curve')
+ax.set_xlabel('Unemployment rate ($\%$)')
+ax.set_ylabel('Market tightness ($\\theta$)')
+ax.grid()
+
+cbar = plt.colorbar(ax = ax)
+num_ticks = int((df_all.index[-1].year-1930)/20)+1
+tick_dates = [str(1930 + i*20)+'-01-01' for i in range(num_ticks)]
+ticks = df_all.reset_index().index[df_all.index.isin(tick_dates)].tolist()
+cbar.set_ticks(ticks)
+cbar.set_ticklabels([df_all.index[int(i)].strftime('%Y') for i in ticks])
+
+
+plt.savefig('../png/fig_modified_beveridge_curve_color.png',bbox_inches='tight',dpi=120)
+
+
+# In[24]:
 
 
 # Construct figure for paper
@@ -477,8 +525,8 @@ c = np.arange(len(df_post_gr.index))
 plt.scatter(df_post_gr['Unemployment rate'].values,df_post_gr['Market tightness'].values,s=75,alpha = 0.5,c=c)
 
 cbar = plt.colorbar(ax = ax)
-cbar.set_ticks([int(i) for i in cbar.get_ticks()])
-cbar.set_ticklabels([df_post_gr.index[int(i)].strftime('%b %Y') for i in cbar.get_ticks()[:-1]])
+cbar.set_ticks([int(i) for i in cbar.get_ticks()[:-1]])
+cbar.set_ticklabels([df_post_gr.index[int(i)].strftime('%b %Y') for i in cbar.get_ticks()])
 
 plt.plot(df_post_gr['Unemployment rate'].values,df_post_gr['Market tightness'].values,'-')
 
@@ -490,7 +538,7 @@ ax.grid()
 plt.savefig('../png/fig_modified_beveridge_curve_both.png',bbox_inches='tight',dpi=120)
 
 
-# In[23]:
+# In[25]:
 
 
 # Export data to csv
