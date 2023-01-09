@@ -127,7 +127,7 @@ data_p = data_p.sort_index()
 data_p
 
 
-# In[18]:
+# In[5]:
 
 
 base_year = json_response['BEAAPI']['Results']['Notes'][0]['NoteText'].split('Index numbers, ')[-1].split('=')[0]
@@ -138,7 +138,7 @@ with open('../csv/state_income_metadata.csv','w') as newfile:
 
 # ## Per capita income data
 
-# In[5]:
+# In[6]:
 
 
 # Obtain data from BEA
@@ -167,7 +167,7 @@ data_y
 
 # # Load Easterlin's data
 
-# In[6]:
+# In[7]:
 
 
 # Import Easterlin's income data
@@ -178,7 +178,7 @@ historic_cpi_data=pd.read_csv('../historic_data/Historical Statistics of the US 
 historic_cpi_data = historic_cpi_data/historic_cpi_data.loc[1929]*float(data_p.loc['1929'])
 
 
-# In[7]:
+# In[8]:
 
 
 # Construct series for real incomes in 1840, 1880, and 1900
@@ -191,7 +191,7 @@ df = pd.DataFrame({pd.to_datetime('1840'):df_1840,pd.to_datetime('1880'):df_1880
 df = pd.concat([data_y,df]).sort_index()
 
 
-# In[8]:
+# In[9]:
 
 
 # Export data to csv
@@ -203,7 +203,7 @@ for c in dropCols:
 series.to_csv('../csv/state_income_data.csv',na_rep='NaN')
 
 
-# In[9]:
+# In[10]:
 
 
 # Export notebook to .py

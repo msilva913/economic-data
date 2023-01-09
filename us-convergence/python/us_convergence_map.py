@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[15]:
+# In[1]:
 
 
 import numpy as np
@@ -16,7 +16,7 @@ plt.style.use('classic')
 # get_ipython().run_line_magic('matplotlib', 'inline')
 
 
-# In[16]:
+# In[2]:
 
 
 # -1.0 Create an svg map using the simplemapplot package
@@ -29,7 +29,7 @@ plt.style.use('classic')
 svg = open('../svg/usMap.svg', 'r').read()
 
 
-# In[17]:
+# In[3]:
 
 
 # 0. Setup
@@ -60,7 +60,7 @@ majorLocator_y   = plt.MultipleLocator(3)
 majorLocator_shares   = plt.MultipleLocator(0.2)
 
 
-# In[18]:
+# In[4]:
 
 
 # 1. Load and manage income data
@@ -80,7 +80,7 @@ csa = ['SC','MS','FL','AL','GA','LA','TX','VA','AR','TN','NC']
 state_income.index
 
 
-# In[19]:
+# In[5]:
 
 
 # 2. Compute statistics
@@ -107,7 +107,7 @@ slope = results.params[1]
 inter = results.params[0]
 
 
-# In[20]:
+# In[6]:
 
 
 # 3.1 Plots
@@ -136,7 +136,7 @@ plt.tight_layout()
 plt.savefig('../png/fig_us_statesIncomeGrowth.png',bbox_inches='tight',dpi=120)
 
 
-# In[21]:
+# In[7]:
 
 
 # 3.2 Plot income per capita in all states
@@ -167,7 +167,7 @@ plt.tight_layout()
 plt.savefig('../png/fig_us_statesIncome.png',bbox_inches='tight',dpi=120)
 
 
-# In[22]:
+# In[8]:
 
 
 # 3.2 Plot income per capita in all states
@@ -199,7 +199,7 @@ plt.tight_layout()
 plt.savefig('../png/fig_us_statesIncomeRelative.png',bbox_inches='tight',dpi=120)
 
 
-# In[23]:
+# In[9]:
 
 
 # 4. Make the maps. Reference: http://flowingdata.com/2009/11/12/how-to-make-a-us-county-thematic-map-using-free-tools/
@@ -215,7 +215,7 @@ bins = [-.25,-.15,-.05,.05,.15,.25]
 # bins = [-.45,-.25,-.1,-.05-.025,.025,.05,.1,.25,.45]
 
 
-# In[24]:
+# In[10]:
 
 
 # 4.2 Load svg with Beautiful Soup
@@ -223,7 +223,7 @@ soup = BeautifulSoup(svg, "lxml")
 paths = soup.findAll('path')
 
 
-# In[25]:
+# In[11]:
 
 
 # 4.3 Create color-coded maps for each year
@@ -303,7 +303,7 @@ for t,year in enumerate(state_income.index):
     subprocess.call(convert,shell=True)
 
 
-# In[26]:
+# In[12]:
 
 
 # 4.4 Creat gif with imagemagick
@@ -311,7 +311,7 @@ makegif = 'convert -loop 0 -delay 50x100 ../frames/*.png ../gif/us_state_converg
 subprocess.call(makegif,shell=True)
 
 
-# In[27]:
+# In[13]:
 
 
 # 5. Clean up
@@ -321,7 +321,7 @@ subprocess.call(makegif,shell=True)
 #         os.remove(files)
 
 
-# In[28]:
+# In[14]:
 
 
 # 6. Export notebook to .py
