@@ -22,7 +22,10 @@ get_ipython().run_line_magic('matplotlib', 'inline')
 csv_export_path = '../csv/'
 
 # Most recent PWT version verified manually
-manual_pwt_version = '10.0'
+manual_pwt_version = '10.01'
+
+# Download link for PWT Excel file
+pwt_excel_url = 'https://dataverse.nl/api/access/datafile/354095'
 
 
 # # Cross Country Production Data
@@ -71,9 +74,9 @@ if os.path.exists('../xslx/'+current_pwt_file):
     pwt = pd.read_excel('../xslx/'+current_pwt_file,sheet_name='Data',index_col=3,parse_dates=True)
 
 else:
-    info = pd.read_excel('https://www.rug.nl/ggdc/docs/'+current_pwt_file,sheet_name='Info',header=None)
-    legend = pd.read_excel('https://www.rug.nl/ggdc/docs/'+current_pwt_file,sheet_name='Legend',index_col=0)
-    pwt = pd.read_excel('https://www.rug.nl/ggdc/docs/'+current_pwt_file,sheet_name='Data',index_col=3,parse_dates=True)
+    info = pd.read_excel(pwt_excel_url,sheet_name='Info',header=None)
+    legend = pd.read_excel(pwt_excel_url,sheet_name='Legend',index_col=0)
+    pwt = pd.read_excel(pwt_excel_url,sheet_name='Data',index_col=3,parse_dates=True)
 
 
 # In[6]:
@@ -222,11 +225,4 @@ fig.tight_layout()
 
 # Save image
 plt.savefig('../png/fig_GDP_GDP_Growth_site.png',bbox_inches='tight')
-
-
-# In[12]:
-
-
-# Export notebook to python script
-runProcs.exportNb('cross_country_income_data')
 
