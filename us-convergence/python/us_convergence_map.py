@@ -13,7 +13,7 @@ import subprocess,os
 import runProcs
 import matplotlib.pyplot as plt
 plt.style.use('classic')
-# get_ipython().run_line_magic('matplotlib', 'inline')
+plt.rcParams['figure.facecolor'] = 'white'
 
 
 # In[2]:
