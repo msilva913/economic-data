@@ -18,7 +18,7 @@ import mock
 from openpyxl.reader import excel
 
 plt.style.use('classic')
-get_ipython().run_line_magic('matplotlib', 'inline')
+plt.rcParams['figure.facecolor'] = 'white'
 
 
 # ## Download forecast data from SPF

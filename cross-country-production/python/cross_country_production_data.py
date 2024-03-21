@@ -9,10 +9,9 @@ from bs4 import BeautifulSoup
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import runProcs
 import os
 plt.style.use('classic')
-get_ipython().run_line_magic('matplotlib', 'inline')
+plt.rcParams['figure.facecolor'] = 'white'
 
 
 # In[2]:

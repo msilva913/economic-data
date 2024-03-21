@@ -16,14 +16,15 @@
 
 import statsmodels as sm
 import fredpy as fp
-import matplotlib.pyplot as plt
-plt.style.use('classic')
 import numpy as np
 import pandas as pd
 import os,urllib
+import matplotlib.pyplot as plt
+plt.style.use('classic')
+plt.rcParams['figure.facecolor'] = 'white'
+
 import warnings
 warnings.filterwarnings('ignore')
-get_ipython().run_line_magic('matplotlib', 'inline')
 
 # You must change XPATH if you are running this script from anywhere other than the directory containing x13as.
 XPATH = os.getcwd()
