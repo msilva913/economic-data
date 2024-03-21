@@ -162,7 +162,7 @@ data_y.name = 'income'
 data_y = data_y.unstack('State')
 data_y = data_y.sort_index()
 data_y = data_y.divide(data_p,axis=0)
-data_y
+data_y = data_y.dropna(how='all')
 
 
 # # Load Easterlin's data
