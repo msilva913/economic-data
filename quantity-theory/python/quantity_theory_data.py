@@ -101,8 +101,7 @@ import requests
 import zipfile
 import matplotlib.pyplot as plt
 plt.style.use('classic')
-
-get_ipython().run_line_magic('matplotlib', 'inline')
+plt.rcParams['figure.facecolor'] = 'white'
 
 # OECD countries
 oecd_list = ['AUS','AUT','BEL','CAN','CHL','CZE','DNK','EST','FIN','FRA','DEU','GRC','HUN','ISL','IRL','ISR',
@@ -133,7 +132,7 @@ indicators = {
 
 
 # Get all countries and regions available through WB API
-all_wb_countries = wbdata.get_country()
+all_wb_countries = wbdata.get_countries()
 
 # Convert to a DataFrame with selected columns
 countries_and_regions = pd.DataFrame()
