@@ -12,7 +12,7 @@ import pandas as pd
 import runProcs
 import matplotlib.pyplot as plt
 plt.style.use('classic')
-# get_ipython().run_line_magic('matplotlib', 'inline')
+plt.rcParams['figure.facecolor'] = 'white'
 
 
 # In[2]:
@@ -78,7 +78,7 @@ governmentA.data = 100*governmentA.data/deflatorA.data
 exportsA.data = 100*exportsA.data/deflatorA.data
 importsA.data = 100*importsA.data/deflatorA.data
 netExportsA.data = 100*netExportsA.data/deflatorA.data
-depreciationA.data = 100*depreciationA.data/deflatorA.data
+depreciationA.data = 100*depreciationA.data/deflatorA.data/1000 # Because units are millions, not billions
 gdpA.data= 100*gdpA.data/deflatorA.data
 
 # 2.3 Convert labor from millions of hours to billions
