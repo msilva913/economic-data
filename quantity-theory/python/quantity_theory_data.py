@@ -97,6 +97,8 @@ import pandas as pd
 import numpy as np
 import wbdata
 import os
+import shutil
+import getpass
 import requests
 import zipfile
 import matplotlib.pyplot as plt
@@ -126,7 +128,7 @@ indicators = {
 }
 
 
-# ## Import data using `wbpy`
+# ## Import data using `wbdata`
 
 # In[2]:
 
@@ -371,8 +373,8 @@ def get_data_frame(df,indicators,show_not_available=False):
                     else:    
                         data.loc[n,new_columns[ind]] = (country_df[ind].iloc[stop-1]/country_df[ind].iloc[start])**(1/(stop-start-1))-1
             
-                data.loc[n,'income group'] = countries[countries['country name']==country]['income group'][0]
-                data.loc[n,'oecd'] = countries[countries['country name']==country]['oecd'][0]
+                data.loc[n,'income group'] = countries[countries['country name']==country]['income group'].iloc[0]
+                data.loc[n,'oecd'] = countries[countries['country name']==country]['oecd'].iloc[0]
         except:
             if show_not_available==True:
                 print('Data not available for: ',country)
@@ -460,4 +462,26 @@ ax.grid(linestyle=':')
 
 plt.tight_layout()
 # # plt.savefig('../png/fig_money_inflation_coded.png',bbox_inches='tight',dpi=120)
+
+
+# ## Save metadata
+
+# In[10]:
+
+
+data = wbdata.get_data('NY.GDP.MKTP.KD', country="USA")
+
+pd.Series({'first_date':data[-1]['date'],'last_date':data[0]['date']}).to_csv('../csv/quantity_theory_metadata.csv',index=False)
+
+
+# ## Delete cache
+
+# In[11]:
+
+
+# Get current user
+user = getpass.getuser()
+
+# Remove wbdata Cache
+shutil.rmtree('/Users/'+user+'/Library/Caches/wbdata')
 
