@@ -15,7 +15,8 @@
 
 
 import statsmodels as sm
-import fredpy as fp
+#import fredpy as fp
+from fredapi import Fred
 import numpy as np
 import pandas as pd
 import os,urllib
@@ -32,6 +33,7 @@ XPATH = os.getcwd()
 # Load fredpy api key
 #fp.api_key = fp.load_api_key('d35aabd7dc07cd94481af3d1e2f0ecf3')
 fp.api_key = 'd35aabd7dc07cd94481af3d1e2f0ecf3 '
+fred = Fred(api_key = 'd35aabd7dc07cd94481af3d1e2f0ecf3	')
 # Whether x13 binary is available
 x_13 = False
 
@@ -52,8 +54,8 @@ x_13 = False
 # Seasonally adjusted
 
 # Download from FRED and save as a Pandas series
-unemp_1 = fp.series('M0892AUSM156SNBR')
-unemp_1 = unemp_1.window(['04-01-1929','02-01-1940']).data
+unemp_1 = fred.get_series('M0892AUSM156SNBR')
+unemp_1 = unemp_1['04-01-1929':'02-01-1940']
 
 
 # In[3]:
@@ -63,8 +65,8 @@ unemp_1 = unemp_1.window(['04-01-1929','02-01-1940']).data
 # Seasonally adjusted
 
 # Download from FRED and save as a Pandas series
-unemp_2 = fp.series('M0892BUSM156SNBR')
-unemp_2 = unemp_2.window(['03-01-1940','12-01-1946']).data
+unemp_2 = fred.get_series('M0892BUSM156SNBR')
+unemp_2 = unemp_2['03-01-1940':'12-01-1946']
 
 
 # In[4]:
@@ -99,8 +101,8 @@ else:
 
 # US civilian unemployment rate from the BLS: 1948-01-01 to most recent;
 # Seasonally  adjusted
-unemp_4 = fp.series('UNRATE')
-unemp_4 = unemp_4.window(['01-01-1948','01-01-2200']).data
+unemp_4 = fred.get_series('UNRATE')
+unemp_4 = unemp_4['01-01-1948':'01-01-2200']
 
 
 # In[6]:
@@ -114,7 +116,7 @@ unemployment_rate_series = unemployment_rate_series.append(unemp_4).sort_index()
 # plot the series and save the figure
 fig = plt.figure()
 ax = fig.add_subplot(1,1,1)
-ax.plot(unemployment_rate_series,'-',lw=4,alpha = 0.65)
+ax.plot(unemployment_rate_series,'-',lw=2,alpha = 0.65)
 ax.set_ylabel('Percent')
 ax.grid()
 
@@ -138,7 +140,7 @@ if x_13:
     # Met life help-wanted index: 1919-01-01 to 1960-08-01;
     
     # Not seasonally adjusted
-    vac_1 = fp.series('M0882AUSM349NNBR').data
+    vac_1 = fred.get_series('M0882AUSM349NNBR')
 
     # temp_series = pd.Series(vac_1.data,index=pd.to_datetime(vac_1.dates))
 
