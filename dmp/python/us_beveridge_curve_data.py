@@ -30,8 +30,8 @@ warnings.filterwarnings('ignore')
 XPATH = os.getcwd()
 
 # Load fredpy api key
-fp.api_key = fp.load_api_key('fred_api_key.txt')
-
+#fp.api_key = fp.load_api_key('d35aabd7dc07cd94481af3d1e2f0ecf3')
+fp.api_key = 'd35aabd7dc07cd94481af3d1e2f0ecf3 '
 # Whether x13 binary is available
 x_13 = False
 
